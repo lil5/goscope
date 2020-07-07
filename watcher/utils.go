@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"fmt"
 	"strings"
 	"time"
 )
@@ -30,4 +31,11 @@ func formatJson(rawString string) string {
 	str = strings.ReplaceAll(str, "}", "\n}")
 	str = strings.ReplaceAll(str, "],", "],\n    ")
 	return str
+}
+
+func ReplaceVariablesInTemplate(rawTemplate string, variables map[string]string) string {
+	for i, s := range variables {
+		rawTemplate = strings.ReplaceAll(rawTemplate, fmt.Sprintf("{{.%s}}", i), s)
+	}
+	return rawTemplate
 }

@@ -11,18 +11,20 @@ import (
 )
 
 func Dashboard(c *gin.Context) {
-	/*variables := map[string]string{
-		"APPLICATION_NAME":os.Getenv("APPLICATION_NAME"),
-	}*/
-	r := strings.NewReader(watcher_templates.IndexTemplate)
-	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
+	variables := map[string]string{
+		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
+	}
+	rawTemplate := watcher_templates.IndexTemplate
+	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
+	reader := strings.NewReader(cleanTemplate)
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
 
 func ShowRequest(c *gin.Context) {
 	var request RecordByUri
 	_ = c.ShouldBindUri(&request)
 	requestDetails := GetDetailedRequest(request.Uid)
-	variables := gin.H{
+	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
 		"BODY":             formatJson(requestDetails.Body),
 		"CLIENT_IP":        requestDetails.ClientIp,
@@ -37,15 +39,17 @@ func ShowRequest(c *gin.Context) {
 		"USER_AGENT":       requestDetails.UserAgent,
 	}
 	fmt.Printf("%+v", variables)
-	r := strings.NewReader(watcher_templates.RequestTemplate)
-	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
+	rawTemplate := watcher_templates.RequestTemplate
+	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
+	reader := strings.NewReader(cleanTemplate)
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
 
 func ShowResponse(c *gin.Context) {
 	var request RecordByUri
 	_ = c.ShouldBindUri(&request)
 	responseDetails := GetDetailedResponse(request.Uid)
-	variables := gin.H{
+	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
 		"BODY":             formatJson(responseDetails.Body),
 		"CLIENT_IP":        responseDetails.ClientIp,
@@ -57,6 +61,8 @@ func ShowResponse(c *gin.Context) {
 		"UID":              responseDetails.Uid,
 	}
 	fmt.Printf("%+v", variables)
-	r := strings.NewReader(watcher_templates.ResponseTemplate)
-	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
+	rawTemplate := watcher_templates.ResponseTemplate
+	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
+	reader := strings.NewReader(cleanTemplate)
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
