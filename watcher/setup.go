@@ -4,13 +4,13 @@ import "github.com/gin-gonic/gin"
 
 func Setup(engine *gin.Engine) {
 	// Load HTML templates
-	engine.LoadHTMLGlob("static/templates/*")
+	engine.LoadHTMLGlob("../static/templates/*")
 	// Use the logging middleware
 	engine.Use(RequestLogger)
 	engine.Use(ResponseLogger)
 	// Re route to static folders
-	engine.Static("/js", "./static/js/")
-	engine.Static("/css", "./static/css")
+	engine.Static("/js", "../static/js/")
+	engine.Static("/css", "../static/css")
 	// Setup necessary routes
 	watcherGroup := engine.Group("/watcher")
 	watcherGroup.GET("/", Dashboard)
