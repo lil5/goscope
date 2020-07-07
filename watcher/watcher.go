@@ -16,7 +16,7 @@ func Dashboard(c *gin.Context) {
 		"APPLICATION_NAME": appName,
 	}*/
 	r := strings.NewReader(watcher_templates.IndexTemplate)
-	c.DataFromReader(200, 123, "text/html", r, nil)
+	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
 	//c.HTML(http.StatusOK, "index.tmpl", variables)
 }
 
