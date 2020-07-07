@@ -58,4 +58,4 @@ var IndexTemplate = fmt.Sprintf(`
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>`,
-	watcher_js.DashboardJs, watcher_css.RaisinCss, watcher_css.HighlightTheme, watcher_css.WatcherStyles)
+	watcher_css.RaisinCss, watcher_css.HighlightTheme, watcher_css.WatcherStyles, watcher_js.DashboardJs)
