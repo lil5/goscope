@@ -1,14 +1,20 @@
 package watcher_templates
 
-const ResponseTemplate = `
+import (
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_css"
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_js"
+	"fmt"
+)
+
+var ResponseTemplate = fmt.Sprintf(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Response at {{.TIME}} - {{.APPLICATION_NAME}}</title>
-    <link rel="stylesheet" href="/css/raisin.css">
-    <link rel="stylesheet" href="/css/watcher.css">
-    <link rel="stylesheet" href="/css/highlight-theme.css">
+    <style>%s</style>
+	<style>%s</style>
+	<style>%s</style>
 </head>
 <body>
 <div class="m-3 p-3 text-center" style="line-height: 2em;">
@@ -28,8 +34,8 @@ const ResponseTemplate = `
         </p>
     </div>
 </div>
-<script src="/js/response.js"></script>
+<script>%s</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 </body>
 </html>
-`
+`, watcher_css.RaisinCss, watcher_css.HighlightTheme, watcher_css.WatcherStyles, watcher_js.ResponseJs)

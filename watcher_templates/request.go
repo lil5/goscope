@@ -1,14 +1,20 @@
 package watcher_templates
 
-const RequestTemplate = `
+import (
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_css"
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_js"
+	"fmt"
+)
+
+var RequestTemplate = fmt.Sprintf(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Request at {{.TIME}} - {{.APPLICATION_NAME}}</title>
-    <link rel="stylesheet" href="/css/raisin.css">
-    <link rel="stylesheet" href="/css/watcher.css">
-    <link rel="stylesheet" href="/css/highlight-theme.css">
+    <style>%s</style>
+	<style>%s</style>
+	<style>%s</style>
 </head>
 <body>
 
@@ -50,8 +56,8 @@ const RequestTemplate = `
         </p>
     </div>
 </div>
-<script src="/js/request.js"></script>
+<script>%s</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 </body>
 </html>
-`
+`, watcher_css.RaisinCss, watcher_css.HighlightTheme, watcher_css.WatcherStyles, watcher_js.RequestJs)

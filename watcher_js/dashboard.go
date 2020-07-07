@@ -65,7 +65,7 @@ function fillRequestTable(requestData) {
             \<td class="p-3 custom-td">' + item.path + '</td>\
             \<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\
-                 <a class="cursor-pointer" href="/watcher/responses/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
+                 <a class="cursor-pointer" href="/watcher/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
     })
 }
 
