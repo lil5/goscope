@@ -1,3 +1,6 @@
+package watcher_templates
+
+const ResponseTemplate = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,3 +32,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 </body>
 </html>
+`

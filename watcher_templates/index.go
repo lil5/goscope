@@ -1,11 +1,20 @@
+package watcher_templates
+
+import (
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_css"
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_js"
+	"fmt"
+)
+
+var IndexTemplate = fmt.Sprintf(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Go HTTP Watcher</title>
-    <link rel="stylesheet" href="/css/raisin.css">
-    <link rel="stylesheet" href="/css/watcher.css">
-    <link rel="stylesheet" href="/css/highlight-theme.css">
+    <style>%s</style>
+	<style>%s</style>
+	<style>%s</style>
 </head>
 <body>
 <div class="m-3 p-3 text-center">
@@ -44,8 +53,9 @@
         </div>
     </div>
 </div>
-<script src="/js/dashboard.js"></script>
+<script>%s</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
-</html>
+</html>`,
+	watcher_js.DashboardJs, watcher_css.RaisinCss, watcher_css.HighlightTheme, watcher_css.WatcherStyles)

@@ -1,3 +1,5 @@
+package watcher_css
+const HighlightTheme = `
 /*
  * highlightjs-material-dark-theme
  * Material Dark theme for Highlight.js
@@ -166,3 +168,4 @@
 .hljs-link {
     text-decoration: underline;
 }
+`

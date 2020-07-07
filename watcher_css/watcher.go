@@ -1,3 +1,5 @@
+package watcher_css
+const WatcherStyles = `
 body {
     background: #333;
     color: #fff;
@@ -21,3 +23,4 @@ table {
     color: #fff;
     border: none;
 }
+`
