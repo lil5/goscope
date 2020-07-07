@@ -1,19 +1,23 @@
 package watcher
 
 import (
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_templates"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func Dashboard(c *gin.Context) {
-	appName := os.Getenv("APPLICATION_NAME")
-	variables := map[string]string{
+	//appName := os.Getenv("APPLICATION_NAME")
+	/*variables := map[string]string{
 		"APPLICATION_NAME": appName,
-	}
-	c.HTML(http.StatusOK, "index.tmpl", variables)
+	}*/
+	r := strings.NewReader(watcher_templates.IndexTemplate)
+	c.DataFromReader(200, 123, "text/html", r, nil)
+	//c.HTML(http.StatusOK, "index.tmpl", variables)
 }
 
 func ShowRequest(c *gin.Context) {
