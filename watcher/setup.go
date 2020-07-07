@@ -1,10 +1,14 @@
 package watcher
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"path/filepath"
+)
 
 func Setup(engine *gin.Engine) {
 	// Load HTML templates
-	engine.LoadHTMLGlob("../static/templates/*")
+	absPath, _ := filepath.Abs("../static/templates/*")
+	engine.LoadHTMLGlob(absPath)
 	// Use the logging middleware
 	engine.Use(RequestLogger)
 	engine.Use(ResponseLogger)
