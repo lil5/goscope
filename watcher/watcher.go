@@ -11,13 +11,11 @@ import (
 )
 
 func Dashboard(c *gin.Context) {
-	//appName := os.Getenv("APPLICATION_NAME")
 	/*variables := map[string]string{
-		"APPLICATION_NAME": appName,
+		"APPLICATION_NAME":os.Getenv("APPLICATION_NAME"),
 	}*/
 	r := strings.NewReader(watcher_templates.IndexTemplate)
 	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
-	//c.HTML(http.StatusOK, "index.tmpl", variables)
 }
 
 func ShowRequest(c *gin.Context) {
@@ -39,7 +37,8 @@ func ShowRequest(c *gin.Context) {
 		"USER_AGENT":       requestDetails.UserAgent,
 	}
 	fmt.Printf("%+v", variables)
-	c.HTML(http.StatusOK, "request.tmpl", variables)
+	r := strings.NewReader(watcher_templates.RequestTemplate)
+	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
 }
 
 func ShowResponse(c *gin.Context) {
@@ -58,5 +57,6 @@ func ShowResponse(c *gin.Context) {
 		"UID":              responseDetails.Uid,
 	}
 	fmt.Printf("%+v", variables)
-	c.HTML(http.StatusOK, "response.tmpl", variables)
+	r := strings.NewReader(watcher_templates.ResponseTemplate)
+	c.DataFromReader(http.StatusOK, r.Size(), "text/html", r, nil)
 }

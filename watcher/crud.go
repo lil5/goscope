@@ -99,6 +99,7 @@ func GetRequests(c *gin.Context) {
 	defer db.Close()
 	query := "SELECT `uid`, `method`, `path`, `time` FROM `requests` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
+	fmt.Println(resultingQuery)
 	rows, _ := db.Query(resultingQuery)
 	var result []SummarizedRequest
 	for rows.Next() {
