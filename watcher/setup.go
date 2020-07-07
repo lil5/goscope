@@ -7,7 +7,7 @@ import (
 
 func Setup(engine *gin.Engine) {
 	// Load HTML templates
-	absPath, _ := filepath.Abs("../static/templates/*")
+	absPath, _ := filepath.Abs("./static/templates/*")
 	engine.LoadHTMLGlob(absPath)
 	// Use the logging middleware
 	engine.Use(RequestLogger)
