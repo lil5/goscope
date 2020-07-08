@@ -32,7 +32,7 @@ func prettifyJson(rawString string) string {
 	var prettyJSON bytes.Buffer
 	madeJson, _ := json.Marshal(rawString)
 	var b []byte
-	_ := json.Unmarshal(madeJson, &b)
+	_ = json.Unmarshal(madeJson, &b)
 	err := json.Indent(&prettyJSON, b, "", "    ")
 	if err != nil {
 		fmt.Println(err.Error())
