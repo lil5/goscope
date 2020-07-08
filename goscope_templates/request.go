@@ -1,8 +1,8 @@
 package goscope_templates
 
 import (
-	"bitbucket.org/prowarehouse-nl/gohttpwatcher/goscope_css"
-	"bitbucket.org/prowarehouse-nl/gohttpwatcher/goscope_js"
+	"bitbucket.org/prowarehouse-nl/goscope/goscope_css"
+	"bitbucket.org/prowarehouse-nl/goscope/goscope_js"
 	"fmt"
 )
 

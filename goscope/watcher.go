@@ -1,7 +1,7 @@
 package goscope
 
 import (
-	"bitbucket.org/prowarehouse-nl/gohttpwatcher/goscope_templates"
+	"bitbucket.org/prowarehouse-nl/goscope/goscope_templates"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
