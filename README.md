@@ -3,8 +3,14 @@
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
 The aim of this application is to be a plug and play addition to your application, not a hurdle.
+
 Thus to setup, you only require a one-liner in your main function.
-Once all is set up you can access the web interface by visiting `http://your-app.com/goscope`. It is recommended that you will protect this route from external/public access so that you do not leak important application data.
+
+Once all is set up you can access the web interface by visiting `http://your-app.com/goscope`. 
+
+It is recommended that you will protect this route from external/public access so that you do not leak important application data.
+
+![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594213052/git-repositories/goscope/zgl0npjbhwcs89snwm8u.png)
 
 Example implementation code: 
 ```go
@@ -72,3 +78,9 @@ CREATE TABLE `responses` (
 
 SET FOREIGN_KEY_CHECKS = 1;
 ```
+
+More detailed information about request and response is provided:
+
+![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594213049/git-repositories/goscope/ar5rsnlku4xm8nvf5wj0.png)
+
+![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594213049/git-repositories/goscope/hbeyhmcfii6zmgixyn90.png)
