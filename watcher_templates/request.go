@@ -17,12 +17,11 @@ var RequestTemplate = fmt.Sprintf(`
     <style>%s</style>
 </head>
 <body>
-<div>
-	  <button class="p-4 font-xl" onclick="openTab('request-tab')">Request</button>
-	  <button class="p-4 font-xl" onclick="openTab('response-tab')">Response</button>
+<div class="m-3 p-3 text-center">
+	  <button class="tab-button p-4 font-xl" onclick="openTab('request-tab')">Request</button>
+	  <button class="tab-button p-4 font-xl" onclick="openTab('response-tab')">Response</button>
 </div> 
 <div class="m-3 p-3 text-center" style="line-height: 2em;">
-	 
     <div id="request-tab" class="view-tab md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">
 		<h1 class="font-xl m-2">Request at {{.REQUEST_TIME}} - {{.APPLICATION_NAME}} - Go Watcher</h1>
         <p>Client IP Address:
