@@ -153,7 +153,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	headers, _ = json.Marshal(blw.Header())
 	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
 		"('%s', '%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
-	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(headers), blw.body.Len())
+	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
 		panic(err.Error())
