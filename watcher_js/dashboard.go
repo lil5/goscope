@@ -51,29 +51,29 @@ String.prototype.toHumanDate = function () {
 
 function applyMethodColor(method) {
     if (method === "GET") {
-        return '<span class="badge-secondary"></span>'
+        return '<span class="badge-secondary">method</span>'
     } else if (method === "POST") {
-        return '<span class="badge-info"></span>'
+        return '<span class="badge-info">method</span>'
     } else if (method === "PUT") {
-        return '<span class="badge-info"></span>'
+        return '<span class="badge-info">method</span>'
     } else if (method === "PATCH") {
-        return '<span class="badge-info"></span>'
+        return '<span class="badge-info">method</span>'
     } else if (method === "DELETE") {
-        return '<span class="badge-danger"></span>'
+        return '<span class="badge-danger">method</span>'
     }
-    return '<span class="badge-secondary"></span>'
+    return '<span class="badge-secondary">method</span>'
 }
 
 function applyStatusColor(status) {
     status = parseInt(status)
     if (status >= 200 && status < 300) {
-        return '<span class="badge-success"></span>'
+        return '<span class="badge-success">status</span>'
     } else if (status >= 300 && status < 400) {
-        return '<span class="badge-info"></span>'
+        return '<span class="badge-info">status</span>'
     } else if (status >= 400 && status < 500) {
-        return '<span class="badge-warning"></span>'
+        return '<span class="badge-warning">status</span>'
     }
-    return '<span class="badge-danger"></span>'
+    return '<span class="badge-danger">status</span>'
 
 }
 
