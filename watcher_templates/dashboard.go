@@ -11,7 +11,7 @@ var IndexTemplate = fmt.Sprintf(`
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Go HTTP Watcher</title>
+    <title>{{.APPLICATION_NAME}} - Go HTTP Watcher</title>
     <style>%s</style>
 	<style>%s</style>
 	<style>%s</style>
