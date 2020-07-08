@@ -124,39 +124,6 @@ func GetRequests(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func GetResponses(c *gin.Context) {
-	offsetQuery := c.DefaultQuery("offset", "0")
-	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-	query := "SELECT `uid`, `request_uid`, `client_ip`, `status`, `time`, `path` FROM `responses` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
-	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
-	fmt.Println(resultingQuery)
-	rows, _ := db.Query(resultingQuery)
-	var result []SummarizedResponse
-	for rows.Next() {
-		var uid string
-		var requestUid string
-		var clientIp string
-		var path string
-		var status string
-		var t int
-
-		_ = rows.Scan(&uid, &requestUid, &clientIp, &status, &t, &path)
-		response := SummarizedResponse{
-			ClientIp: clientIp,
-			Path:     path,
-			Status:   status,
-			Time:     t,
-			Uid:      uid,
-		}
-		result = append(result, response)
-	}
-	c.JSON(http.StatusOK, result)
-}
 
 func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))

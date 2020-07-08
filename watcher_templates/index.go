@@ -35,23 +35,6 @@ var IndexTemplate = fmt.Sprintf(`
             <button id="requests-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
         </div>
     </div>
-    <div class="m-3 p-3">
-        <table id="response-table" class="md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
-            <thead>Outgoing Responses</thead>
-            <tr>
-                <th class="custom-td">Code</th>
-                <th class="custom-td">ClientIP</th>
-                <th class="custom-td text-center">Path</th>
-                <th class="custom-td">Happened</th>
-                <th class="custom-td"></th>
-            </tr>
-        </table>
-        <div>
-            <button id="responses-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
-            &nbsp;
-            <button id="responses-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
-        </div>
-    </div>
 </div>
 <script>%s</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
