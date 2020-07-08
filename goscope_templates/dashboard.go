@@ -28,10 +28,11 @@ var IndexTemplate = fmt.Sprintf(`
             <button id="requests-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
         </div>
     </div>
+	<img src="%s">
 </div>
 <script>%s</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>`,
-	goscope_css.RaisinCss, goscope_css.HighlightTheme, goscope_css.WatcherStyles, goscope_js.DashboardJs)
+	goscope_css.RaisinCss, goscope_css.HighlightTheme, goscope_css.WatcherStyles, GopherImage, goscope_js.DashboardJs)
