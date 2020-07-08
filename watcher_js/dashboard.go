@@ -14,6 +14,7 @@ const requestTableHeaders = '\
 	<th class="custom-td"></th>\
 </tr>\
 ';
+
 async function getRequests(offset) {
     try {
         const response = await axios.get('/watcher/requests', {
@@ -48,17 +49,45 @@ String.prototype.toHumanDate = function () {
     return resultingString + ' ago';
 }
 
+function applyMethodColor(method) {
+    if (method === "GET") {
+        return '<span class="badge-secondary"></span>'
+    } else if (method === "POST") {
+        return '<span class="badge-info"></span>'
+    } else if (method === "PUT") {
+        return '<span class="badge-info"></span>'
+    } else if (method === "PATCH") {
+        return '<span class="badge-info"></span>'
+    } else if (method === "DELETE") {
+        return '<span class="badge-danger"></span>'
+    }
+    return '<span class="badge-secondary"></span>'
+}
+
+function applyStatusColor(status) {
+    status = parseInt(status)
+    if (status >= 200 && status < 300) {
+        return '<span class="badge-success"></span>'
+    } else if (status >= 300 && status < 400) {
+        return '<span class="badge-info"></span>'
+    } else if (status >= 400 && status < 500) {
+        return '<span class="badge-warning"></span>'
+    }
+    return '<span class="badge-danger"></span>'
+
+}
+
 function fillRequestTable(requestData) {
     let requestTable = document.getElementById("request-table");
     requestTable.innerHTML = requestTableHeaders;
-	
+
     requestData.forEach(function (item) {
         let requestMoment = item.time;
         let elapsed = (now - requestMoment).toString().toHumanDate();
         requestTable.innerHTML += '\
             <tr class="text-center">\
-			<td class="p-3 custom-td">' + item.response_status + '</td>\
-            <td class="p-3 custom-td">' + item.method + '</td>\
+			<td class="p-3 custom-td">' + applyStatusColor(item.response_status) + '</td>\
+            <td class="p-3 custom-td">' + applyMethodColor(item.method) + '</td>\
             \<td class="p-3 custom-td">' + item.path + '</td>\
             \<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\

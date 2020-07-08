@@ -29,4 +29,24 @@ table {
 	background: #2B2B2D;
 	border-radius: 4px;
 }
+.badge-success {
+    color: #fff;
+    background-color: #1f9d55;
+}
+.badge-info {
+    color: #fff;
+    background-color: #1c3d5a;
+}
+.badge-secondary {
+    color: #fff;
+    background-color: #494444;
+}
+.badge-danger {
+    color: #fff;
+    background-color: #621b18;
+}
+.badge-warning {
+    color: #fff;
+    background-color: #684f1d;
+}
 `
