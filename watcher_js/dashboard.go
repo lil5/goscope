@@ -50,7 +50,8 @@ String.prototype.toHumanDate = function () {
 
 function fillRequestTable(requestData) {
     let requestTable = document.getElementById("request-table");
-    requestTable.innerHTML = "";
+    requestTable.innerHTML = requestTableHeaders;
+	
     requestData.forEach(function (item) {
         let requestMoment = item.time;
         let elapsed = (now - requestMoment).toString().toHumanDate();
