@@ -25,7 +25,7 @@ func UnixTimeToAmsterdam(rawTime int) string {
 	return timeInstance.In(loc).Format("15:04:05 Mon, 2 Jan 2006 ")
 }
 
-func formatJson(rawString string) string {
+func prettifyJson(rawString string) string {
 	var prettyJSON bytes.Buffer
 	err := json.Indent(&prettyJSON, []byte(rawString), "", "\t")
 	if err != nil {
