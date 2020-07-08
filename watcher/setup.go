@@ -13,6 +13,5 @@ func Setup(engine *gin.Engine) {
 	watcherGroup.GET("/", Dashboard)
 	watcherGroup.GET("/requests", GetRequests)
 	watcherGroup.GET("/requests/:id", ShowRequest)
-	watcherGroup.GET("/responses", GetResponses)
 	watcherGroup.GET("/responses/:id", ShowResponse)
 }
