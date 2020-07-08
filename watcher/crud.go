@@ -132,19 +132,20 @@ func GetResponses(c *gin.Context) {
 		panic(err.Error())
 	}
 	defer db.Close()
-	query := "SELECT `uid`, `client_ip`, `status`, `time`, `path` FROM `responses` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
+	query := "SELECT `uid`, `request_uid`, `client_ip`, `status`, `time`, `path` FROM `responses` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
 	fmt.Println(resultingQuery)
 	rows, _ := db.Query(resultingQuery)
 	var result []SummarizedResponse
 	for rows.Next() {
 		var uid string
+		var requestUid string
 		var clientIp string
 		var path string
 		var status string
 		var t int
 
-		_ = rows.Scan(&uid, &clientIp, &status, &t, &path)
+		_ = rows.Scan(&uid, &requestUid, &clientIp, &status, &t, &path)
 		response := SummarizedResponse{
 			ClientIp: clientIp,
 			Path:     path,
@@ -157,32 +158,27 @@ func GetResponses(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func DumpResponse(c *gin.Context, blw *BodyLogWriter) {
+func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
-	uid, _ := uuid.NewV4()
-	now := time.Now().Unix()
-	headers, _ := json.Marshal(blw.Header())
-	query := "INSERT INTO `responses` (`uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
-		"('%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
-	resultingQuery := fmt.Sprintf(query, uid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, blw.body.String(), c.FullPath(), headers, blw.body.Len())
-	_, _ = db.Exec(resultingQuery)
-}
 
-func DumpRequest(c *gin.Context, body string) {
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-	uid, _ := uuid.NewV4()
 	now := time.Now().Unix()
+
+	requestUid, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
 	query := "INSERT INTO `requests` (`uid`, `application`, `client_ip`, `method`, `path`, `host`, `time`, `headers`, `body`, `referrer`, `url`, `user_agent`) VALUES " +
 		"('%s', '%s', '%s', '%s', '%s', '%s', %v, '%s', '%s', '%s', '%s', '%s');"
-	resultingQuery := fmt.Sprintf(query, uid, os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method, c.FullPath(), c.Request.Host, now, headers, body, c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
+	resultingQuery := fmt.Sprintf(query, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method, c.FullPath(), c.Request.Host, now, headers, body,
+		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
+	_, _ = db.Exec(resultingQuery)
+
+	responseUid, _ := uuid.NewV4()
+	headers, _ = json.Marshal(blw.Header())
+	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
+		"('%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
+	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, blw.body.String(), c.FullPath(), headers, blw.body.Len())
 	_, _ = db.Exec(resultingQuery)
 }

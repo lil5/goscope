@@ -12,12 +12,14 @@ func ResponseLogger(c *gin.Context) {
 	if CheckExcludedPaths(c.FullPath()) {
 		blw := &BodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 		c.Writer = blw
-		go DumpResponse(c, blw)
+		buf, _ := ioutil.ReadAll(c.Request.Body)
+		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
+		go DumpResponse(c, blw, readBody(rdr1))
 	}
 	c.Next()
 }
 
-func RequestLogger(c *gin.Context) {
+/*func RequestLogger(c *gin.Context) {
 	if CheckExcludedPaths(c.FullPath()) {
 		buf, _ := ioutil.ReadAll(c.Request.Body)
 		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
@@ -27,7 +29,7 @@ func RequestLogger(c *gin.Context) {
 		go DumpRequest(c, readBody(rdr1))
 	}
 	c.Next()
-}
+}*/
 
 func readBody(reader io.Reader) string {
 	buf := new(bytes.Buffer)

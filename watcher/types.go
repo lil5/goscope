@@ -17,22 +17,24 @@ type RecordByUri struct {
 }
 
 type SummarizedResponse struct {
-	ClientIp string `json:"client_ip,exists"`
-	Path     string `json:"path,exists"`
-	Status   string `json:"status,exists"`
-	Time     int    `json:"time,exists"`
-	Uid      string `json:"uid,exists"`
+	RequestUid string `json:"request_uid,exists"`
+	ClientIp   string `json:"client_ip,exists"`
+	Path       string `json:"path,exists"`
+	Status     string `json:"status,exists"`
+	Time       int    `json:"time,exists"`
+	Uid        string `json:"uid,exists"`
 }
 
 type DetailedResponse struct {
-	Body     string `json:"body,exists"`
-	ClientIp string `json:"client_ip,exists"`
-	Headers  string `json:"headers,exists"`
-	Path     string `json:"path,exists"`
-	Size     int    `json:"size,exists"`
-	Status   string `json:"status,exists"`
-	Time     int    `json:"time,exists"`
-	Uid      string `json:"uid,exists"`
+	Body       string `json:"body,exists"`
+	ClientIp   string `json:"client_ip,exists"`
+	Headers    string `json:"headers,exists"`
+	Path       string `json:"path,exists"`
+	Size       int    `json:"size,exists"`
+	Status     string `json:"status,exists"`
+	Time       int    `json:"time,exists"`
+	RequestUid string `json:"request_uid,exists"`
+	Uid        string `json:"uid,exists"`
 }
 
 type DetailedRequest struct {
