@@ -140,12 +140,18 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 		"('%s', '%s', '%s', '%s', '%s', '%s', %v, '%s', '%s', '%s', '%s', '%s');"
 	resultingQuery := fmt.Sprintf(query, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method, c.FullPath(), c.Request.Host, now, headers, body,
 		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
-	_, _ = db.Exec(resultingQuery)
+	_, err = db.Exec(resultingQuery)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	responseUid, _ := uuid.NewV4()
 	headers, _ = json.Marshal(blw.Header())
 	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
 		"('%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
 	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, blw.body.String(), c.FullPath(), headers, blw.body.Len())
-	_, _ = db.Exec(resultingQuery)
+	_, err = db.Exec(resultingQuery)
+	if err != nil {
+		panic(err.Error())
+	}
 }
