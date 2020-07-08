@@ -4,8 +4,9 @@ Watch incoming requests and outgoing responses from your Go Gin application. All
 
 The aim of this application is to be a plug and play addition to your application, not a hurdle.
 Thus to setup, you only require a one-liner in your main function.
+Once all is set up you can access the web interface by visiting `http://your-app.com/goscope`. It is recommended that you will protect this route from external/public access so that you do not leak important application data.
 
-Example code: 
+Example implementation code: 
 ```go
 package main
 import (
