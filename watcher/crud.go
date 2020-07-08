@@ -44,9 +44,9 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	}
 
 	return DetailedRequest{
-		Body:      html.UnescapeString(body),
+		Body:      body,
 		ClientIp:  clientIp,
-		Headers:   html.UnescapeString(headers),
+		Headers:   headers,
 		Host:      host,
 		Method:    method,
 		Path:      path,
@@ -83,9 +83,9 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 		panic(err.Error())
 	}
 	return DetailedResponse{
-		Body:     html.UnescapeString(body),
+		Body:     body,
 		ClientIp: clientIp,
-		Headers:  html.UnescapeString(headers),
+		Headers:  headers,
 		Path:     path,
 		Size:     size,
 		Status:   status,
