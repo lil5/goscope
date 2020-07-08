@@ -1,4 +1,4 @@
-module bitbucket.org/prowarehouse-nl/gohttpwatcher
+module bitbucket.org/prowarehouse-nl/goscope
 
 go 1.14
 
