@@ -26,6 +26,9 @@ func UnixTimeToAmsterdam(rawTime int) string {
 }
 
 func prettifyJson(rawString string) string {
+	if rawString == "" {
+		return ""
+	}
 	var prettyJSON bytes.Buffer
 	err := json.Indent(&prettyJSON, []byte(rawString), "", "\t")
 	if err != nil {
