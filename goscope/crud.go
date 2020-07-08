@@ -103,7 +103,7 @@ func GetRequests(c *gin.Context) {
 	}
 	defer db.Close()
 	query := "SELECT `requests`.`uid`,`requests`.`method`,`requests`.`path`,`requests`.`time`,`responses`.`status` FROM `requests` " +
-		"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` WHERE `requests`.`application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
+		"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` WHERE `requests`.`application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
 	fmt.Println(resultingQuery)
 	rows, _ := db.Query(resultingQuery)
