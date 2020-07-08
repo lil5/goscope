@@ -30,22 +30,32 @@ table {
 	border-radius: 4px;
 }
 .badge-success {
+	padding: 4px;
+	border-radius: 4px;
     color: #fff;
     background-color: #1f9d55;
 }
 .badge-info {
+	padding: 4px;
+	border-radius: 4px;
     color: #fff;
     background-color: #1c3d5a;
 }
 .badge-secondary {
+	border-radius: 4px;
+	padding: 4px;
     color: #fff;
     background-color: #494444;
 }
 .badge-danger {
+	border-radius: 4px;
+	padding: 4px;
     color: #fff;
     background-color: #621b18;
 }
 .badge-warning {
+	border-radius: 4px;
+	padding: 4px;
     color: #fff;
     background-color: #684f1d;
 }
