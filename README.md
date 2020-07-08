@@ -38,6 +38,8 @@ APPLICATION_ID: "application-id"
 WATCHER_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
 ```
 
+The application expects a MySQL database (preferably MariaDB) and the following tables:
+
 ```
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
