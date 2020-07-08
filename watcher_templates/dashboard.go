@@ -21,13 +21,6 @@ var IndexTemplate = fmt.Sprintf(`
     <h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} - Go HTTP Watcher</h1>
     <div class="m-3 p-3">
         <table id="request-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
-            <thead>Incoming Requests</thead>
-            <tr>
-                <th class="custom-td">Verb</th>
-                <th class="custom-td text-center">Path</th>
-                <th class="custom-td">Happened</th>
-                <th class="custom-td"></th>
-            </tr>
         </table>
         <div>
             <button id="requests-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>

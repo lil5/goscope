@@ -101,7 +101,8 @@ func GetRequests(c *gin.Context) {
 		panic(err.Error())
 	}
 	defer db.Close()
-	query := "SELECT `uid`, `method`, `path`, `time` FROM `requests` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
+	query := "SELECT `requests`.`uid`,`requests`.`method`,`requests`.`path`,`requests`.`time`,`responses`.`status` FROM `requests` " +
+		"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` WHERE `requests`.`application` = '%s' ORDER BY `time` DESC LIMIT 15 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
 	fmt.Println(resultingQuery)
 	rows, _ := db.Query(resultingQuery)
@@ -111,13 +112,15 @@ func GetRequests(c *gin.Context) {
 		var method string
 		var path string
 		var t int
+		var status int
 
-		_ = rows.Scan(&uid, &method, &path, &t)
+		_ = rows.Scan(&uid, &method, &path, &t, &status)
 		request := SummarizedRequest{
 			Method: method,
 			Path:   path,
 			Time:   t,
 			Uid:    uid,
+			ResponseStatus: status,
 		}
 		result = append(result, request)
 	}

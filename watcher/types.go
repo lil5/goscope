@@ -6,10 +6,11 @@ import (
 )
 
 type SummarizedRequest struct {
-	Method string `json:"method,exists"`
-	Path   string `json:"path,exists"`
-	Time   int    `json:"time,exists"`
-	Uid    string `json:"uid,exists"`
+	Method         string `json:"method,exists"`
+	Path           string `json:"path,exists"`
+	Time           int    `json:"time,exists"`
+	Uid            string `json:"uid,exists"`
+	ResponseStatus int    `json:"response_status,exists"`
 }
 
 type RecordByUri struct {
