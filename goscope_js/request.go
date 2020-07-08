@@ -1,4 +1,4 @@
-package watcher_js
+package goscope_js
 const RequestJs = `
 document.addEventListener("DOMContentLoaded", function () {
     hljs.initHighlightingOnLoad();

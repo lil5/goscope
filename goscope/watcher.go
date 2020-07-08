@@ -1,7 +1,7 @@
-package watcher
+package goscope
 
 import (
-	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_templates"
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/goscope_templates"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -13,7 +13,7 @@ func Dashboard(c *gin.Context) {
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
 	}
-	rawTemplate := watcher_templates.IndexTemplate
+	rawTemplate := goscope_templates.IndexTemplate
 	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
 	reader := strings.NewReader(cleanTemplate)
 	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
@@ -46,7 +46,7 @@ func ShowRequest(c *gin.Context) {
 		"RESPONSE_TIME":             UnixTimeToAmsterdam(responseDetails.Time),
 		"RESPONSE_UID":              responseDetails.Uid,
 	}
-	rawTemplate := watcher_templates.RequestTemplate
+	rawTemplate := goscope_templates.RequestTemplate
 	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
 	reader := strings.NewReader(cleanTemplate)
 	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)

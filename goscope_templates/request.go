@@ -1,8 +1,8 @@
-package watcher_templates
+package goscope_templates
 
 import (
-	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_css"
-	"bitbucket.org/prowarehouse-nl/gohttpwatcher/watcher_js"
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/goscope_css"
+	"bitbucket.org/prowarehouse-nl/gohttpwatcher/goscope_js"
 	"fmt"
 )
 
@@ -89,4 +89,4 @@ var RequestTemplate = fmt.Sprintf(`
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 </body>
 </html>
-`, watcher_css.RaisinCss, watcher_css.HighlightTheme, watcher_css.WatcherStyles, watcher_js.RequestJs)
+`, goscope_css.RaisinCss, goscope_css.HighlightTheme, goscope_css.WatcherStyles, goscope_js.RequestJs)

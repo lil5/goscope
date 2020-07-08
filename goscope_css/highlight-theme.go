@@ -1,4 +1,4 @@
-package watcher_css
+package goscope_css
 const HighlightTheme = `
 /*
  * highlightjs-material-dark-theme

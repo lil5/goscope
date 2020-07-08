@@ -1,4 +1,4 @@
-package watcher
+package goscope
 
 import (
 	"bytes"

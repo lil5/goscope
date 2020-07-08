@@ -1,4 +1,4 @@
-package watcher
+package goscope
 
 import (
 	"github.com/gin-gonic/gin"
