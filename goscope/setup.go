@@ -9,7 +9,7 @@ func Setup(engine *gin.Engine) {
 	engine.Use(ResponseLogger)
 
 	// Setup necessary routes
-	watcherGroup := engine.Group("/watcher")
+	watcherGroup := engine.Group("/goscope")
 	watcherGroup.GET("/", Dashboard)
 	watcherGroup.GET("/requests", GetRequests)
 	watcherGroup.GET("/requests/:id", ShowRequest)

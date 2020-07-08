@@ -17,7 +17,7 @@ const requestTableHeaders = '\
 
 async function getRequests(offset) {
     try {
-        const response = await axios.get('/watcher/requests', {
+        const response = await axios.get('/goscope/requests', {
             params: {
                 "offset": offset,
             }
@@ -91,7 +91,7 @@ function fillRequestTable(requestData) {
             \<td class="p-3 custom-td">' + item.path + '</td>\
             \<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\
-                 <a class="cursor-pointer" href="/watcher/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
+                 <a class="cursor-pointer" href="/goscope/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
     })
 }
 

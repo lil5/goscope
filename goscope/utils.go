@@ -10,7 +10,7 @@ import (
 
 func CheckExcludedPaths(path string) bool {
 	result := true
-	items := []string{"", "/watcher/", "css", "/watcher", "/js/*", "/css/*", "/css/*filepath", "/js/*filepath", "/watcher/requests", "/js", "/watcher/responses", "/watcher/responses/:id", "/watcher/requests/:id"}
+	items := []string{"", "/goscope/", "css", "/goscope", "/js/*", "/css/*", "/css/*filepath", "/js/*filepath", "/goscope/requests", "/js", "/goscope/responses", "/goscope/responses/:id", "/goscope/requests/:id"}
 	for _, s := range items {
 		if path == s {
 			result = false
