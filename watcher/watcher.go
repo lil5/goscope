@@ -39,7 +39,7 @@ func ShowRequest(c *gin.Context) {
 		"REQUEST_USER_AGENT":        requestDetails.UserAgent,
 		"RESPONSE_BODY":             formatJson(responseDetails.Body),
 		"RESPONSE_CLIENT_IP":        responseDetails.ClientIp,
-		"RESPONSE_HEADERS":          formatJson(responseDetails.Headers),
+		"RESPONSE_HEADERS":          prettifyJson(responseDetails.Headers),
 		"RESPONSE_PATH":             responseDetails.Path,
 		"RESPONSE_SIZE":             strconv.Itoa(responseDetails.Size),
 		"RESPONSE_STATUS":           responseDetails.Status,

@@ -1,6 +1,8 @@
 package watcher
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -24,13 +26,12 @@ func UnixTimeToAmsterdam(rawTime int) string {
 }
 
 func formatJson(rawString string) string {
-	if rawString == "" {
-		return rawString
+	var prettyJSON bytes.Buffer
+	err := json.Indent(&prettyJSON, []byte(rawString), "", "\t")
+	if err != nil {
+		panic(err.Error())
 	}
-	str := strings.ReplaceAll(rawString, "{", "{\n    ")
-	str = strings.ReplaceAll(str, "}", "\n}")
-	str = strings.ReplaceAll(str, "],", "],\n    ")
-	return str
+	return string(prettyJSON.Bytes())
 }
 
 func ReplaceVariablesInTemplate(rawTemplate string, variables map[string]string) string {
