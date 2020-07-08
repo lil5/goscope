@@ -23,4 +23,10 @@ table {
     color: #fff;
     border: none;
 }
+.tab-button {
+	color: #fff;
+    border: none;
+	background: #2B2B2D;
+	border-radius: 4px;
+}
 `
