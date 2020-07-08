@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
+	"html"
 	"net/http"
 	"os"
 	"strconv"
@@ -43,9 +44,9 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	}
 
 	return DetailedRequest{
-		Body:      body,
+		Body:      html.UnescapeString(body),
 		ClientIp:  clientIp,
-		Headers:   headers,
+		Headers:   html.UnescapeString(headers),
 		Host:      host,
 		Method:    method,
 		Path:      path,
@@ -82,9 +83,9 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 		panic(err.Error())
 	}
 	return DetailedResponse{
-		Body:     body,
+		Body:     html.UnescapeString(body),
 		ClientIp: clientIp,
-		Headers:  headers,
+		Headers:  html.UnescapeString(headers),
 		Path:     path,
 		Size:     size,
 		Status:   status,
@@ -141,7 +142,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	headers, _ := json.Marshal(c.Request.Header)
 	query := "INSERT INTO `requests` (`uid`, `application`, `client_ip`, `method`, `path`, `host`, `time`, `headers`, `body`, `referrer`, `url`, `user_agent`) VALUES " +
 		"('%s', '%s', '%s', '%s', '%s', '%s', %v, '%s', '%s', '%s', '%s', '%s');"
-	resultingQuery := fmt.Sprintf(query, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method, c.FullPath(), c.Request.Host, now, headers, body,
+	resultingQuery := fmt.Sprintf(query, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method, c.FullPath(), c.Request.Host, now, html.EscapeString(string(headers)), html.EscapeString(body),
 		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
@@ -152,7 +153,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	headers, _ = json.Marshal(blw.Header())
 	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
 		"('%s', '%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
-	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, blw.body.String(), c.FullPath(), headers, blw.body.Len())
+	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(headers), blw.body.Len())
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
 		panic(err.Error())
