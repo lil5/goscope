@@ -57,13 +57,13 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	}
 }
 
-func GetDetailedResponse(responseUid string) DetailedResponse {
+func GetDetailedResponse(requestUid string) DetailedResponse {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
-	resultingQuery := fmt.Sprintf("SELECT * FROM `responses` WHERE `uid` = '%s' LIMIT 1;", responseUid)
+	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size` FROM `responses` WHERE `request_uid` = '%s' LIMIT 1;", requestUid)
 	fmt.Println(resultingQuery)
 	row := db.QueryRow(resultingQuery)
 

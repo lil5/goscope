@@ -24,6 +24,7 @@ func ShowRequest(c *gin.Context) {
 	var request RecordByUri
 	_ = c.ShouldBindUri(&request)
 	requestDetails := GetDetailedRequest(request.Uid)
+	responseDetails := GetDetailedResponse(request.Uid)
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
 		"BODY":             formatJson(requestDetails.Body),
