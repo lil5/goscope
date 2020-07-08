@@ -14,22 +14,13 @@ func ResponseLogger(c *gin.Context) {
 		c.Writer = blw
 		buf, _ := ioutil.ReadAll(c.Request.Body)
 		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
+		// We have to create a new Buffer, because rdr1 will be read and consumed.
+		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
+		c.Request.Body = rdr2
 		go DumpResponse(c, blw, readBody(rdr1))
 	}
 	c.Next()
 }
-
-/*func RequestLogger(c *gin.Context) {
-	if CheckExcludedPaths(c.FullPath()) {
-		buf, _ := ioutil.ReadAll(c.Request.Body)
-		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
-		// We have to create a new Buffer, because rdr1 will be read and consumed.
-		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
-		c.Request.Body = rdr2
-		go DumpRequest(c, readBody(rdr1))
-	}
-	c.Next()
-}*/
 
 func readBody(reader io.Reader) string {
 	buf := new(bytes.Buffer)

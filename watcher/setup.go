@@ -6,7 +6,6 @@ import (
 
 func Setup(engine *gin.Engine) {
 	// Use the logging middleware
-	engine.Use(RequestLogger)
 	engine.Use(ResponseLogger)
 
 	// Setup necessary routes
