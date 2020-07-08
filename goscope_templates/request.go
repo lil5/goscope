@@ -23,7 +23,7 @@ var RequestTemplate = fmt.Sprintf(`
 </div> 
 <div class="m-3 p-3 text-center" style="line-height: 2em;">
     <div id="request-tab" class="view-tab md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">
-		<h1 class="font-xl m-2">Request at {{.REQUEST_TIME}} - {{.APPLICATION_NAME}} - Go Watcher</h1>
+		<h1 class="font-xl m-2">Request at {{.REQUEST_TIME}} - {{.APPLICATION_NAME}} - GoScope</h1>
         <p>Client IP Address:
         <pre><code class="plaintext">{{.REQUEST_CLIENT_IP}}</code></pre>
         </p>
