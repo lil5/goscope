@@ -135,7 +135,7 @@ func GetLogs(c *gin.Context) {
 		log.Println(err.Error())
 	}
 	defer db.Close()
-	query := "SELECT `uid`, CONCAT(LEFT(`error`, 80),'...'), `time` FROM `logs` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
+	query := "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
 	rows, err := db.Query(resultingQuery)
 	if err != nil {
