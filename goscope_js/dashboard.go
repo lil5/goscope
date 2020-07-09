@@ -4,12 +4,12 @@ let requestOffset = 0;
 let logOffset = 0;
 
 function openTab(tabName) {
-  var i;
-  var x = document.getElementsByClassName("view-tab");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  document.getElementById(tabName).style.display = "block";
+    var i;
+    var x = document.getElementsByClassName("view-tab");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(tabName).style.display = "block";
 }
 
 const now = Math.round((new Date()).getTime() / 1000);
@@ -127,13 +127,13 @@ function fillRequestTable(requestData) {
 }
 
 function fillLogTable(logData) {
-    let requestTable = document.getElementById("log-table");
-    requestTable.innerHTML = requestTableHeaders;
+    let logTable = document.getElementById("log-table");
+    logTable.innerHTML = requestTableHeaders;
 
     logData.forEach(function (item) {
         let requestMoment = item.time;
         let elapsed = (now - requestMoment).toString().toHumanDate();
-        requestTable.innerHTML += '\
+        logTable.innerHTML += '\
             <tr class="text-center">\
 			<td class="p-3 custom-td">' + item.error + '</td>\
 			\<td class="p-3 custom-td">' + elapsed + '</td>\
@@ -141,14 +141,6 @@ function fillLogTable(logData) {
                  <a class="cursor-pointer" href="/goscope/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
     })
 }
-
-document.addEventListener("DOMContentLoaded", async function () {
-    let requestData = await getRequests(requestOffset);
-    let logData = await getLogs(logOffset)
-    fillRequestTable(requestData)
-    fillLogTable(logData)
-	openTab('http-tab')
-})
 
 function increaseRequestOffset() {
     requestOffset += 10;
@@ -180,4 +172,14 @@ nextRequestPage.onclick = async function () {
         decreaseRequestOffset()
     }
 }
+
+document.addEventListener("DOMContentLoaded", async function () {
+    let requestData = await getRequests(requestOffset);
+    let logData = await getLogs(logOffset);
+    fillRequestTable(requestData);
+    fillLogTable(logData);
+    openTab('http-tab');
+})
+
+
 `
