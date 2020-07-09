@@ -19,16 +19,13 @@ var IndexTemplate = fmt.Sprintf(`
 <body>
 <div class="m-1 p-1 text-center">
 	<h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} - GoScope</h1>
-        <div class="m-3 p-3">
-            <table id="request-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
-            </table>
-            <div>
-                <button id="requests-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
-                &nbsp;
-                <button id="requests-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
-            </div>
-        </div>
-    </div>
+	<table id="request-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
+	</table>
+	<div>
+		<button id="requests-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
+		&nbsp;
+		<button id="requests-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
+	</div>
     <img src="%s">
 </div>
 <script>%s</script>
