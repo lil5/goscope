@@ -22,9 +22,9 @@ var LogsTemplate = fmt.Sprintf(`
 		<table id="log-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
 		</table>
 		<div>
-			<button id="log-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
+			<button id="logs-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
 			&nbsp;
-			<button id="log-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
+			<button id="logs-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
 		</div>
 	</div>
     <img src="%s">
