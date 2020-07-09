@@ -22,9 +22,13 @@ func Dashboard(c *gin.Context) {
 	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
 
+
 func ShowRequest(c *gin.Context) {
 	var request RecordByUri
-	_ = c.ShouldBindUri(&request)
+	err := c.ShouldBindUri(&request)
+	if err != nil {
+		Log(err.Error())
+	}
 	requestDetails := GetDetailedRequest(request.Uid)
 	responseDetails := GetDetailedResponse(request.Uid)
 	variables := map[string]string{

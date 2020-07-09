@@ -26,7 +26,10 @@ func ResponseLogger(c *gin.Context) {
 
 func readBody(reader io.Reader) string {
 	buf := new(bytes.Buffer)
-	_, _ = buf.ReadFrom(reader)
+	_, err := buf.ReadFrom(reader)
+	if err != nil {
+		Log(err.Error())
+	}
 	s := buf.String()
 	return s
 }

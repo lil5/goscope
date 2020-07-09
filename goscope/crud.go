@@ -39,6 +39,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 
 	err = row.Scan(&uid, &application, &clientIp, &method, &path, &url, &host, &t, &headers, &body, &referrer, &userAgent)
 	if err != nil {
+		Log(err.Error())
 		panic(err.Error())
 	}
 
@@ -79,6 +80,7 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 
 	err = row.Scan(&uid, &application, &clientIp, &status, &t, &body, &path, &headers, &size)
 	if err != nil {
+		Log(err.Error())
 		panic(err.Error())
 	}
 	return DetailedResponse{
@@ -98,13 +100,13 @@ func GetRequests(c *gin.Context) {
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
+		Log(err.Error())
 		panic(err.Error())
 	}
 	defer db.Close()
 	query := "SELECT `requests`.`uid`,`requests`.`method`,`requests`.`path`,`requests`.`time`,`responses`.`status` FROM `requests` " +
 		"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` WHERE `requests`.`application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
-	fmt.Println(resultingQuery)
 	rows, _ := db.Query(resultingQuery)
 	var result []SummarizedRequest
 	for rows.Next() {
@@ -121,6 +123,35 @@ func GetRequests(c *gin.Context) {
 			Time:   t,
 			Uid:    uid,
 			ResponseStatus: status,
+		}
+		result = append(result, request)
+	}
+	c.JSON(http.StatusOK, result)
+}
+
+func GetLogs(c *gin.Context) {
+	offsetQuery := c.DefaultQuery("offset", "0")
+	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
+	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	if err != nil {
+		Log(err.Error())
+		panic(err.Error())
+	}
+	defer db.Close()
+	query := "SELECT `uid`, `error`, `time` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
+	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
+	rows, _ := db.Query(resultingQuery)
+	var result []ExceptionRecord
+	for rows.Next() {
+		var uid string
+		var t int
+		var errorMessage string
+
+		_ = rows.Scan(&uid, &errorMessage, &t)
+		request := ExceptionRecord{
+			Error: errorMessage,
+			Time:  t,
+			Uid:   uid,
 		}
 		result = append(result, request)
 	}
@@ -145,15 +176,14 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	if err != nil {
 		panic(err.Error())
 	}
-
 	responseUid, _ := uuid.NewV4()
 	headers, _ = json.Marshal(blw.Header())
 	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
 		"('%s', '%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
 	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
 	_, err = db.Exec(resultingQuery)
-	fmt.Println(resultingQuery)
 	if err != nil {
+		Log(err.Error())
 		panic(err.Error())
 	}
 }

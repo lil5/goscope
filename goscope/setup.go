@@ -25,6 +25,7 @@ func Setup(engine *gin.Engine) {
 	// Setup necessary routes
 	watcherGroup := engine.Group("/goscope")
 	watcherGroup.GET("/", Dashboard)
+	watcherGroup.GET("/logs", GetLogs)
 	watcherGroup.GET("/requests", GetRequests)
 	watcherGroup.GET("/requests/:id", ShowRequest)
 }
