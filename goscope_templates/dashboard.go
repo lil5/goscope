@@ -35,7 +35,7 @@ var IndexTemplate = fmt.Sprintf(`
         </div>
     </div>
 
-    <div id="log-tab" class="class="view-tab"">
+    <div id="log-tab" class="view-tab">
         <div class="m-3 p-3">
             <table id="log-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
             </table>

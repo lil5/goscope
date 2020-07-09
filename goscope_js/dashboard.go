@@ -111,7 +111,6 @@ function applyStatusColor(status) {
 function fillRequestTable(requestData) {
     let requestTable = document.getElementById("request-table");
     requestTable.innerHTML = requestTableHeaders;
-
     requestData.forEach(function (item) {
         let requestMoment = item.time;
         let elapsed = (now - requestMoment).toString().toHumanDate();
@@ -129,7 +128,6 @@ function fillRequestTable(requestData) {
 function fillLogTable(logData) {
     let logTable = document.getElementById("log-table");
     logTable.innerHTML = logTableHeaders;
-
     logData.forEach(function (item) {
         let requestMoment = item.time;
         let elapsed = (now - requestMoment).toString().toHumanDate();
@@ -174,11 +172,11 @@ nextRequestPage.onclick = async function () {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
+	openTab('http-tab');
     let requestData = await getRequests(requestOffset);
     let logData = await getLogs(logOffset);
     fillRequestTable(requestData);
     fillLogTable(logData);
-    openTab('http-tab');
 })
 
 
