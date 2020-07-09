@@ -38,48 +38,7 @@ APPLICATION_ID: "application-id"
 WATCHER_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
 ```
 
-The application expects a MySQL database (preferably MariaDB) and the following tables:
-
-```
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
-DROP TABLE IF EXISTS `requests`;
-CREATE TABLE `requests` (
-  `uid` varchar(32) NOT NULL,
-  `application` varchar(255) NOT NULL,
-  `client_ip` varchar(255) DEFAULT NULL,
-  `method` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `host` varchar(255) DEFAULT NULL,
-  `time` bigint(20) DEFAULT NULL,
-  `headers` text,
-  `body` longtext,
-  `referrer` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DROP TABLE IF EXISTS `responses`;
-CREATE TABLE `responses` (
-  `uid` varchar(32) NOT NULL,
-  `request_uid` varchar(32) NOT NULL,
-  `application` varchar(255) NOT NULL,
-  `client_ip` varchar(255) DEFAULT NULL,
-  `status` int(255) DEFAULT NULL,
-  `time` bigint(20) DEFAULT NULL,
-  `body` longtext,
-  `path` varchar(255) DEFAULT NULL,
-  `headers` text,
-  `size` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`uid`) USING BTREE,
-  KEY `request_uid_foreign` (`request_uid`),
-  CONSTRAINT `request_uid_foreign` FOREIGN KEY (`request_uid`) REFERENCES `requests` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-SET FOREIGN_KEY_CHECKS = 1;
-```
+The application expects a MySQL database (preferably MariaDB) with a setup that can be recreated by taking a look at the `setup.sql` file in the root of this repository.
 
 More detailed information about request and response is provided:
 
