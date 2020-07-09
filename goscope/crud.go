@@ -21,7 +21,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 		panic(err.Error())
 	}
 	defer db.Close()
-	resultingQuery := fmt.Sprintf("SELECT * FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid)
+	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `method`, `path`, `url`, `host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid)
 	fmt.Println(resultingQuery)
 	row := db.QueryRow(resultingQuery)
 	var application string
