@@ -1,6 +1,7 @@
 package goscope_js
 const DashboardJs = `
 let requestOffset = 0;
+let logOffset = 0;
 
 const now = Math.round((new Date()).getTime() / 1000);
 const viewMoreImage = '<svg style="width:1.2em;height:1.2em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 16"> <path fill="white" d="M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"> </path> </svg>';
@@ -15,9 +16,30 @@ const requestTableHeaders = '\
 </tr>\
 ';
 
+const logTableHeaders = '\
+<thead>Logs</thead>\
+<tr>\
+	<th class="custom-td">Mesage</th>\
+	<th class="custom-td">Time</th>\
+</tr>\
+';
+
 async function getRequests(offset) {
     try {
         const response = await axios.get('/goscope/requests', {
+            params: {
+                "offset": offset,
+            }
+        });
+        return response.data
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function getLogs(offset) {
+    try {
+        const response = await axios.get('/goscope/logs', {
             params: {
                 "offset": offset,
             }
@@ -95,9 +117,27 @@ function fillRequestTable(requestData) {
     })
 }
 
+function fillLogTable(logData) {
+    let requestTable = document.getElementById("log-table");
+    requestTable.innerHTML = requestTableHeaders;
+
+    logData.forEach(function (item) {
+        let requestMoment = item.time;
+        let elapsed = (now - requestMoment).toString().toHumanDate();
+        requestTable.innerHTML += '\
+            <tr class="text-center">\
+			<td class="p-3 custom-td">' + item.error + '</td>\
+			\<td class="p-3 custom-td">' + elapsed + '</td>\
+            <td class="p-3 custom-td">\
+                 <a class="cursor-pointer" href="/goscope/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
+    })
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
     let requestData = await getRequests(requestOffset);
+    let logData = await getLogs(logOffset)
     fillRequestTable(requestData)
+    fillLogTable(logData)
 })
 
 function increaseRequestOffset() {
