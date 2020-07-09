@@ -152,6 +152,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 		"('%s', '%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
 	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
 	_, err = db.Exec(resultingQuery)
+	fmt.Println(resultingQuery)
 	if err != nil {
 		panic(err.Error())
 	}
