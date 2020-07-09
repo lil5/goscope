@@ -140,7 +140,11 @@ func GetLogs(c *gin.Context) {
 	defer db.Close()
 	query := "SELECT `uid`, `error`, `time` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
-	rows, _ := db.Query(resultingQuery)
+	rows, err := db.Query(resultingQuery)
+	if err != nil {
+		Log(err.Error())
+		panic(err.Error())
+	}
 	var result []ExceptionRecord
 	for rows.Next() {
 		var uid string
