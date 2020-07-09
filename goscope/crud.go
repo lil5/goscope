@@ -158,15 +158,15 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	}
 }
 
-func DumpLog(t int64, clientIp string, method string, path string, status int, userAgent string, message string) {
+func Log(message string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		panic(err.Error())
 	}
 	uid, _ := uuid.NewV4()
-	query := "INSERT INTO `logs` (`uid`, `application`, `client_ip`, `method`, `path`, `status`, `user_agent`, `error`, `time`) VALUES " +
-		"('%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %v)"
-	resultingQuery := fmt.Sprintf(query, uid, os.Getenv("APPLICATION_ID"), clientIp, method, path, status, userAgent, message, t)
+	query := "INSERT INTO `logs` (`uid`, `application`, `error`, `time`) VALUES " +
+		"('%s', '%s', '%s', %v)"
+	resultingQuery := fmt.Sprintf(query, uid, os.Getenv("APPLICATION_ID"), message, time.Now().Unix())
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
 		panic(err.Error())
