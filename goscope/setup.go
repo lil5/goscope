@@ -3,27 +3,15 @@
 package goscope
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
-	"time"
 )
 
 func Setup(engine *gin.Engine) {
 	logger := &LoggerGoScope{}
 	gin.DefaultErrorWriter = logger
+	log.SetFlags(0)
 	log.SetOutput(logger)
-	engine.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-		return fmt.Sprintf("%d - %s - %s - %s - %d - %s\n%s",
-			time.Now().Unix(),
-			param.ClientIP,
-			param.Method,
-			param.Path,
-			param.StatusCode,
-			param.Request.UserAgent(),
-			param.ErrorMessage,
-		)
-	}))
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
