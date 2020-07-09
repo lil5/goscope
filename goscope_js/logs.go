@@ -7,7 +7,7 @@ const logTableHeaders = '\
 <tr>\
 	<th class="custom-td">Message</th>\
 	<th class="custom-td">Time</th>\
-	<th class="custom-td"></th>
+	<th class="custom-td"></th>\
 </tr>\
 ';
 

@@ -17,13 +17,8 @@ var IndexTemplate = fmt.Sprintf(`
     <style>%s</style>
 </head>
 <body>
-<div class="m-3 p-3 text-center">
-    <button class="tab-button p-4 font-xl" onclick="openTab('http-tab')">HTTP</button>
-    <button class="tab-button p-4 font-xl" onclick="openTab('log-tab')">Log</button>
-</div>
 <div class="m-1 p-1 text-center">
-    <div id="http-tab" class="view-tab">
-        <h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} - GoScope</h1>
+	<h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} - GoScope</h1>
         <div class="m-3 p-3">
             <table id="request-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
             </table>
@@ -31,17 +26,6 @@ var IndexTemplate = fmt.Sprintf(`
                 <button id="requests-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
                 &nbsp;
                 <button id="requests-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
-            </div>
-        </div>
-    </div>
-    <div id="log-tab" class="view-tab">
-        <div class="m-3 p-3">
-            <table id="log-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
-            </table>
-            <div>
-                <button id="log-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
-                &nbsp;
-                <button id="log-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
             </div>
         </div>
     </div>
