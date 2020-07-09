@@ -128,7 +128,7 @@ function fillRequestTable(requestData) {
 
 function fillLogTable(logData) {
     let logTable = document.getElementById("log-table");
-    logTable.innerHTML = requestTableHeaders;
+    logTable.innerHTML = logTableHeaders;
 
     logData.forEach(function (item) {
         let requestMoment = item.time;
