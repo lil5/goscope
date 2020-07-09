@@ -1,3 +1,5 @@
+// Copyright © 2020 Pro Warehouse B.V.
+// All Rights Reserved
 package goscope
 
 import (
@@ -132,9 +134,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 		panic(err.Error())
 	}
 	defer db.Close()
-
 	now := time.Now().Unix()
-
 	requestUid, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
 	query := "INSERT INTO `requests` (`uid`, `application`, `client_ip`, `method`, `path`, `host`, `time`, `headers`, `body`, `referrer`, `url`, `user_agent`) VALUES " +
@@ -151,6 +151,21 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
 		"('%s', '%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
 	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
+	_, err = db.Exec(resultingQuery)
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+func DumpLog(t int64, clientIp string, method string, path string, status int, userAgent string, message string) {
+	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	if err != nil {
+		panic(err.Error())
+	}
+	uid, _ := uuid.NewV4()
+	query := "INSERT INTO `logs` (`uid`, `application`, `client_ip`, `method`, `path`, `status`, `user_agent`, `error`, `time`) VALUES " +
+		"('%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %v)"
+	resultingQuery := fmt.Sprintf(query, uid, os.Getenv("APPLICATION_ID"), clientIp, method, path, status, userAgent, message, t)
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
 		panic(err.Error())

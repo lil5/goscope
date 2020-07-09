@@ -1,4 +1,7 @@
+// Copyright © 2020 Pro Warehouse B.V.
+// All Rights Reserved
 package goscope
+
 
 import (
 	"bitbucket.org/prowarehouse-nl/goscope/goscope_templates"
