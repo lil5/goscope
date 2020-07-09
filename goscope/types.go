@@ -6,11 +6,11 @@ import (
 )
 
 type SummarizedRequest struct {
-	Method         string `json:"method,exists"`
-	Path           string `json:"path,exists"`
-	Time           int    `json:"time,exists"`
-	Uid            string `json:"uid,exists"`
-	ResponseStatus int    `json:"response_status,exists"`
+	Method         string `json:"method"`
+	Path           string `json:"path"`
+	Time           int    `json:"time"`
+	Uid            string `json:"uid"`
+	ResponseStatus int    `json:"response_status"`
 }
 
 type RecordByUri struct {
@@ -18,38 +18,38 @@ type RecordByUri struct {
 }
 
 type SummarizedResponse struct {
-	RequestUid string `json:"request_uid,exists"`
-	ClientIp   string `json:"client_ip,exists"`
-	Path       string `json:"path,exists"`
-	Status     string `json:"status,exists"`
-	Time       int    `json:"time,exists"`
-	Uid        string `json:"uid,exists"`
+	RequestUid string `json:"request_uid"`
+	ClientIp   string `json:"client_ip"`
+	Path       string `json:"path"`
+	Status     string `json:"status"`
+	Time       int    `json:"time"`
+	Uid        string `json:"uid"`
 }
 
 type DetailedResponse struct {
-	Body       string `json:"body,exists"`
-	ClientIp   string `json:"client_ip,exists"`
-	Headers    string `json:"headers,exists"`
-	Path       string `json:"path,exists"`
-	Size       int    `json:"size,exists"`
-	Status     string `json:"status,exists"`
-	Time       int    `json:"time,exists"`
-	RequestUid string `json:"request_uid,exists"`
-	Uid        string `json:"uid,exists"`
+	Body       string `json:"body"`
+	ClientIp   string `json:"client_ip"`
+	Headers    string `json:"headers"`
+	Path       string `json:"path"`
+	Size       int    `json:"size"`
+	Status     string `json:"status"`
+	Time       int    `json:"time"`
+	RequestUid string `json:"request_uid"`
+	Uid        string `json:"uid"`
 }
 
 type DetailedRequest struct {
-	Body      string `json:"body,exists"`
-	ClientIp  string `json:"client_ip,exists"`
-	Headers   string `json:"headers,exists"`
-	Host      string `json:"host,exists"`
-	Method    string `json:"method,exists"`
-	Path      string `json:"path,exists"`
-	Referrer  string `json:"referrer,exists"`
-	Time      int    `json:"time,exists"`
-	Uid       string `json:"uid,exists"`
-	Url       string `json:"url,exists"`
-	UserAgent string `json:",exists"`
+	Body      string `json:"body"`
+	ClientIp  string `json:"client_ip"`
+	Headers   string `json:"headers"`
+	Host      string `json:"host"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+	Referrer  string `json:"referrer"`
+	Time      int    `json:"time"`
+	Uid       string `json:"uid"`
+	Url       string `json:"url"`
+	UserAgent string `json:""`
 }
 
 type BodyLogWriter struct {

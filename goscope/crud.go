@@ -19,12 +19,9 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 		panic(err.Error())
 	}
 	defer db.Close()
-
-	fmt.Println(fmt.Sprintf("SELECT * FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid))
 	resultingQuery := fmt.Sprintf("SELECT * FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid)
 	fmt.Println(resultingQuery)
 	row := db.QueryRow(resultingQuery)
-
 	var application string
 	var body string
 	var clientIp string

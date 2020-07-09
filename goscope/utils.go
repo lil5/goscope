@@ -35,7 +35,7 @@ func prettifyJson(rawString string) string {
 		fmt.Println(err.Error())
 		return rawString
 	}
-	return string(prettyJSON.Bytes())
+	return prettyJSON.String()
 }
 
 func ReplaceVariablesInTemplate(rawTemplate string, variables map[string]string) string {

@@ -7,7 +7,6 @@ import (
 func Setup(engine *gin.Engine) {
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
-
 	// Setup necessary routes
 	watcherGroup := engine.Group("/goscope")
 	watcherGroup.GET("/", Dashboard)
