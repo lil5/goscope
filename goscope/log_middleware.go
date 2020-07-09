@@ -8,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"io"
 	"io/ioutil"
+	"log"
 )
 
 func ResponseLogger(c *gin.Context) {
@@ -28,7 +29,7 @@ func readBody(reader io.Reader) string {
 	buf := new(bytes.Buffer)
 	_, err := buf.ReadFrom(reader)
 	if err != nil {
-		Log(err.Error())
+		log.Println(err.Error())
 	}
 	s := buf.String()
 	return s

@@ -6,20 +6,31 @@ package goscope
 import (
 	"bitbucket.org/prowarehouse-nl/goscope/goscope_templates"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 )
 
+func ShowGoScopePage(c *gin.Context, rawTemplate string, variables map[string]string) {
+	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
+	reader := strings.NewReader(cleanTemplate)
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
+}
+
 func Dashboard(c *gin.Context) {
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
 	}
-	rawTemplate := goscope_templates.IndexTemplate
-	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
-	reader := strings.NewReader(cleanTemplate)
-	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
+	ShowGoScopePage(c, goscope_templates.IndexTemplate, variables)
+}
+
+func LogDashboard(c *gin.Context) {
+	variables := map[string]string{
+		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
+	}
+	ShowGoScopePage(c, goscope_templates.LogsTemplate, variables)
 }
 
 
@@ -27,7 +38,7 @@ func ShowRequest(c *gin.Context) {
 	var request RecordByUri
 	err := c.ShouldBindUri(&request)
 	if err != nil {
-		Log(err.Error())
+		log.Println(err.Error())
 	}
 	requestDetails := GetDetailedRequest(request.Uid)
 	responseDetails := GetDetailedResponse(request.Uid)
@@ -53,8 +64,5 @@ func ShowRequest(c *gin.Context) {
 		"RESPONSE_TIME":             UnixTimeToAmsterdam(responseDetails.Time),
 		"RESPONSE_UID":              responseDetails.Uid,
 	}
-	rawTemplate := goscope_templates.RequestTemplate
-	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
-	reader := strings.NewReader(cleanTemplate)
-	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
+	ShowGoScopePage(c, goscope_templates.RequestTemplate, variables)
 }

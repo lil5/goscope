@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
 	"html"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -18,7 +19,7 @@ import (
 func GetDetailedRequest(requestUid string) DetailedRequest {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	defer db.Close()
 	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `method`, `path`, `url`, `host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid)
@@ -39,8 +40,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 
 	err = row.Scan(&uid, &application, &clientIp, &method, &path, &url, &host, &t, &headers, &body, &referrer, &userAgent)
 	if err != nil {
-		Log(err.Error())
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 
 	return DetailedRequest{
@@ -61,7 +61,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 func GetDetailedResponse(requestUid string) DetailedResponse {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	defer db.Close()
 	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size` FROM `responses` WHERE `request_uid` = '%s' LIMIT 1;", requestUid)
@@ -80,8 +80,7 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 
 	err = row.Scan(&uid, &application, &clientIp, &status, &t, &body, &path, &headers, &size)
 	if err != nil {
-		Log(err.Error())
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	return DetailedResponse{
 		Body:     html.UnescapeString(body),
@@ -100,8 +99,7 @@ func GetRequests(c *gin.Context) {
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
-		Log(err.Error())
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	defer db.Close()
 	query := "SELECT `requests`.`uid`,`requests`.`method`,`requests`.`path`,`requests`.`time`,`responses`.`status` FROM `requests` " +
@@ -134,16 +132,14 @@ func GetLogs(c *gin.Context) {
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
-		Log(err.Error())
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	defer db.Close()
-	query := "SELECT `uid`, SUBSTRING(`error`, 1, 35), `time` FROM `logs` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
+	query := "SELECT `uid`, SUBSTRING(`error`, 1, 100), `time` FROM `logs` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
 	rows, err := db.Query(resultingQuery)
 	if err != nil {
-		Log(err.Error())
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	var result []ExceptionRecord
 	for rows.Next() {
@@ -166,7 +162,7 @@ func GetLogs(c *gin.Context) {
 func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	defer db.Close()
 	now := time.Now().Unix()
@@ -178,7 +174,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	responseUid, _ := uuid.NewV4()
 	headers, _ = json.Marshal(blw.Header())
@@ -187,8 +183,7 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
 	_, err = db.Exec(resultingQuery)
 	if err != nil {
-		Log(err.Error())
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 }
 

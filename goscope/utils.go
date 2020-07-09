@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 )
@@ -34,7 +35,7 @@ func prettifyJson(rawString string) string {
 	var prettyJSON bytes.Buffer
 	err := json.Indent(&prettyJSON, []byte(rawString), "", "    ")
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 		return rawString
 	}
 	return prettyJSON.String()
