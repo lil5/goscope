@@ -74,7 +74,7 @@ func ShowLog(c *gin.Context) {
 	logDetails := GetDetailedLog(request.Uid)
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"TIME": strconv.Itoa(logDetails.Time),
+		"TIME": UnixTimeToAmsterdam(logDetails.Time),
 		"MESSAGE": logDetails.Error,
 	}
 	ShowGoScopePage(c, goscope_templates.LogView(), variables)
