@@ -46,12 +46,12 @@ type LoggerGoScope struct {
 }
 
 func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
-	go Log(string(p))
+	go writeLogs(string(p))
 	return len(p), nil
 }
 
-func Log(message string) {
-	fmt.Println(message)
+func writeLogs(message string) {
+	fmt.Printf("%v - %v", log.Llongfile, message)
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
