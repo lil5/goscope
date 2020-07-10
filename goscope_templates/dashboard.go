@@ -18,9 +18,8 @@ func DashboardView() string {
     <style>%s</style>
 </head>
 <body>
-<div></div>
+%s
 <div class="m-1 p-1 text-center">
-	<h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} - GoScope</h1>
 	<table id="request-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
 	</table>
 	<div>
@@ -37,5 +36,5 @@ func DashboardView() string {
 </body>
 </html>
 `
-	return fmt.Sprintf(template, goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.DashboardJs))
+	return fmt.Sprintf(template, goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), NavbarComponent(), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.DashboardJs))
 }

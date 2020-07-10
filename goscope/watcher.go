@@ -30,7 +30,7 @@ func LogDashboard(c *gin.Context) {
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
 	}
-	ShowGoScopePage(c, goscope_templates.LogsTemplate, variables)
+	ShowGoScopePage(c, goscope_templates.LogsView(), variables)
 }
 
 

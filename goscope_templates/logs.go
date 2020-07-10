@@ -6,7 +6,8 @@ import (
 	"fmt"
 )
 
-var LogsTemplate = fmt.Sprintf(`
+func LogsView() string {
+	const template = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +18,7 @@ var LogsTemplate = fmt.Sprintf(`
     <style>%s</style>
 </head>
 <body>
+%s
 <div class="m-1 p-1 text-center">
 	<h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} Logs - GoScope</h1>
 	<table id="log-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
@@ -33,5 +35,6 @@ var LogsTemplate = fmt.Sprintf(`
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
-</html>`,
-	goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.LogsJs))
+</html>`
+	return fmt.Sprintf(template, goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), NavbarComponent(), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.LogsJs))
+}
