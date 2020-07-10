@@ -38,16 +38,16 @@ function fillLogTable(logData) {
 			\<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\
                  <a class="cursor-pointer" href="/goscope/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
-    })
+    });
 }
 
 function increaseLogOffset() {
-    logOffset += 10;
+    logOffset += 100;
 }
 
 function decreaseLogOffset() {
     if (logOffset !== 0) {
-        logOffset -= 10;
+        logOffset -= 100;
     }
 }
 

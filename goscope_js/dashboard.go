@@ -46,12 +46,12 @@ function fillRequestTable(requestData) {
 }
 
 function increaseRequestOffset() {
-    requestOffset += 10;
+    requestOffset += 100;
 }
 
 function decreaseRequestOffset() {
     if (requestOffset !== 0) {
-        requestOffset -= 10;
+        requestOffset -= 100;
     }
 }
 
