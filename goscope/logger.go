@@ -23,6 +23,7 @@ func Log(message string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
+		return
 	}
 	defer db.Close()
 	uid, _ := uuid.NewV4()

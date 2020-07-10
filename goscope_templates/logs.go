@@ -27,7 +27,7 @@ func LogsView() string {
 		&nbsp;
 		<button id="logs-next-page" class="paginate-button">next <span class="font-4xl">&#8594;</span></button>
 	</div>
-    <img src="%s">
+    %s
 </div>
 <script>%s</script>
 <script>%s</script>
