@@ -6,13 +6,13 @@ import (
 	"fmt"
 )
 
-var RequestTemplate = fmt.Sprintf(`
-<!DOCTYPE html>
+func RequestView() string {
+	const template = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Request at {{.REQUEST_TIME}} - {{.APPLICATION_NAME}}</title>
-    <style>%s</style>
+    <link href="https://cdn.jsdelivr.net/gh/tretapey/raisincss@1.1.0/raisin.min.css" rel="stylesheet"/>
     <style>%s</style>
     <style>%s</style>
 </head>
@@ -88,5 +88,6 @@ var RequestTemplate = fmt.Sprintf(`
 <script>%s</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 </body>
-</html>
-`, goscope_css.RaisinCss, goscope_css.HighlightTheme, goscope_css.WatcherStyles, goscope_js.RequestJs)
+</html>`
+	return fmt.Sprintf(template, goscope_css.HighlightTheme(), goscope_css.WatcherStyles(), goscope_js.RequestJs())
+}

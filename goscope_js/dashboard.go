@@ -1,6 +1,7 @@
 package goscope_js
 
-const DashboardJs = `
+func DashboardJs() string {
+	const script = `
 let requestOffset = 0;
 
 const requestTableHeaders = '\
@@ -80,3 +81,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     fillRequestTable(requestData);
 });
 `
+	return MinifyJs(script)
+}

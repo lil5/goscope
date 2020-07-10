@@ -1,6 +1,7 @@
 package goscope_js
 
-const RequestJs = `
+func RequestJs() string {
+	const script = `
 document.addEventListener("DOMContentLoaded", function () {
     hljs.initHighlightingOnLoad();
 	openTab('request-tab');
@@ -15,3 +16,5 @@ function openTab(tabName) {
   document.getElementById(tabName).style.display = "block";
 }
 `
+	return MinifyJs(script)
+}

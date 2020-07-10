@@ -1,6 +1,7 @@
 package goscope_js
 
-const LogsJs = `
+func LogsJs() string {
+	const script = `
 let logOffset = 0;
 
 const logTableHeaders = '\
@@ -76,3 +77,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     fillLogTable(logData);
 });
 `
+	return MinifyJs(script)
+}

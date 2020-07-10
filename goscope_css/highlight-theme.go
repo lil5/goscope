@@ -1,6 +1,7 @@
 package goscope_css
 
-const HighlightTheme = `
+func HighlightTheme() string {
+	const styles = `
 /*
  * highlightjs-material-dark-theme
  * Material Dark theme for Highlight.js
@@ -170,3 +171,5 @@ const HighlightTheme = `
     text-decoration: underline;
 }
 `
+	return MinifyCss(styles)
+}

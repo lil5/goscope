@@ -62,5 +62,5 @@ func ShowRequest(c *gin.Context) {
 		"RESPONSE_TIME":      UnixTimeToAmsterdam(responseDetails.Time),
 		"RESPONSE_UID":       responseDetails.Uid,
 	}
-	ShowGoScopePage(c, goscope_templates.RequestTemplate, variables)
+	ShowGoScopePage(c, goscope_templates.RequestView(), variables)
 }
