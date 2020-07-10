@@ -15,10 +15,11 @@ func Setup(engine *gin.Engine) {
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
-	watcherGroup := engine.Group("/goscope")
-	watcherGroup.GET("/", Dashboard)
-	watcherGroup.GET("/logs", LogDashboard)
-	watcherGroup.GET("/log-records", GetLogs)
-	watcherGroup.GET("/requests", GetRequests)
-	watcherGroup.GET("/requests/:id", ShowRequest)
+	goscopeGroup := engine.Group("/goscope")
+	goscopeGroup.GET("/", Dashboard)
+	goscopeGroup.GET("/logs", LogDashboard)
+	goscopeGroup.GET("/log-records", GetLogs)
+	goscopeGroup.GET("/log-records/:id", ShowLog)
+	goscopeGroup.GET("/requests", GetRequests)
+	goscopeGroup.GET("/requests/:id", ShowRequest)
 }

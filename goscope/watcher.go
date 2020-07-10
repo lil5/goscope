@@ -64,3 +64,18 @@ func ShowRequest(c *gin.Context) {
 	}
 	ShowGoScopePage(c, goscope_templates.RequestView(), variables)
 }
+
+func ShowLog(c *gin.Context) {
+	var request RecordByUri
+	err := c.ShouldBindUri(&request)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	logDetails := GetDetailedLog(request.Uid)
+	variables := map[string]string{
+		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
+		"TIME": strconv.Itoa(logDetails.Time),
+		"MESSAGE": logDetails.Error,
+	}
+	ShowGoScopePage(c, goscope_templates.LogView(), variables)
+}

@@ -37,7 +37,7 @@ function fillLogTable(logData) {
 			<td class="p-3 custom-td">' + item.error + '</td>\
 			\<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\
-                 <a class="cursor-pointer" href="/goscope/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
+                 <a class="cursor-pointer" href="/goscope/log-records/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';
     });
 }
 

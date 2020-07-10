@@ -136,6 +136,31 @@ func GetRequests(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+func GetDetailedLog(requestUid string) ExceptionRecord {
+	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	if err != nil {
+		log.Println(err.Error())
+		return ExceptionRecord{}
+	}
+	defer db.Close()
+	query := "SELECT `uid`, `error`, `time` FROM `logs` WHERE `uid` = '%s';"
+	resultingQuery := fmt.Sprintf(query, requestUid)
+	row := db.QueryRow(resultingQuery)
+	var uid string
+	var t int
+	var errorMessage string
+	err = row.Scan(&uid, &errorMessage, &t)
+	if err != nil {
+		log.Println(err.Error())
+		return ExceptionRecord{}
+	}
+	return ExceptionRecord{
+		Error: errorMessage,
+		Time:  t,
+		Uid:   uid,
+	}
+}
+
 func GetLogs(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
