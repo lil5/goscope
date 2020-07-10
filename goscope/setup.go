@@ -8,6 +8,8 @@ import (
 )
 
 func Setup(engine *gin.Engine) {
+	engine.Use(gin.Logger())
+	engine.Use(gin.Recovery())
 	logger := &LoggerGoScope{}
 	gin.DefaultErrorWriter = logger
 	log.SetFlags(0)

@@ -4,11 +4,17 @@ package goscope
 
 import (
 	"bytes"
+	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	uuid "github.com/nu7hatch/gouuid"
+	"html"
 	"io"
 	"io/ioutil"
 	"log"
+	"os"
+	"time"
 )
 
 func ResponseLogger(c *gin.Context) {
@@ -33,4 +39,31 @@ func readBody(reader io.Reader) string {
 	}
 	s := buf.String()
 	return s
+}
+
+type LoggerGoScope struct {
+	RoutingEngine *gin.Engine
+}
+
+func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
+	go Log(string(p))
+	return len(p), nil
+}
+
+func Log(message string) {
+	fmt.Println(message)
+	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	defer db.Close()
+	uid, _ := uuid.NewV4()
+	query := "INSERT INTO `logs` (`uid`, `application`, `error`, `time`) VALUES " +
+		"('%s', '%s', '%s', %v)"
+	resultingQuery := fmt.Sprintf(query, uid, os.Getenv("APPLICATION_ID"), html.EscapeString(message), time.Now().Unix())
+	_, err = db.Exec(resultingQuery)
+	if err != nil {
+		log.Println(err.Error())
+	}
 }
