@@ -12,6 +12,10 @@ func WatcherStyles() string {
 		text-decoration: none;
 		color: #fff;
 	}
+	.navbar-link:hover {
+		text-decoration: underline;
+		color: rgb(181, 224, 222);
+	}
 	.custom-td {
 		background: #2B2B2D;
 	}

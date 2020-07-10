@@ -20,7 +20,6 @@ func LogsView() string {
 <body>
 %s
 <div class="m-1 p-1 text-center">
-	<h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} Logs - GoScope</h1>
 	<table id="log-table" style="line-height: 1.6em; margin: 0 auto;">
 	</table>
 	<div>
