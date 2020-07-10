@@ -10,7 +10,7 @@ Once all is set up you can access the web interface by visiting `http://your-app
 
 It is recommended that you will protect this route from external/public access so that you do not leak important application data.
 
-![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594213052/git-repositories/goscope/zgl0npjbhwcs89snwm8u.png)
+![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594376979/git-repositories/goscope/oyvv1pjmvemvo30icf8k.png)
 
 Example implementation code: 
 ```go
@@ -42,6 +42,4 @@ The application expects a MySQL database (preferably MariaDB) with a setup that 
 
 More detailed information about request and response is provided:
 
-![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594213049/git-repositories/goscope/ar5rsnlku4xm8nvf5wj0.png)
-
-![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594213049/git-repositories/goscope/hbeyhmcfii6zmgixyn90.png)
+![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594376979/git-repositories/goscope/faxtg6g2ycxhixcvmdpr.png)
