@@ -37,5 +37,5 @@ func LogsView() string {
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>`
-	return fmt.Sprintf(template, goscope_css.HighlightTheme(), goscope_css.WatcherStyles(), NavbarComponent(), GopherImage, goscope_js.JsUtils(), goscope_js.LogsJs())
+	return fmt.Sprintf(template, goscope_css.HighlightTheme(), goscope_css.WatcherStyles(), NavbarComponent("LOGS"), GopherImage, goscope_js.JsUtils(), goscope_js.LogsJs())
 }

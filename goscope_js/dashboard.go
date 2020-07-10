@@ -5,7 +5,6 @@ func DashboardJs() string {
 let requestOffset = 0;
 
 const requestTableHeaders = '\
-<thead>Incoming Requests</thead>\
 <tr>\
 	<th class="custom-td">Status</th>\
 	<th class="custom-td">Verb</th>\
@@ -36,7 +35,7 @@ function fillRequestTable(requestData) {
         let elapsed = (now - requestMoment).toString().toHumanDate();
         requestTable.innerHTML += '\
             <tr class="text-center">\
-			<td class="monospaced p-3 custom-td">' + applyStatusColor(item.response_status) + '</td>\
+			<td class="p-3 custom-td">' + applyStatusColor(item.response_status) + '</td>\
             <td class="p-3 custom-td">' + applyMethodColor(item.method) + '</td>\
             \<td class="monospaced p-3 custom-td">' + item.path + '</td>\
             \<td class="p-3 custom-td">' + elapsed + '</td>\

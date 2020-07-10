@@ -5,7 +5,6 @@ func LogsJs() string {
 let logOffset = 0;
 
 const logTableHeaders = '\
-<thead>Logs</thead>\
 <tr>\
 	<th class="custom-td">Message</th>\
 	<th class="custom-td">Time</th>\
