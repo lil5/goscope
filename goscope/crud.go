@@ -116,10 +116,10 @@ func GetRequests(c *gin.Context) {
 
 		_ = rows.Scan(&uid, &method, &path, &t, &status)
 		request := SummarizedRequest{
-			Method: method,
-			Path:   path,
-			Time:   t,
-			Uid:    uid,
+			Method:         method,
+			Path:           path,
+			Time:           t,
+			Uid:            uid,
 			ResponseStatus: status,
 		}
 		result = append(result, request)
@@ -158,8 +158,7 @@ func GetLogs(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-
-func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
+func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
@@ -186,4 +185,3 @@ func DumpResponse(c *gin.Context,  blw *BodyLogWriter, body string) {
 		log.Println(err.Error())
 	}
 }
-

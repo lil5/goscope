@@ -13,7 +13,7 @@ func DashboardView() string {
 <head>
     <meta charset="UTF-8">
     <title>{{.APPLICATION_NAME}} - GoScope</title>
-    <style>%s</style>
+    <link href="https://cdn.jsdelivr.net/gh/tretapey/raisincss@1.1.0/raisin.min.css" rel="stylesheet"/>
     <style>%s</style>
     <style>%s</style>
 </head>
@@ -36,5 +36,5 @@ func DashboardView() string {
 </body>
 </html>
 `
-	return fmt.Sprintf(template, goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), NavbarComponent(), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.DashboardJs))
+	return fmt.Sprintf(template, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), NavbarComponent(), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.DashboardJs))
 }

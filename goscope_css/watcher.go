@@ -1,4 +1,5 @@
 package goscope_css
+
 const WatcherStyles = `
 body {
     background: #333;

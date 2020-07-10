@@ -11,10 +11,9 @@ import (
 )
 
 type LoggerGoScope struct {
-
 }
 
-func (logger LoggerGoScope) Write(p []byte) (n int, err error){
+func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 	go Log(string(p))
 	return len(p), nil
 }

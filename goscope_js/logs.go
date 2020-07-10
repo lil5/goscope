@@ -1,4 +1,5 @@
 package goscope_js
+
 const LogsJs = `
 let logOffset = 0;
 

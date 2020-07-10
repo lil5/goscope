@@ -1,4 +1,5 @@
 package goscope_js
+
 const DashboardJs = `
 let requestOffset = 0;
 
