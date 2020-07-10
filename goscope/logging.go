@@ -14,7 +14,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"runtime"
 	"time"
 )
 
@@ -52,8 +51,7 @@ func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 }
 
 func writeLogs(message string) {
-	_, file, line, _ := runtime.Caller(1)
-	fmt.Printf("%v:%v - %v", file, line, message)
+	fmt.Printf("%v", message)
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
