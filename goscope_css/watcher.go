@@ -8,6 +8,10 @@ func WatcherStyles() string {
 		font-family: "Fira Mono", monospace;
 	}
 
+	.navbar-link {
+		text-decoration: none;
+		color: #fff;
+	}
 	.custom-td {
 		background: #2B2B2D;
 	}
