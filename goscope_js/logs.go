@@ -34,7 +34,7 @@ function fillLogTable(logData) {
         let elapsed = (now - requestMoment).toString().toHumanDate();
         logTable.innerHTML += '\
             <tr class="text-center">\
-			<td class="p-3 custom-td">' + item.error + '</td>\
+			<td class="monospaced p-3 custom-td">' + item.error + '</td>\
 			\<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\
                  <a class="cursor-pointer" href="/goscope/log-records/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';

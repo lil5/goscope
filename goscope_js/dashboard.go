@@ -36,9 +36,9 @@ function fillRequestTable(requestData) {
         let elapsed = (now - requestMoment).toString().toHumanDate();
         requestTable.innerHTML += '\
             <tr class="text-center">\
-			<td class="p-3 custom-td">' + applyStatusColor(item.response_status) + '</td>\
+			<td class="monospaced p-3 custom-td">' + applyStatusColor(item.response_status) + '</td>\
             <td class="p-3 custom-td">' + applyMethodColor(item.method) + '</td>\
-            \<td class="p-3 custom-td">' + item.path + '</td>\
+            \<td class="monospaced p-3 custom-td">' + item.path + '</td>\
             \<td class="p-3 custom-td">' + elapsed + '</td>\
             <td class="p-3 custom-td">\
                  <a class="cursor-pointer" href="/goscope/requests/' + item.uid + '" target="_blank" rel="noopener noreferrer">' + viewMoreImage + '</a></td></tr>';

@@ -2,10 +2,17 @@ package goscope_css
 
 func WatcherStyles() string {
 	const styles = `
+	h1, h2, h3 {
+		font-family: "Manrope", "sans-serif";
+	}
 	body {
 		background: #1c1c1c;
 		color: #fff;
-		font-family: "Manrope", Fira Mono", monospace;
+		font-family: "Manrope", "sans-serif";
+	}
+
+	.monospaced {
+		font-family: "Fira Mono", monospace
 	}
 
 	.navbar-link {
