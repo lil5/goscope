@@ -1,7 +1,6 @@
 package goscope_templates
 
 import (
-	"bitbucket.org/prowarehouse-nl/goscope/goscope"
 	"bitbucket.org/prowarehouse-nl/goscope/goscope_css"
 	"bitbucket.org/prowarehouse-nl/goscope/goscope_js"
 	"fmt"
@@ -38,5 +37,5 @@ func DashboardView() string {
 </body>
 </html>
 `
-	return fmt.Sprintf(template, goscope_css.RaisinCss, goscope.MinifyCss(goscope_css.HighlightTheme), goscope.MinifyCss(goscope_css.WatcherStyles), GopherImage, goscope.MinifyJs(goscope_js.JsUtils), goscope.MinifyJs(goscope_js.DashboardJs))
+	return fmt.Sprintf(template, goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.DashboardJs))
 }

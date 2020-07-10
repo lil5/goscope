@@ -34,4 +34,4 @@ var LogsTemplate = fmt.Sprintf(`
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>`,
-	goscope_css.RaisinCss, goscope_css.HighlightTheme, goscope_css.WatcherStyles, GopherImage, goscope_js.JsUtils, goscope_js.LogsJs)
+	goscope_css.RaisinCss, MinifyCss(goscope_css.HighlightTheme), MinifyCss(goscope_css.WatcherStyles), GopherImage, MinifyJs(goscope_js.JsUtils), MinifyJs(goscope_js.LogsJs))
