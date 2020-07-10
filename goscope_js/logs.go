@@ -54,9 +54,9 @@ function decreaseLogOffset() {
 let prevLogPage = document.getElementById("logs-prev-page");
 prevLogPage.onclick = async function () {
     decreaseLogOffset();
-    const data = await getRequests(logOffset)
+    const data = await getLogs(logOffset)
     if (data !== null && data.length > 0) {
-        fillRequestTable(data);
+        fillLogTable(data);
     } else {
         increaseLogOffset();
     }
@@ -64,9 +64,9 @@ prevLogPage.onclick = async function () {
 let nextLogPage = document.getElementById("logs-next-page");
 nextLogPage.onclick = async function () {
     increaseLogOffset();
-    const data = await getRequests(logOffset);
+    const data = await getLogs(logOffset);
     if (data !== null && data.length > 0) {
-        fillRequestTable(data);
+        fillLogTable(data);
     } else {
         decreaseLogOffset();
     }

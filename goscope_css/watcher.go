@@ -33,6 +33,10 @@ func WatcherStyles() string {
 		color: #fff;
 		border: none;
 	}
+	.paginate-button:hover {
+		color: rgb(181, 224, 222);
+		text-decoration: underline;
+	}
 	.tab-button {
 		color: #fff;
 		border: none;
