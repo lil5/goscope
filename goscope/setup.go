@@ -12,7 +12,7 @@ func Setup(engine *gin.Engine) {
 	engine.Use(gin.Recovery())
 	logger := &LoggerGoScope{}
 	gin.DefaultErrorWriter = logger
-	log.SetFlags(log.Llongfile)
+	log.SetFlags(log.Lshortfile)
 	log.SetOutput(logger)
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
