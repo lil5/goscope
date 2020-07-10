@@ -3,9 +3,9 @@ package goscope_css
 func WatcherStyles() string {
 	const styles = `
 	body {
-		background: #333;
+		background: #1c1c1c;
 		color: #fff;
-		font-family: "Fira Mono", monospace;
+		font-family: "Manrope", Fira Mono", monospace;
 	}
 
 	.navbar-link {

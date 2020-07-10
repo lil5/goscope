@@ -13,6 +13,8 @@ func LogView() string {
     <meta charset="UTF-8">
     <title>Request at {{.TIME}} - {{.APPLICATION_NAME}}</title>
     <link href="https://cdn.jsdelivr.net/gh/tretapey/raisincss@1.1.0/raisin.min.css" rel="stylesheet"/>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet"> 
     <style>%s</style>
     <style>%s</style>
 </head>
