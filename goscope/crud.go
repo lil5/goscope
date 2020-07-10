@@ -20,6 +20,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
+		return DetailedRequest{}
 	}
 	defer db.Close()
 	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `method`, `path`, `url`, `host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid)
@@ -62,6 +63,7 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
+		return DetailedResponse{}
 	}
 	defer db.Close()
 	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size` FROM `responses` WHERE `request_uid` = '%s' LIMIT 1;", requestUid)
@@ -100,12 +102,19 @@ func GetRequests(c *gin.Context) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
 	}
 	defer db.Close()
 	query := "SELECT `requests`.`uid`,`requests`.`method`,`requests`.`path`,`requests`.`time`,`responses`.`status` FROM `requests` " +
 		"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` WHERE `requests`.`application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
 	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
-	rows, _ := db.Query(resultingQuery)
+	rows, err := db.Query(resultingQuery)
+	if err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
 	var result []SummarizedRequest
 	for rows.Next() {
 		var uid string
@@ -133,6 +142,8 @@ func GetLogs(c *gin.Context) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
 	}
 	defer db.Close()
 	query := "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
@@ -140,6 +151,8 @@ func GetLogs(c *gin.Context) {
 	rows, err := db.Query(resultingQuery)
 	if err != nil {
 		log.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
 	}
 	var result []ExceptionRecord
 	for rows.Next() {
@@ -147,7 +160,12 @@ func GetLogs(c *gin.Context) {
 		var t int
 		var errorMessage string
 
-		_ = rows.Scan(&uid, &errorMessage, &t)
+		err := rows.Scan(&uid, &errorMessage, &t)
+		if err != nil {
+			log.Println(err.Error())
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
 		request := ExceptionRecord{
 			Error: errorMessage,
 			Time:  t,
@@ -162,6 +180,7 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
+		return
 	}
 	defer db.Close()
 	now := time.Now().Unix()
