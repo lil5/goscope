@@ -21,7 +21,7 @@ func LogsView() string {
 %s
 <div class="m-1 p-1 text-center">
 	<h1 class="font-xl m-2 text-center">{{.APPLICATION_NAME}} Logs - GoScope</h1>
-	<table id="log-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
+	<table id="log-table" style="line-height: 1.6em; margin: 0 auto;">
 	</table>
 	<div>
 		<button id="logs-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>

@@ -20,7 +20,7 @@ func DashboardView() string {
 <body>
 %s
 <div class="m-1 p-1 text-center">
-	<table id="request-table" class="p-6 md:w-2/3 lg:w-2/3" style="line-height: 1.6em; margin: 0 auto;">
+	<table id="request-table" style="line-height: 1.6em; margin: 0 auto;">
 	</table>
 	<div>
 		<button id="requests-prev-page" class="paginate-button"><span class="font-4xl">&#8592;</span> prev</button>
