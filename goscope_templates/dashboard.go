@@ -44,5 +44,5 @@ func DashboardView() string {
 </body>
 </html>
 `
-	return fmt.Sprintf(template, goscope_css.HighlightTheme(), goscope_css.WatcherStyles(), NavbarComponent("REQUESTS"), GopherImage, goscope_js.JsUtils(), goscope_js.DashboardJs())
+	return fmt.Sprintf(template, goscope_css.HighlightTheme(), goscope_css.WatcherStyles(), NavbarComponent("REQUESTS"), FooterText, goscope_js.JsUtils(), goscope_js.DashboardJs())
 }
