@@ -30,7 +30,7 @@ function fillLogTable(logData) {
     logTable.innerHTML = logTableHeaders;
     logData.forEach(function (item) {
         let requestMoment = item.time;
-        let elapsed = (now - requestMoment).toString().toHumanDate();
+        let elapsed = secondsToString(now - requestMoment)
         logTable.innerHTML += '\
             <tr class="text-center">\
 			<td class="monospaced p-3 custom-td">' + item.error + '</td>\

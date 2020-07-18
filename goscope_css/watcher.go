@@ -18,14 +18,15 @@ func WatcherStyles() string {
 	.navbar-link {
 		text-decoration: none;
 		color: #fff;
+		border: none;
 	}
 	.active-navbar-link {
 		text-decoration: none;
-		color: rgb(181, 224, 222);
+		color: #7cc3bf;
 	}
 	.navbar-link:hover {
 		text-decoration: underline;
-		color: rgb(181, 224, 222);
+		color: #7cc3bf;
 	}
 	.custom-td {
 		background: #2B2B2D;
@@ -34,7 +35,12 @@ func WatcherStyles() string {
 	th {
 		border-radius: 4px;
 	}
-
+	.eye-image {
+		fill: #fff;
+	}
+	.eye-image:hover {
+		fill: #7cc3bf;
+	}
 	table {
 		border-spacing: 2px;
 		border-collapse: separate;
@@ -45,7 +51,7 @@ func WatcherStyles() string {
 		border: none;
 	}
 	.paginate-button:hover {
-		color: rgb(181, 224, 222);
+		color: #7cc3bf;
 		text-decoration: underline;
 	}
 	.tab-button {
@@ -65,6 +71,12 @@ func WatcherStyles() string {
 		border-radius: 4px;
 		color: #fff;
 		background-color: #1c3d5a;
+	}
+	.badge-turq {
+		padding: 4px;
+		border-radius: 4px;
+		color: #fff;
+		background-color: #503194;
 	}
 	.badge-secondary {
 		border-radius: 4px;

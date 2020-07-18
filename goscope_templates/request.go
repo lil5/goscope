@@ -17,11 +17,18 @@ func RequestView() string {
 	<link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet"> 
     <style>%s</style>
     <style>%s</style>
+	<link rel="apple-touch-icon" sizes="180x180" href="https://pro-warehouse-res.cloudinary.com/image/upload/v1595014987/git-repositories/goscope/application/lrhheuzhlvgtsxyayru3.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="https://pro-warehouse-res.cloudinary.com/image/upload/v1595015010/git-repositories/goscope/application/blaaguzlyw9s5x4jbhgq.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="https://pro-warehouse-res.cloudinary.com/image/upload/v1595015010/git-repositories/goscope/application/bchsism3hubielueb6xk.png">
+	<link rel="mask-icon" href="https://pro-warehouse-res.cloudinary.com/image/upload/v1595015042/git-repositories/goscope/application/wswxoxpwirad8udbkwz8.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="theme-color" content="#ffffff">
 </head>
 <body>
 <div class="m-3 p-3 text-center">
-	  <button class="tab-button p-4 font-xl" onclick="openTab('request-tab')">Request</button>
-	  <button class="tab-button p-4 font-xl" onclick="openTab('response-tab')">Response</button>
+	  <button class="navbar-link 
+p-4 font-xl" onclick="openTab('request-tab')">Request</button>
+	  <button class="navbar-link p-4 font-xl" onclick="openTab('response-tab')">Response</button>
 </div> 
 <div class="m-3 p-3 text-center" style="line-height: 2em;">
     <div id="request-tab" class="view-tab md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">

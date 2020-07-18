@@ -32,7 +32,7 @@ function fillRequestTable(requestData) {
     requestTable.innerHTML = requestTableHeaders;
     requestData.forEach(function (item) {
         let requestMoment = item.time;
-        let elapsed = (now - requestMoment).toString().toHumanDate();
+        let elapsed =  secondsToString(now - requestMoment);
         requestTable.innerHTML += '\
             <tr class="text-center">\
 			<td class="p-3 custom-td">' + applyStatusColor(item.response_status) + '</td>\
