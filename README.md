@@ -10,8 +10,6 @@ Once all is set up you can access the web interface by visiting `http://your-app
 
 It is recommended that you will protect this route from external/public access so that you do not leak important application data.
 
-![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594376979/git-repositories/goscope/oyvv1pjmvemvo30icf8k.png)
-
 Example implementation code: 
 ```go
 package main
@@ -40,6 +38,12 @@ WATCHER_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
 
 The application expects a MySQL database (preferably MariaDB) with a setup that can be recreated by taking a look at the `setup.sql` file in the root of this repository.
 
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/0.png)
+
 More detailed information about request and response is provided:
 
-![GoScope Dashboard](https://pro-warehouse-res.cloudinary.com/image/upload/v1594376979/git-repositories/goscope/faxtg6g2ycxhixcvmdpr.png)
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/1.png)
+
+You can also view any logs that your application generated via `log.Println` or `log.Printf` statements.
+
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
