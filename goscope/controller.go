@@ -3,7 +3,7 @@
 package goscope
 
 import (
-	"bitbucket.org/prowarehouse-nl/goscope/goscope_templates"
+	"github.com/averageflow/goscope/goscope_templates"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

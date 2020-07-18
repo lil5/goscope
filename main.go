@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bitbucket.org/prowarehouse-nl/goscope/goscope"
+	"github.com/averageflow/goscope/goscope"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"

@@ -1,4 +1,4 @@
-module bitbucket.org/prowarehouse-nl/goscope
+module github.com/averageflow/goscope
 
 go 1.14
 
