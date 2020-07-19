@@ -1,6 +1,12 @@
 package goscope_js
 
+import (
+	"fmt"
+	"os"
+)
+
 func DashboardJs() string {
+	entriesPerPage := os.Getenv("GOSCOPE_ENTRIES_PER_PAGE")
 	const script = `
 let requestOffset = 0;
 
@@ -45,12 +51,12 @@ function fillRequestTable(requestData) {
 }
 
 function increaseRequestOffset() {
-    requestOffset += 100;
+    requestOffset += %v;
 }
 
 function decreaseRequestOffset() {
     if (requestOffset !== 0) {
-        requestOffset -= 100;
+        requestOffset -= %v;
     }
 }
 
@@ -80,5 +86,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     fillRequestTable(requestData);
 });
 `
-	return MinifyJs(script)
+	return MinifyJs(fmt.Sprintf(script, entriesPerPage, entriesPerPage))
 }

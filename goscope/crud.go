@@ -3,7 +3,6 @@
 package goscope
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -17,15 +16,10 @@ import (
 )
 
 func GetDetailedRequest(requestUid string) DetailedRequest {
-	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
-	if err != nil {
-		log.Println(err.Error())
-		return DetailedRequest{}
-	}
+	db := GetDB()
 	defer db.Close()
-	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `method`, `path`, `url`, `host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = '%s' LIMIT 1;", requestUid)
-	fmt.Println(resultingQuery)
-	row := db.QueryRow(resultingQuery)
+	resultingQuery := "SELECT uid, application, client_ip, method, path, url, host, time, headers, body, referrer, user_agent FROM requests WHERE uid = ? LIMIT 1;"
+	row := db.QueryRow(resultingQuery, requestUid)
 	var application string
 	var body string
 	var clientIp string
@@ -39,7 +33,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	var url string
 	var userAgent string
 
-	err = row.Scan(&uid, &application, &clientIp, &method, &path, &url, &host, &t, &headers, &body, &referrer, &userAgent)
+	err := row.Scan(&uid, &application, &clientIp, &method, &path, &url, &host, &t, &headers, &body, &referrer, &userAgent)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -60,15 +54,10 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 }
 
 func GetDetailedResponse(requestUid string) DetailedResponse {
-	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
-	if err != nil {
-		log.Println(err.Error())
-		return DetailedResponse{}
-	}
+	db := GetDB()
 	defer db.Close()
-	resultingQuery := fmt.Sprintf("SELECT `uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size` FROM `responses` WHERE `request_uid` = '%s' LIMIT 1;", requestUid)
-	fmt.Println(resultingQuery)
-	row := db.QueryRow(resultingQuery)
+	resultingQuery := "SELECT uid, application, client_ip, status, time, body, path, headers, size FROM responses WHERE request_uid = ? LIMIT 1;"
+	row := db.QueryRow(resultingQuery, requestUid)
 
 	var application string
 	var body string
@@ -80,7 +69,7 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 	var t int
 	var uid string
 
-	err = row.Scan(&uid, &application, &clientIp, &status, &t, &body, &path, &headers, &size)
+	err := row.Scan(&uid, &application, &clientIp, &status, &t, &body, &path, &headers, &size)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -99,17 +88,11 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 func GetRequests(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
+	db := GetDB()
 	defer db.Close()
-	query := "SELECT `requests`.`uid`,`requests`.`method`,`requests`.`path`,`requests`.`time`,`responses`.`status` FROM `requests` " +
-		"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` WHERE `requests`.`application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
-	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
-	rows, err := db.Query(resultingQuery)
+	query := "SELECT requests.uid, requests.method, requests.path, requests.time, responses.status FROM requests " +
+		"INNER JOIN responses ON requests.uid = responses.request_uid WHERE requests.application = ? ORDER BY time DESC LIMIT %v OFFSET ?;"
+	rows, err := db.Query(fmt.Sprintf(query, os.Getenv("GOSCOPE_ENTRIES_PER_PAGE")), os.Getenv("APPLICATION_ID"), offset)
 	if err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -137,19 +120,14 @@ func GetRequests(c *gin.Context) {
 }
 
 func GetDetailedLog(requestUid string) ExceptionRecord {
-	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
-	if err != nil {
-		log.Println(err.Error())
-		return ExceptionRecord{}
-	}
+	db := GetDB()
 	defer db.Close()
-	query := "SELECT `uid`, `error`, `time` FROM `logs` WHERE `uid` = '%s';"
-	resultingQuery := fmt.Sprintf(query, requestUid)
-	row := db.QueryRow(resultingQuery)
+	query := "SELECT uid, error, time FROM logs WHERE uid = ?;"
+	row := db.QueryRow(query, requestUid)
 	var uid string
 	var t int
 	var errorMessage string
-	err = row.Scan(&uid, &errorMessage, &t)
+	err := row.Scan(&uid, &errorMessage, &t)
 	if err != nil {
 		log.Println(err.Error())
 		return ExceptionRecord{}
@@ -164,16 +142,12 @@ func GetDetailedLog(requestUid string) ExceptionRecord {
 func GetLogs(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
+	db := GetDB()
 	defer db.Close()
-	query := "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = '%s' ORDER BY `time` DESC LIMIT 100 OFFSET %d;"
-	resultingQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), offset)
-	rows, err := db.Query(resultingQuery)
+	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
+		"ELSE error END AS error, time FROM logs WHERE application = ? " +
+		"ORDER BY time DESC LIMIT %v OFFSET ?;"
+	rows, err := db.Query(fmt.Sprintf(query, os.Getenv("GOSCOPE_ENTRIES_PER_PAGE")), os.Getenv("APPLICATION_ID"), offset)
 	if err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -202,29 +176,27 @@ func GetLogs(c *gin.Context) {
 }
 
 func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
-	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
+	db := GetDB()
 	defer db.Close()
 	now := time.Now().Unix()
 	requestUid, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
-	query := "INSERT INTO `requests` (`uid`, `application`, `client_ip`, `method`, `path`, `host`, `time`, `headers`, `body`, `referrer`, `url`, `user_agent`) VALUES " +
-		"('%s', '%s', '%s', '%s', '%s', '%s', %v, '%s', '%s', '%s', '%s', '%s');"
-	resultingQuery := fmt.Sprintf(query, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method, c.FullPath(), c.Request.Host, now, html.EscapeString(string(headers)), html.EscapeString(body),
+	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
+		"headers, body, referrer, url, user_agent) VALUES " +
+		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	_, err := db.Exec(query, requestUid.String(), os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method,
+		c.FullPath(), c.Request.Host, now, html.EscapeString(string(headers)), html.EscapeString(body),
 		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
-	_, err = db.Exec(resultingQuery)
 	if err != nil {
 		log.Println(err.Error())
 	}
 	responseUid, _ := uuid.NewV4()
 	headers, _ = json.Marshal(blw.Header())
-	query = "INSERT INTO `responses` (`uid`, `request_uid`, `application`, `client_ip`, `status`, `time`, `body`, `path`, `headers`, `size`) VALUES " +
-		"('%s', '%s', '%s', '%s', %v, %v, '%s', '%s', '%s', %v);"
-	resultingQuery = fmt.Sprintf(query, responseUid, requestUid, os.Getenv("APPLICATION_ID"), c.ClientIP(), blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
-	_, err = db.Exec(resultingQuery)
+	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
+		"body, path, headers, size) VALUES " +
+		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	_, err = db.Exec(query, responseUid.String(), requestUid.String(), os.Getenv("APPLICATION_ID"), c.ClientIP(),
+		blw.Status(), now, html.EscapeString(blw.body.String()), c.FullPath(), html.EscapeString(string(headers)), blw.body.Len())
 	if err != nil {
 		log.Println(err.Error())
 	}

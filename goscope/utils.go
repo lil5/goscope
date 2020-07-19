@@ -4,6 +4,7 @@ package goscope
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -51,4 +52,18 @@ func ReplaceVariablesInTemplate(rawTemplate string, variables map[string]string)
 		rawTemplate = strings.ReplaceAll(rawTemplate, fmt.Sprintf("{{.%s}}", i), s)
 	}
 	return rawTemplate
+}
+
+func GetDB() *sql.DB {
+	db, err := sql.Open(os.Getenv("GOSCOPE_DATABASE_TYPE"), os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
+	if err != nil {
+		log.Println(err.Error())
+		panic(err.Error())
+	}
+	err = db.Ping()
+	if err != nil {
+		log.Println(err.Error())
+		panic(err.Error())
+	}
+	return db
 }

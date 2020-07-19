@@ -1,6 +1,12 @@
 package goscope_js
 
+import (
+	"fmt"
+	"os"
+)
+
 func LogsJs() string {
+	entriesPerPage := os.Getenv("GOSCOPE_ENTRIES_PER_PAGE")
 	const script = `
 let logOffset = 0;
 
@@ -41,12 +47,12 @@ function fillLogTable(logData) {
 }
 
 function increaseLogOffset() {
-    logOffset += 100;
+    logOffset += %v;
 }
 
 function decreaseLogOffset() {
     if (logOffset !== 0) {
-        logOffset -= 100;
+        logOffset -= %v;
     }
 }
 
@@ -76,5 +82,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     fillLogTable(logData);
 });
 `
-	return MinifyJs(script)
+	return MinifyJs(fmt.Sprintf(script, entriesPerPage, entriesPerPage))
 }

@@ -14,13 +14,16 @@ It is recommended that you will protect this route from external/public access s
 The application requires that your `.env` file contains the following variables:
 
 ```yaml
-APPLICATION_NAME: "Your Application Name"
 APPLICATION_ID: "application-id"
-GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
+APPLICATION_NAME: "Your Application Name"
 APPLICATION_TIMEZONE: "Europe/Amsterdam"
+GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
+GOSCOPE_DATABASE_TYPE: "mysql"
+GOSCOPE_ENTRIES_PER_PAGE: 50
 ```
 
-The application expects a MySQL database (preferably MariaDB) with a setup that can be recreated by taking a look at the `setup.sql` file in the root of this repository.
+In the .env file you can specify either the `mysql` driver or `postgres` driver, which will use the `github.com/go-sql-driver/mysql` or `github.com/lib/pq`
+The application expects a database with a setup that can be recreated by taking a look at the `mysql-setup.sql` file in the root of this repository.
 
 ### Example
 Example implementation code, please note that you should use plain gin without middlewares, since GoScope will use Gin Gonic's logger and recovery middlewares, but with a customized twist, thus the requirement is that initially you have a clean `gin.Engine` instance.
