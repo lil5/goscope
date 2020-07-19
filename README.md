@@ -16,7 +16,8 @@ The application requires that your `.env` file contains the following variables:
 ```yaml
 APPLICATION_NAME: "Your Application Name"
 APPLICATION_ID: "application-id"
-WATCHER_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
+GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
+APPLICATION_TIMEZONE: "Europe/Amsterdam"
 ```
 
 The application expects a MySQL database (preferably MariaDB) with a setup that can be recreated by taking a look at the `setup.sql` file in the root of this repository.

@@ -49,7 +49,7 @@ func ShowRequest(c *gin.Context) {
 		"REQUEST_METHOD":     requestDetails.Method,
 		"REQUEST_PATH":       requestDetails.Path,
 		"REQUEST_REFERRER":   requestDetails.Referrer,
-		"REQUEST_TIME":       UnixTimeToAmsterdam(requestDetails.Time),
+		"REQUEST_TIME":       UnixTimeToHuman(requestDetails.Time),
 		"REQUEST_UID":        requestDetails.Uid,
 		"REQUEST_URL":        requestDetails.Url,
 		"REQUEST_USER_AGENT": requestDetails.UserAgent,
@@ -59,7 +59,7 @@ func ShowRequest(c *gin.Context) {
 		"RESPONSE_PATH":      responseDetails.Path,
 		"RESPONSE_SIZE":      strconv.Itoa(responseDetails.Size),
 		"RESPONSE_STATUS":    responseDetails.Status,
-		"RESPONSE_TIME":      UnixTimeToAmsterdam(responseDetails.Time),
+		"RESPONSE_TIME":      UnixTimeToHuman(responseDetails.Time),
 		"RESPONSE_UID":       responseDetails.Uid,
 	}
 	ShowGoScopePage(c, goscope_templates.RequestView(), variables)
@@ -74,7 +74,7 @@ func ShowLog(c *gin.Context) {
 	logDetails := GetDetailedLog(request.Uid)
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"TIME": UnixTimeToAmsterdam(logDetails.Time),
+		"TIME": UnixTimeToHuman(logDetails.Time),
 		"MESSAGE": logDetails.Error,
 	}
 	ShowGoScopePage(c, goscope_templates.LogView(), variables)

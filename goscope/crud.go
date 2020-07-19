@@ -17,7 +17,7 @@ import (
 )
 
 func GetDetailedRequest(requestUid string) DetailedRequest {
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		return DetailedRequest{}
@@ -60,7 +60,7 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 }
 
 func GetDetailedResponse(requestUid string) DetailedResponse {
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		return DetailedResponse{}
@@ -99,7 +99,7 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 func GetRequests(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -137,7 +137,7 @@ func GetRequests(c *gin.Context) {
 }
 
 func GetDetailedLog(requestUid string) ExceptionRecord {
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		return ExceptionRecord{}
@@ -164,7 +164,7 @@ func GetDetailedLog(requestUid string) ExceptionRecord {
 func GetLogs(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -202,7 +202,7 @@ func GetLogs(c *gin.Context) {
 }
 
 func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		return

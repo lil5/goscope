@@ -52,7 +52,7 @@ func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 
 func writeLogs(message string) {
 	fmt.Printf("%v", message)
-	db, err := sql.Open("mysql", os.Getenv("WATCHER_DATABASE_CONNECTION"))
+	db, err := sql.Open("mysql", os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
 	if err != nil {
 		log.Println(err.Error())
 		return

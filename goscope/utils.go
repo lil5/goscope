@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 )
@@ -22,8 +23,12 @@ func CheckExcludedPaths(path string) bool {
 	return result
 }
 
-func UnixTimeToAmsterdam(rawTime int) string {
-	loc, _ := time.LoadLocation("Europe/Amsterdam")
+func UnixTimeToHuman(rawTime int) string {
+	loc, err := time.LoadLocation(os.Getenv("APPLICATION_TIMEZONE"))
+	if err != nil {
+		log.Println(err.Error())
+		loc, _ = time.LoadLocation("Europe/Amsterdam")
+	}
 	timeInstance := time.Unix(int64(rawTime), 0)
 	return timeInstance.In(loc).Format("15:04:05 Mon, 2 Jan 2006 ")
 }
