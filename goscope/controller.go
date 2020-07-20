@@ -3,7 +3,6 @@
 package goscope
 
 import (
-	"github.com/averageflow/goscope/goscope_templates"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -19,17 +18,49 @@ func ShowGoScopePage(c *gin.Context, rawTemplate string, variables map[string]st
 }
 
 func Dashboard(c *gin.Context) {
+	dashboardView, _ := Asset("static/html/dashboard.html")
+	commonHeader, _ := Asset("static/html/head.html")
+	highlightStyles, _ := Asset("static/css/highlight.css")
+	watcherStyles, _ := Asset("static/css/watcher.css")
+	footer, _ := Asset("static/html/footer.html")
+	utilScripts, _ := Asset("static/js/utils.js")
+	dashboardScripts, _ := Asset("static/js/dashboard.js")
+	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	variables := map[string]string{
-		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
+		"APPLICATION_NAME":  os.Getenv("APPLICATION_NAME"),
+		"COMMON_HEADER":     MinifyHtml(header),
+		"HIGHLIGHT_STYLES":  MinifyCss(string(highlightStyles)),
+		"WATCHER_STYLES":    MinifyCss(string(watcherStyles)),
+		"ENTRIES_PER_PAGE":  os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		"NAVBAR":            NavbarComponent("REQUESTS"),
+		"FOOTER":            MinifyHtml(string(footer)),
+		"UTIL_SCRIPTS":      MinifyJs(string(utilScripts)),
+		"DASHBOARD_SCRIPTS": MinifyJs(string(dashboardScripts)),
 	}
-	ShowGoScopePage(c, goscope_templates.DashboardView(), variables)
+	ShowGoScopePage(c, MinifyHtml(string(dashboardView)), variables)
 }
 
 func LogDashboard(c *gin.Context) {
+	logsView, _ := Asset("static/html/logs.html")
+	commonHeader, _ := Asset("static/html/head.html")
+	highlightStyles, _ := Asset("static/css/highlight.css")
+	watcherStyles, _ := Asset("static/css/watcher.css")
+	footer, _ := Asset("static/html/footer.html")
+	utilScripts, _ := Asset("static/js/utils.js")
+	logScripts, _ := Asset("static/js/logs.js")
+	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
+		"COMMON_HEADER":    MinifyHtml(header),
+		"HIGHLIGHT_STYLES": MinifyCss(string(highlightStyles)),
+		"WATCHER_STYLES":   MinifyCss(string(watcherStyles)),
+		"ENTRIES_PER_PAGE": os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		"NAVBAR":           NavbarComponent("LOGS"),
+		"FOOTER":           MinifyHtml(string(footer)),
+		"UTIL_SCRIPTS":     MinifyJs(string(utilScripts)),
+		"LOG_SCRIPTS":      MinifyJs(string(logScripts)),
 	}
-	ShowGoScopePage(c, goscope_templates.LogsView(), variables)
+	ShowGoScopePage(c, MinifyHtml(string(logsView)), variables)
 }
 
 func ShowRequest(c *gin.Context) {
@@ -40,8 +71,18 @@ func ShowRequest(c *gin.Context) {
 	}
 	requestDetails := GetDetailedRequest(request.Uid)
 	responseDetails := GetDetailedResponse(request.Uid)
+	requestView, _ := Asset("static/html/request.html")
+	commonHeader, _ := Asset("static/html/head.html")
+	highlightStyles, _ := Asset("static/css/highlight.css")
+	watcherStyles, _ := Asset("static/css/watcher.css")
+	requestScripts, _ := Asset("static/js/request.js")
+	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
+		"COMMON_HEADER":      MinifyHtml(header),
+		"HIGHLIGHT_STYLES":   MinifyCss(string(highlightStyles)),
+		"WATCHER_STYLES":     MinifyCss(string(watcherStyles)),
+		"REQUEST_SCRIPTS":    MinifyJs(string(requestScripts)),
 		"REQUEST_BODY":       prettifyJson(requestDetails.Body),
 		"REQUEST_CLIENT_IP":  requestDetails.ClientIp,
 		"REQUEST_HEADERS":    prettifyJson(requestDetails.Headers),
@@ -62,7 +103,7 @@ func ShowRequest(c *gin.Context) {
 		"RESPONSE_TIME":      UnixTimeToHuman(responseDetails.Time),
 		"RESPONSE_UID":       responseDetails.Uid,
 	}
-	ShowGoScopePage(c, goscope_templates.RequestView(), variables)
+	ShowGoScopePage(c, MinifyHtml(string(requestView)), variables)
 }
 
 func ShowLog(c *gin.Context) {
@@ -72,10 +113,20 @@ func ShowLog(c *gin.Context) {
 		log.Println(err.Error())
 	}
 	logDetails := GetDetailedLog(request.Uid)
+	logView, _ := Asset("static/html/log.html")
+	commonHeader, _ := Asset("static/html/head.html")
+	highlightStyles, _ := Asset("static/css/highlight.css")
+	watcherStyles, _ := Asset("static/css/watcher.css")
+	requestScripts, _ := Asset("static/js/log.js")
+	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	variables := map[string]string{
-		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"TIME": UnixTimeToHuman(logDetails.Time),
-		"MESSAGE": logDetails.Error,
+		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
+		"COMMON_HEADER":    MinifyHtml(header),
+		"HIGHLIGHT_STYLES": MinifyCss(string(highlightStyles)),
+		"WATCHER_STYLES":   MinifyCss(string(watcherStyles)),
+		"LOG_SCRIPTS":      MinifyJs(string(requestScripts)),
+		"TIME":             UnixTimeToHuman(logDetails.Time),
+		"MESSAGE":          logDetails.Error,
 	}
-	ShowGoScopePage(c, goscope_templates.LogView(), variables)
+	ShowGoScopePage(c, MinifyHtml(string(logView)), variables)
 }

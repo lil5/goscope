@@ -60,3 +60,8 @@ GoScope hooks into the logging mechanism of your application by using a custom `
 This means that you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
 
 ![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
+
+### Contributing
+
+Any change to assets in the `static` folder will require a rebuild of the `bindata.go`. For this you will require to have the package installed (via `go get -u github.com/shuLhan/go-bindata/...
+`) and then navigate in terminal to the root of the project and run `cd goscope && go-bindata -nomemcopy  static/... `. Then edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.

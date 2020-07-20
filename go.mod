@@ -8,5 +8,6 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/lib/pq v1.7.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
+	github.com/shuLhan/go-bindata v3.4.0+incompatible // indirect
 	github.com/tdewolff/minify/v2 v2.7.6
 )

@@ -7,8 +7,13 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/css"
+	"github.com/tdewolff/minify/v2/html"
+	"github.com/tdewolff/minify/v2/js"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -66,4 +71,61 @@ func GetDB() *sql.DB {
 		panic(err.Error())
 	}
 	return db
+}
+func MinifyCss(uncompressed string) string {
+	m := minify.New()
+	m.AddFunc("text/css", css.Minify)
+	minified, err := m.String("text/css", uncompressed)
+	if err != nil {
+		log.Println(err.Error())
+		return ""
+	}
+	return minified
+}
+
+func MinifyJs(uncompressed string) string {
+	m := minify.New()
+	m.AddFuncRegexp(regexp.MustCompile("^(application|text)/(x-)?(java|ecma)script$"), js.Minify)
+	minified, err := m.String("application/javascript", uncompressed)
+	if err != nil {
+		log.Println(err.Error())
+		return ""
+	}
+	return minified
+}
+
+func MinifyHtml(uncompressed string) string {
+	m := minify.New()
+	m.AddFunc("text/html", html.Minify)
+	minified, err := m.String("text/html", uncompressed)
+	if err != nil {
+		log.Println(err.Error())
+		return ""
+	}
+	return minified
+}
+
+func NavbarComponent(selected string) string {
+	navlinkKeys := []string {
+		"REQUESTS", "LOGS",
+	}
+	navLinks := []string{
+		"<a class=\"%s\" href=\"/goscope/\"><h3 style=\"margin: 1.2em;\" class=\"font-l\">🌐&nbsp;&nbsp;Requests</h3></a>",
+		"<a class=\"%s\" href=\"/goscope/logs\"><h3 style=\"margin: 1.2em;\" class=\"font-l\">📃&nbsp;&nbsp;Logs</h3></a>",
+	}
+	navbarCode := `
+	<div class="flex m-2 p-2">
+		<h3 class="font-l" style="margin: 1.2em;">⚙️&nbsp;%s</h3>
+		%s
+	</div>
+	`
+	var generatedLinks string
+	for i, s := range navlinkKeys {
+		if s == selected {
+			generatedLinks += fmt.Sprintf(navLinks[i], "active-navbar-link")
+		} else {
+			generatedLinks += fmt.Sprintf(navLinks[i], "navbar-link")
+		}
+	}
+	return MinifyHtml(fmt.Sprintf(navbarCode, os.Getenv("APPLICATION_NAME"), generatedLinks))
 }
