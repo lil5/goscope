@@ -1,3 +1,8 @@
+/*
+    License: MIT
+    Authors:
+        - Josep Bigorra (averageflow)
+ */
 let requestOffset = 0;
 
 const requestTableHeaders = `

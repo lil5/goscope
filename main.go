@@ -1,3 +1,6 @@
+// License: MIT
+// Authors:
+// 		- Josep Bigorra (averageflow)
 package main
 
 import (

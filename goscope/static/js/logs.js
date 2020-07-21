@@ -1,3 +1,8 @@
+/*
+    License: MIT
+    Authors:
+        - Josep Bigorra (averageflow)
+ */
 let logOffset = 0;
 
 const logTableHeaders = `

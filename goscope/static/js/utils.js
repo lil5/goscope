@@ -1,3 +1,8 @@
+/*
+    License: MIT
+    Authors:
+        - Josep Bigorra (averageflow)
+ */
 const now = Math.round((new Date()).getTime() / 1000);
 const TimeLevels = {
     scale: [24, 60, 60, 1],

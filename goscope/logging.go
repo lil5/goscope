@@ -1,5 +1,6 @@
-// Copyright © 2020 Pro Warehouse B.V.
-// All Rights Reserved
+// License: MIT
+// Authors:
+// 		- Josep Bigorra (averageflow)
 package goscope
 
 import (
