@@ -1,0 +1,45 @@
+<!--
+    License: MIT
+    Authors:
+        - Josep Bigorra (averageflow)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{.COMMON_HEADER}}
+    <style>{{.HIGHLIGHT_STYLES}}</style>
+    <style>{{.GOSCOPE_STYLES}}</style>
+</head>
+<body>
+<div class="m-3 p-3 text-center" style="line-height: 2em;">
+    <div class="md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">
+        <h1 class="font-xl m-2">System Information - GoScope</h1>
+        <h3 class="font-l m-2">CPU</h3>
+        <p>Model Name:
+        <pre><code class="plaintext">{{.CPU_MODEL_NAME}}</code></pre>
+        </p>
+        <p>Core Count:
+        <pre><code class="plaintext">{{.CPU_CORE_COUNT}}</code></pre>
+        </p>
+        <h3 class="font-l m-2">Memory</h3>
+        <p>Available:
+        <pre><code class="plaintext">{{.MEMORY_AVAILABLE}} of {{.MEMORY_TOTAL}}</code></pre>
+        </p>
+        <h3 class="font-l m-2">Host</h3>
+        <p>Hostname:
+        <pre><code class="plaintext">{{.HOST_NAME}}</code></pre>
+        </p>
+        <p>Operating System:
+        <pre><code class="plaintext">{{.HOST_OS}}</code></pre>
+        </p>
+        <p>Kernel:
+        <pre><code class="plaintext">{{.HOST_KERNEL_VERSION}} {{.HOST_KERNEL_ARCH}}</code></pre>
+        </p>
+        <p>Uptime:
+        <pre><code class="plaintext">{{.HOST_UPTIME}}</code></pre>
+        </p>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+</body>
+</html>

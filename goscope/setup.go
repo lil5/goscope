@@ -40,6 +40,7 @@ func Setup(engine *gin.Engine) {
 	goscopeGroup := engine.Group("/goscope")
 	goscopeGroup.GET("/", Dashboard)
 	goscopeGroup.GET("/logs", LogDashboard)
+	goscopeGroup.GET("/info", ShowSystemInfo)
 	goscopeGroup.GET("/log-records", GetLogs)
 	goscopeGroup.GET("/log-records/:id", ShowLog)
 	goscopeGroup.GET("/requests", GetRequests)
