@@ -1,0 +1,152 @@
+/*
+    License: MIT
+    Authors:
+        - Josep Bigorra (averageflow)
+ */
+
+:root {
+    --main-highlight-color: #7cc3bf;
+}
+
+h1, h2, h3 {
+    font-family: "Manrope", "sans-serif";
+}
+
+body {
+    background: #1c1c1c;
+    color: #fff;
+    font-family: "Manrope", "sans-serif";
+}
+
+code {
+    font-family: "Fira Mono", monospace
+}
+
+.monospaced {
+    font-family: "Fira Mono", monospace
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: #fff;
+    border: none;
+}
+
+.active-navbar-link {
+    text-decoration: none;
+    color: var(--main-highlight-color);
+}
+
+.navbar-link:hover {
+    text-decoration: underline;
+    color: var(--main-highlight-color);
+}
+
+.custom-td {
+    background: #2B2B2D;
+}
+
+th {
+    border-radius: 4px;
+}
+
+.eye-image {
+    fill: #fff;
+}
+
+.eye-image:hover {
+    fill: var(--main-highlight-color);
+}
+
+table {
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
+.paginate-button {
+    color: #fff;
+    border: none;
+}
+
+.paginate-button:hover {
+    color: var(--main-highlight-color);
+    text-decoration: underline;
+}
+
+.tab-button {
+    color: #fff;
+    border: none;
+    background: #2B2B2D;
+    border-radius: 4px;
+}
+
+.badge-success {
+    padding: 4px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #1f9d55;
+}
+
+.badge-info {
+    padding: 4px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #1c3d5a;
+}
+
+.badge-turq {
+    padding: 4px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #503194;
+}
+
+.badge-secondary {
+    border-radius: 4px;
+    padding: 4px;
+    color: #fff;
+    background-color: #494444;
+}
+
+.badge-danger {
+    border-radius: 4px;
+    padding: 4px;
+    color: #fff;
+    background-color: #621b18;
+}
+
+.badge-warning {
+    border-radius: 4px;
+    padding: 4px;
+    color: #fff;
+    background-color: #684f1d;
+}
+
+.search-input {
+    background: #232323;
+    color: #fff;
+    border-radius: 8px;
+    border-color: #454545;
+}
+
+/* -----
+SVG Icons - svgicons.sparkk.fr
+----- */
+
+.svg-icon {
+    width: 1em;
+    height: 1em;
+}
+
+.svg-icon {
+    fill: #fff;
+}
+
+.svg-icon:hover {
+    fill: var(--main-highlight-color);
+}
+
+.svg-icon circle {
+    stroke: #ffffff;
+    stroke-width: 1;
+}

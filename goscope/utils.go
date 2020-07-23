@@ -8,11 +8,13 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/css"
 	"github.com/tdewolff/minify/v2/html"
 	"github.com/tdewolff/minify/v2/js"
 	"log"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -21,7 +23,26 @@ import (
 
 func CheckExcludedPaths(path string) bool {
 	result := true
-	items := []string{"", "/goscope/", "/goscope/log-records", "/goscope/log-records/:id", "/goscope/logs", "css", "/goscope", "/js/*", "/css/*", "/css/*filepath", "/js/*filepath", "/goscope/requests", "/js", "/goscope/responses", "/goscope/responses/:id", "/goscope/requests/:id"}
+	items := []string{
+		"",
+		"/goscope/",
+		"/goscope/log-records",
+		"/goscope/log-records/:id",
+		"/goscope/logs",
+		"css",
+		"/goscope",
+		"/js/*",
+		"/css/*",
+		"/css/*filepath",
+		"/js/*filepath",
+		"/goscope/requests",
+		"/js",
+		"/goscope/responses",
+		"/goscope/responses/:id",
+		"/goscope/requests/:id",
+		"/goscope/search/requests",
+		"/goscope/search/logs",
+	}
 	for _, s := range items {
 		if path == s {
 			result = false
@@ -106,27 +127,8 @@ func MinifyHtml(uncompressed string) string {
 	return minified
 }
 
-func NavbarComponent(selected string) string {
-	navlinkKeys := []string {
-		"REQUESTS", "LOGS",
-	}
-	navLinks := []string{
-		"<a class=\"%s\" href=\"/goscope/\"><h3 style=\"margin: 1.2em;\" class=\"font-l\">🌐&nbsp;&nbsp;Requests</h3></a>",
-		"<a class=\"%s\" href=\"/goscope/logs\"><h3 style=\"margin: 1.2em;\" class=\"font-l\">📃&nbsp;&nbsp;Logs</h3></a>",
-	}
-	navbarCode := `
-	<div class="flex m-2 p-2">
-		<h3 class="font-l" style="margin: 1.2em;">⚙️&nbsp;%s</h3>
-		%s
-	</div>
-	`
-	var generatedLinks string
-	for i, s := range navlinkKeys {
-		if s == selected {
-			generatedLinks += fmt.Sprintf(navLinks[i], "active-navbar-link")
-		} else {
-			generatedLinks += fmt.Sprintf(navLinks[i], "navbar-link")
-		}
-	}
-	return MinifyHtml(fmt.Sprintf(navbarCode, os.Getenv("APPLICATION_NAME"), generatedLinks))
+func ShowGoScopePage(c *gin.Context, rawTemplate string, variables map[string]string) {
+	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
+	reader := strings.NewReader(cleanTemplate)
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }

@@ -202,3 +202,74 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 		log.Println(err.Error())
 	}
 }
+
+func SearchRequests(searchString string, offset int) []SummarizedRequest {
+	var result []SummarizedRequest
+	db := GetDB()
+	defer db.Close()
+	query := "SELECT requests.uid, requests.method, requests.path, requests.time, responses.status FROM requests " +
+		"INNER JOIN responses ON requests.uid = responses.request_uid WHERE requests.application = '%[2]v' AND " +
+		"(requests.uid LIKE '%%%[3]v%%' OR requests.application LIKE '%%%[3]v%%' OR requests.client_ip LIKE '%%%[3]v%%' OR requests.method LIKE '%%%[3]v%%' OR requests.path LIKE '%%%[3]v%%' " +
+		"OR requests.url LIKE '%%%[3]v%%' OR requests.host LIKE '%%%[3]v%%' OR requests.body LIKE '%%%[3]v%%' OR requests.referrer LIKE '%%%[3]v%%' OR requests.user_agent LIKE '%%%[3]v%%' OR requests.time LIKE '%%%[3]v%%'" +
+		"OR responses.uid LIKE '%%%[3]v%%' OR responses.request_uid LIKE '%%%[3]v%%' OR responses.application LIKE '%%%[3]v%%' OR responses.client_ip LIKE '%%%[3]v%%' OR responses.status LIKE '%%%[3]v%%' " +
+		"OR responses.body LIKE '%%%[3]v%%' OR responses.path LIKE '%%%[3]v%%' OR responses.headers LIKE '%%%[3]v%%' OR responses.size LIKE '%%%[3]v%%' OR responses.time LIKE '%%%[3]v%%') " +
+		"ORDER BY time DESC LIMIT %[1]v OFFSET %[4]v;"
+	preparedQuery := fmt.Sprintf(query, os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), os.Getenv("APPLICATION_ID"), searchString, offset)
+	rows, err := db.Query(preparedQuery)
+	if err != nil {
+		log.Println(err.Error())
+		return result
+	}
+	for rows.Next() {
+		var uid string
+		var method string
+		var path string
+		var t int
+		var status int
+
+		_ = rows.Scan(&uid, &method, &path, &t, &status)
+		request := SummarizedRequest{
+			Method:         method,
+			Path:           path,
+			Time:           t,
+			Uid:            uid,
+			ResponseStatus: status,
+		}
+		result = append(result, request)
+	}
+	return result
+}
+
+func SearchLogs(searchString string, offset int) []ExceptionRecord {
+	var result []ExceptionRecord
+	db := GetDB()
+	defer db.Close()
+	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
+		"ELSE error END AS error, time FROM logs WHERE application = '%[1]v' AND (uid LIKE '%%%[3]v%%' OR application LIKE '%%%[3]v%%' OR error LIKE '%%%[3]v%%' OR time LIKE '%%%[3]v%%') " +
+		"ORDER BY time DESC LIMIT %[2]v OFFSET %[4]v;"
+	preparedQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), searchString, offset)
+	log.Println(preparedQuery)
+	rows, err := db.Query(preparedQuery)
+	if err != nil {
+		log.Println(err.Error())
+		return result
+	}
+	for rows.Next() {
+		var uid string
+		var t int
+		var errorMessage string
+
+		err := rows.Scan(&uid, &errorMessage, &t)
+		if err != nil {
+			log.Println(err.Error())
+			return result
+		}
+		request := ExceptionRecord{
+			Error: errorMessage,
+			Time:  t,
+			Uid:   uid,
+		}
+		result = append(result, request)
+	}
+	return result
+}

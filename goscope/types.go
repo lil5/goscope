@@ -69,3 +69,7 @@ func (w BodyLogWriter) Write(b []byte) (int, error) {
 	w.body.Write(b)
 	return w.ResponseWriter.Write(b)
 }
+
+type SearchRequestPayload struct {
+	Query string `json:"query"`
+}

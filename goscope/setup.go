@@ -44,4 +44,6 @@ func Setup(engine *gin.Engine) {
 	goscopeGroup.GET("/log-records/:id", ShowLog)
 	goscopeGroup.GET("/requests", GetRequests)
 	goscopeGroup.GET("/requests/:id", ShowRequest)
+	goscopeGroup.POST("/search/requests", SearchRequest)
+	goscopeGroup.POST("/search/logs", SearchLog)
 }
