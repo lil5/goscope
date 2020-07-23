@@ -7,6 +7,11 @@
 
 :root {
     --main-highlight-color: #7cc3bf;
+    --main-text-color: #fff;
+    --main-background-color-400: #454545;
+    --main-background-color-600: #2B2B2D;
+    --main-background-color-700: #232323;
+    --main-background-color-800: #1c1c1c;
 }
 
 h1, h2, h3 {
