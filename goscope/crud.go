@@ -248,7 +248,6 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 		"ELSE error END AS error, time FROM logs WHERE application = '%[1]v' AND (uid LIKE '%%%[3]v%%' OR application LIKE '%%%[3]v%%' OR error LIKE '%%%[3]v%%' OR time LIKE '%%%[3]v%%') " +
 		"ORDER BY time DESC LIMIT %[2]v OFFSET %[4]v;"
 	preparedQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), searchString, offset)
-	log.Println(preparedQuery)
 	rows, err := db.Query(preparedQuery)
 	if err != nil {
 		log.Println(err.Error())

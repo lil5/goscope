@@ -13,30 +13,45 @@
 <body>
 <div class="m-3 p-3 text-center" style="line-height: 2em;">
     <div class="md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">
-        <h1 class="font-xl m-2">System Information - GoScope</h1>
-        <h3 class="font-l m-2">CPU</h3>
-        <p>Model Name:
-        <pre><code class="plaintext">{{.CPU_MODEL_NAME}}</code></pre>
+        <h1 class="font-xl m-1">System Information - GoScope</h1>
+        <h3 class="font-l m-2">
+            CPU
+        </h3>
+        <p>
+            Model Name:&nbsp;<code class="plaintext">{{.CPU_MODEL_NAME}}</code></p>
+        <p>
+            Core Count:&nbsp;<code class="plaintext">{{.CPU_CORE_COUNT}}</code>
         </p>
-        <p>Core Count:
-        <pre><code class="plaintext">{{.CPU_CORE_COUNT}}</code></pre>
+        <h3 class="font-l m-2">
+            Memory
+        </h3>
+        <p>
+            Available:&nbsp;<code class="plaintext">{{.MEMORY_AVAILABLE}} of {{.MEMORY_TOTAL}}</code>
         </p>
-        <h3 class="font-l m-2">Memory</h3>
-        <p>Available:
-        <pre><code class="plaintext">{{.MEMORY_AVAILABLE}} of {{.MEMORY_TOTAL}}</code></pre>
+        <p>
+            Swap Usage:&nbsp;<code class="plaintext">{{.SWAP_USED}} of swap used</code>
         </p>
         <h3 class="font-l m-2">Host</h3>
-        <p>Hostname:
-        <pre><code class="plaintext">{{.HOST_NAME}}</code></pre>
+        <p>
+            Hostname:&nbsp;<code class="plaintext">{{.HOST_NAME}}</code>
         </p>
-        <p>Operating System:
-        <pre><code class="plaintext">{{.HOST_OS}}</code></pre>
+        <p>
+            Operating System:&nbsp;<code class="plaintext">{{.HOST_OS}} {{.HOST_PLATFORM}}</code>
         </p>
-        <p>Kernel:
-        <pre><code class="plaintext">{{.HOST_KERNEL_VERSION}} {{.HOST_KERNEL_ARCH}}</code></pre>
+        <p>
+            Kernel:&nbsp;<code class="plaintext">{{.HOST_KERNEL_VERSION}} {{.HOST_KERNEL_ARCH}}</code>
         </p>
-        <p>Uptime:
-        <pre><code class="plaintext">{{.HOST_UPTIME}}</code></pre>
+        <p>
+            Uptime:&nbsp;<code class="plaintext">{{.HOST_UPTIME}}</code>
+        </p>
+        <h3 class="font-l m-2">
+            Disk
+        </h3>
+        <p>
+            Partition:&nbsp;<code class="plaintext">Mounted at {{.DISK_PATH}} with type {{.DISK_PARTITION_TYPE}}</code>
+        </p>
+        <p>
+            Space:&nbsp;<code class="plaintext">{{.DISK_FREE}} free of {{.DISK_TOTAL}}</code>
         </p>
     </div>
 </div>

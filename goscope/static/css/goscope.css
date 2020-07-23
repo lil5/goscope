@@ -129,6 +129,7 @@ table {
     border-color: #454545;
 }
 
+
 /* -----
 SVG Icons - svgicons.sparkk.fr
 ----- */
@@ -149,4 +150,39 @@ SVG Icons - svgicons.sparkk.fr
 .svg-icon circle {
     stroke: #ffffff;
     stroke-width: 1;
+}
+
+.navbar-container h3 {
+    font-size: large;
+    margin: 0.7em;
+    line-height: initial;
+}
+
+.navbar-container svg {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.goscope-entries-table {
+    min-width: 70%;
+    max-width: 85%;
+    line-height: 1.6em;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 900px) {
+    .navbar-container h3 {
+        font-size: medium;
+        margin: 0.7em;
+        line-height: initial;
+    }
+
+}
+
+@media only screen and (min-width: 1200px) {
+    .goscope-entries-table {
+        min-width: 50%;
+        max-width: 75%;
+    }
+
 }
