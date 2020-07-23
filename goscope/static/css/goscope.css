@@ -135,6 +135,11 @@ table {
     color: var(--main-text-color);
     border-radius: 8px;
     border-color: var(--main-background-color-400);
+    transition: border-color 0.2s ease-in;
+}
+.search-input:focus,
+.search-input:active {
+    border-color: var(--main-highlight-color);
 }
 
 /* -----
