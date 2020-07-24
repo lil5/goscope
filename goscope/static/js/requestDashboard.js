@@ -12,7 +12,6 @@ class RequestDashboard extends AbstractDashboard {
         super('/goscope/requests', '/goscope/search/requests');
         document.getElementById(activeLink).className = "active-navbar-link";
         document.getElementById(activeSymbol).style.fill = "var(--main-highlight-color)";
-        document.getElementById("search-cancel-button").style.display = "none";
     }
 
     _requestTableHeaders = "";
@@ -30,10 +29,11 @@ class RequestDashboard extends AbstractDashboard {
 
     fillTable(requestData) {
         let requestTable = document.getElementById("request-table");
-        requestTable.innerHTML = this.requestTableHeaders;
         if (requestData === null || requestData === undefined || requestData.length === 0) {
+            requestTable.innerHTML = `<h3>No results could be found</h3>`;
             return
         }
+        requestTable.innerHTML = this.requestTableHeaders;
         requestData.forEach(function (item) {
             let requestMoment = item.time;
             let elapsed = secondsToString(now - requestMoment);

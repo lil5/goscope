@@ -12,7 +12,6 @@ class LogsDashboard extends AbstractDashboard {
         super('/goscope/log-records', '/goscope/search/logs');
         document.getElementById(activeLink).className = "active-navbar-link";
         document.getElementById(activeSymbol).style.fill = "var(--main-highlight-color)";
-        document.getElementById("search-cancel-button").style.display = "none";
     }
 
     _requestTableHeaders = "";
@@ -30,10 +29,11 @@ class LogsDashboard extends AbstractDashboard {
 
     fillTable(logData) {
         let logTable = document.getElementById("log-table");
-        logTable.innerHTML = this.requestTableHeaders;
         if (logData === null || logData === undefined || logData.length === 0) {
+            logTable.innerHTML = `<h3>No results could be found</h3>`;
             return
         }
+        logTable.innerHTML = this.requestTableHeaders;
         logData.forEach(function (item) {
             let requestMoment = item.time;
             let elapsed = secondsToString(now - requestMoment)

@@ -217,6 +217,7 @@ class AbstractDashboard {
      * @param {AbstractDashboard} instance
      */
     commonEventListeners(instance) {
+        document.getElementById("search-cancel-button").style.display = "none";
         document.getElementById("prev-page").addEventListener("click", async () => {
             await instance.previousPage()
         });
