@@ -35,6 +35,10 @@ code,
     font-family: "Fira Mono", monospace
 }
 
+.goscope-background-700 {
+    background-color: var(--main-background-color-700);
+}
+
 .navbar-link {
     text-decoration: none;
     color: var(--main-text-color);
