@@ -6,6 +6,10 @@ package goscope
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	// Import MYSQL Driver
+	_ "github.com/go-sql-driver/mysql"
+	// Import PostgreSQL Driver
+	_ "github.com/lib/pq"
 	"log"
 	"os"
 )
@@ -40,7 +44,7 @@ func Setup(engine *gin.Engine) {
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
 	goscopeGroup := engine.Group("/goscope")
-	goscopeGroup.GET("/", Dashboard)
+	goscopeGroup.GET("/", RequestDashboard)
 	goscopeGroup.GET("/logs", LogDashboard)
 	goscopeGroup.GET("/info", ShowSystemInfo)
 	goscopeGroup.GET("/log-records", GetLogs)

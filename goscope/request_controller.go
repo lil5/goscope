@@ -9,50 +9,25 @@ import (
 	"strconv"
 )
 
-func Dashboard(c *gin.Context) {
-	// Markup
-	dashboardView, _ := Asset("../static/html/request_dashboard.html")
-	commonHeader, _ := Asset("../static/html/common_head.html")
-	footer, _ := Asset("../static/html/common_footer.html")
-	commonNavbar, _ := Asset("../static/html/common_navbar.html")
-	navbar := ReplaceVariablesInTemplate(string(commonNavbar), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
-	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
-	// Styles
-	highlightStyles, _ := Asset("../static/css/highlight.css")
-	goscopeStyles, _ := Asset("../static/css/goscope.css")
-	// Scripts
-	utilScripts, _ := Asset("../static/js/utils.js")
-	abstractDashboard, _ := Asset("../static/js/abstractDashboard.js")
-	requestDashboard, _ := Asset("../static/js/requestDashboard.js")
-	variables := map[string]string{
-		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":      MinifyHtml(header),
-		"HIGHLIGHT_STYLES":   MinifyCss(string(highlightStyles)),
-		"GOSCOPE_STYLES":     MinifyCss(string(goscopeStyles)),
-		"ENTRIES_PER_PAGE":   os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		"COMMON_NAVBAR":      MinifyHtml(navbar),
-		"COMMON_FOOTER":      MinifyHtml(string(footer)),
-		"UTIL_SCRIPTS":       MinifyJs(string(utilScripts)),
-		"ABSTRACT_DASHBOARD": MinifyJs(string(abstractDashboard)),
-		"REQUEST_DASHBOARD":  MinifyJs(string(requestDashboard)),
-	}
-	ShowGoScopePage(c, MinifyHtml(string(dashboardView)), variables)
+func RequestDashboard(c *gin.Context) {
+	ShowDashboard(c, RequestDashboardMode)
 }
 
 func ShowRequest(c *gin.Context) {
-	var request RecordByUri
+	var request RecordByURI
 	err := c.ShouldBindUri(&request)
 
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	requestDetails := GetDetailedRequest(request.Uid)
-	responseDetails := GetDetailedResponse(request.Uid)
+	requestDetails := GetDetailedRequest(request.UID)
+	responseDetails := GetDetailedResponse(request.UID)
 	// Markup
 	requestView, _ := Asset("../static/html/single_request.html")
 	commonHeader, _ := Asset("../static/html/common_head.html")
-	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
+	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
+	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
 	// Styles
 	highlightStyles, _ := Asset("../static/css/highlight.css")
 	goscopeStyles, _ := Asset("../static/css/goscope.css")
@@ -61,31 +36,31 @@ func ShowRequest(c *gin.Context) {
 
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":      MinifyHtml(header),
-		"HIGHLIGHT_STYLES":   MinifyCss(string(highlightStyles)),
-		"GOSCOPE_STYLES":     MinifyCss(string(goscopeStyles)),
+		"COMMON_HEADER":      MinifyHTML(header),
+		"HIGHLIGHT_STYLES":   MinifyCSS(string(highlightStyles)),
+		"GOSCOPE_STYLES":     MinifyCSS(string(goscopeStyles)),
 		"SINGLE_REQUEST":     MinifyJs(string(singleRequest)),
-		"REQUEST_BODY":       prettifyJson(requestDetails.Body),
-		"REQUEST_CLIENT_IP":  requestDetails.ClientIp,
-		"REQUEST_HEADERS":    prettifyJson(requestDetails.Headers),
+		"REQUEST_BODY":       prettifyJSON(requestDetails.Body),
+		"REQUEST_CLIENT_IP":  requestDetails.ClientIP,
+		"REQUEST_HEADERS":    prettifyJSON(requestDetails.Headers),
 		"REQUEST_HOST":       requestDetails.Host,
 		"REQUEST_METHOD":     requestDetails.Method,
 		"REQUEST_PATH":       requestDetails.Path,
 		"REQUEST_REFERRER":   requestDetails.Referrer,
 		"REQUEST_TIME":       UnixTimeToHuman(requestDetails.Time),
-		"REQUEST_UID":        requestDetails.Uid,
-		"REQUEST_URL":        requestDetails.Url,
+		"REQUEST_UID":        requestDetails.UID,
+		"REQUEST_URL":        requestDetails.URL,
 		"REQUEST_USER_AGENT": requestDetails.UserAgent,
-		"RESPONSE_BODY":      prettifyJson(responseDetails.Body),
-		"RESPONSE_CLIENT_IP": responseDetails.ClientIp,
-		"RESPONSE_HEADERS":   prettifyJson(responseDetails.Headers),
+		"RESPONSE_BODY":      prettifyJSON(responseDetails.Body),
+		"RESPONSE_CLIENT_IP": responseDetails.ClientIP,
+		"RESPONSE_HEADERS":   prettifyJSON(responseDetails.Headers),
 		"RESPONSE_PATH":      responseDetails.Path,
 		"RESPONSE_SIZE":      strconv.Itoa(responseDetails.Size),
 		"RESPONSE_STATUS":    responseDetails.Status,
 		"RESPONSE_TIME":      UnixTimeToHuman(responseDetails.Time),
-		"RESPONSE_UID":       responseDetails.Uid,
+		"RESPONSE_UID":       responseDetails.UID,
 	}
-	ShowGoScopePage(c, MinifyHtml(string(requestView)), variables)
+	ShowGoScopePage(c, MinifyHTML(string(requestView)), variables)
 }
 
 func SearchRequest(c *gin.Context) {

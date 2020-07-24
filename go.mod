@@ -11,4 +11,5 @@ require (
 	github.com/shirou/gopsutil v2.20.6+incompatible
 	github.com/shuLhan/go-bindata v3.4.0+incompatible // indirect
 	github.com/tdewolff/minify/v2 v2.7.6
+	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305 // indirect
 )

@@ -13,14 +13,14 @@ import (
 	"time"
 )
 
-func GetDetailedRequest(requestUid string) DetailedRequest {
+func GetDetailedRequest(requestUID string) DetailedRequest {
 	db := GetDB()
 	defer db.Close()
 
 	resultingQuery := "SELECT uid, client_ip, method, path, " +
 		"url, host, time, headers, body, referrer, user_agent " +
 		"FROM requests WHERE uid = ? LIMIT 1;"
-	row := db.QueryRow(resultingQuery, requestUid)
+	row := db.QueryRow(resultingQuery, requestUID)
 
 	var body string
 
@@ -29,11 +29,11 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	var result DetailedRequest
 
 	err := row.Scan(
-		&result.Uid,
-		&result.ClientIp,
+		&result.UID,
+		&result.ClientIP,
 		&result.Method,
 		&result.Path,
-		&result.Url,
+		&result.URL,
 		&result.Host,
 		&result.Time,
 		&headers,
@@ -52,11 +52,14 @@ func GetDetailedRequest(requestUid string) DetailedRequest {
 	return result
 }
 
-func GetDetailedResponse(requestUid string) DetailedResponse {
+func GetDetailedResponse(requestUID string) DetailedResponse {
 	db := GetDB()
 	defer db.Close()
-	resultingQuery := "SELECT uid, client_ip, status, time, body, path, headers, size FROM responses WHERE request_uid = ? LIMIT 1;"
-	row := db.QueryRow(resultingQuery, requestUid)
+
+	resultingQuery := "SELECT uid, client_ip, status, time, " +
+		"body, path, headers, size FROM responses " +
+		"WHERE request_uid = ? LIMIT 1;"
+	row := db.QueryRow(resultingQuery, requestUID)
 
 	var body string
 
@@ -65,8 +68,8 @@ func GetDetailedResponse(requestUid string) DetailedResponse {
 	var result DetailedResponse
 
 	err := row.Scan(
-		&result.Uid,
-		&result.ClientIp,
+		&result.UID,
+		&result.ClientIP,
 		&result.Status,
 		&result.Time,
 		&body,
@@ -112,7 +115,7 @@ func GetRequests(c *gin.Context) {
 	for rows.Next() {
 		var request SummarizedRequest
 
-		_ = rows.Scan(&request.Uid, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
+		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
 		result = append(result, request)
 	}
 	c.JSON(http.StatusOK, result)
@@ -123,27 +126,28 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 	defer db.Close()
 
 	now := time.Now().Unix()
-	requestUid, _ := uuid.NewV4()
+	requestUID, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
 	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
 		"headers, body, referrer, url, user_agent) VALUES " +
 		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	_, err := db.Exec(query, requestUid.String(), os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method,
+	_, err := db.Exec(query, requestUID.String(), os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method,
 		c.FullPath(), c.Request.Host, now, html.EscapeString(string(headers)), html.EscapeString(body),
 		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
 
 	if err != nil {
 		log.Println(err.Error())
 	}
-	responseUid, _ := uuid.NewV4()
+
+	responseUID, _ := uuid.NewV4()
 	headers, _ = json.Marshal(blw.Header())
 	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
 		"body, path, headers, size) VALUES " +
 		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 	_, err = db.Exec(
 		query,
-		responseUid.String(),
-		requestUid.String(),
+		responseUID.String(),
+		requestUID.String(),
 		os.Getenv("APPLICATION_ID"),
 		c.ClientIP(),
 		blw.Status(),
@@ -197,7 +201,7 @@ func SearchRequests(searchString string, offset int) []SummarizedRequest {
 	for rows.Next() {
 		var request SummarizedRequest
 
-		_ = rows.Scan(&request.Uid, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
+		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
 
 		result = append(result, request)
 	}

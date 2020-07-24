@@ -9,16 +9,16 @@ import (
 	"strconv"
 )
 
-func GetDetailedLog(requestUid string) ExceptionRecord {
+func GetDetailedLog(requestUID string) ExceptionRecord {
 	db := GetDB()
 	defer db.Close()
 
 	query := "SELECT uid, error, time FROM logs WHERE uid = ?;"
-	row := db.QueryRow(query, requestUid)
+	row := db.QueryRow(query, requestUID)
 
 	var request ExceptionRecord
 
-	err := row.Scan(&request.Uid, &request.Error, &request.Time)
+	err := row.Scan(&request.UID, &request.Error, &request.Time)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -36,9 +36,17 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	defer db.Close()
 
 	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
-		"ELSE error END AS error, time FROM logs WHERE application = '%[1]v' AND (uid LIKE '%%%[3]v%%' OR application LIKE '%%%[3]v%%' OR error LIKE '%%%[3]v%%' OR time LIKE '%%%[3]v%%') " +
+		"ELSE error END AS error, time FROM logs WHERE application = '%[1]v' AND " +
+		"(uid LIKE '%%%[3]v%%' OR application LIKE '%%%[3]v%%' " +
+		"OR error LIKE '%%%[3]v%%' OR time LIKE '%%%[3]v%%') " +
 		"ORDER BY time DESC LIMIT %[2]v OFFSET %[4]v;"
-	preparedQuery := fmt.Sprintf(query, os.Getenv("APPLICATION_ID"), os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), searchString, offset)
+	preparedQuery := fmt.Sprintf(
+		query,
+		os.Getenv("APPLICATION_ID"),
+		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		searchString,
+		offset,
+	)
 	rows, err := db.Query(preparedQuery)
 
 	if err != nil {
@@ -49,7 +57,7 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	for rows.Next() {
 		var request ExceptionRecord
 
-		err := rows.Scan(&request.Uid, &request.Error, &request.Time)
+		err := rows.Scan(&request.UID, &request.Error, &request.Time)
 		if err != nil {
 			log.Println(err.Error())
 			return result
@@ -85,7 +93,7 @@ func GetLogs(c *gin.Context) {
 	for rows.Next() {
 		var request ExceptionRecord
 
-		err := rows.Scan(&request.Uid, &request.Error, &request.Time)
+		err := rows.Scan(&request.UID, &request.Error, &request.Time)
 		if err != nil {
 			log.Println(err.Error())
 			c.JSON(http.StatusInternalServerError, err.Error())

@@ -66,7 +66,7 @@ func UnixTimeToHuman(rawTime int) string {
 	return timeInstance.In(loc).Format("15:04:05 Mon, 2 Jan 2006 ")
 }
 
-func prettifyJson(rawString string) string {
+func prettifyJSON(rawString string) string {
 	if rawString == "" {
 		return ""
 	}
@@ -106,7 +106,7 @@ func GetDB() *sql.DB {
 
 	return db
 }
-func MinifyCss(uncompressed string) string {
+func MinifyCSS(uncompressed string) string {
 	m := minify.New()
 	m.AddFunc("text/css", css.Minify)
 	minified, err := m.String("text/css", uncompressed)
@@ -132,7 +132,7 @@ func MinifyJs(uncompressed string) string {
 	return minified
 }
 
-func MinifyHtml(uncompressed string) string {
+func MinifyHTML(uncompressed string) string {
 	m := minify.New()
 	m.AddFunc("text/html", html.Minify)
 	minified, err := m.String("text/html", uncompressed)

@@ -8,56 +8,61 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	LogDashboardMode = iota
+	RequestDashboardMode
+)
+
 type ExceptionRecord struct {
 	Error string `json:"error"`
 	Time  int    `json:"time"`
-	Uid   string `json:"uid"`
+	UID   string `json:"uid"`
 }
 
 type SummarizedRequest struct {
 	Method         string `json:"method"`
 	Path           string `json:"path"`
 	Time           int    `json:"time"`
-	Uid            string `json:"uid"`
+	UID            string `json:"uid"`
 	ResponseStatus int    `json:"response_status"`
 }
 
-type RecordByUri struct {
-	Uid string `uri:"id" binding:"required"`
+type RecordByURI struct {
+	UID string `uri:"id" binding:"required"`
 }
 
 type SummarizedResponse struct {
-	RequestUid string `json:"request_uid"`
-	ClientIp   string `json:"client_ip"`
+	RequestUID string `json:"request_uid"`
+	ClientIP   string `json:"client_ip"`
 	Path       string `json:"path"`
 	Status     string `json:"status"`
 	Time       int    `json:"time"`
-	Uid        string `json:"uid"`
+	UID        string `json:"uid"`
 }
 
 type DetailedResponse struct {
 	Body       string `json:"body"`
-	ClientIp   string `json:"client_ip"`
+	ClientIP   string `json:"client_ip"`
 	Headers    string `json:"headers"`
 	Path       string `json:"path"`
 	Size       int    `json:"size"`
 	Status     string `json:"status"`
 	Time       int    `json:"time"`
-	RequestUid string `json:"request_uid"`
-	Uid        string `json:"uid"`
+	RequestUID string `json:"request_uid"`
+	UID        string `json:"uid"`
 }
 
 type DetailedRequest struct {
 	Body      string `json:"body"`
-	ClientIp  string `json:"client_ip"`
+	ClientIP  string `json:"client_ip"`
 	Headers   string `json:"headers"`
 	Host      string `json:"host"`
 	Method    string `json:"method"`
 	Path      string `json:"path"`
 	Referrer  string `json:"referrer"`
 	Time      int    `json:"time"`
-	Uid       string `json:"uid"`
-	Url       string `json:"url"`
+	UID       string `json:"uid"`
+	URL       string `json:"url"`
 	UserAgent string `json:""`
 }
 

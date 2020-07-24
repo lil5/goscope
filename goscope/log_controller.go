@@ -9,9 +9,18 @@ import (
 	"strconv"
 )
 
-func LogDashboard(c *gin.Context) {
+func ShowDashboard(c *gin.Context, mode int) {
 	// Markup
-	logsView, _ := Asset("../static/html/log_dashboard.html")
+	var baseTemplate string
+
+	if mode == LogDashboardMode {
+		logsView, _ := Asset("../static/html/log_dashboard.html")
+		baseTemplate = string(logsView)
+	} else {
+		requestView, _ := Asset("../static/html/request_dashboard.html")
+		baseTemplate = string(requestView)
+	}
+
 	commonHeader, _ := Asset("../static/html/common_head.html")
 	footer, _ := Asset("../static/html/common_footer.html")
 	commonNavbar, _ := Asset("../static/html/common_navbar.html")
@@ -25,36 +34,53 @@ func LogDashboard(c *gin.Context) {
 	// Scripts
 	utilScripts, _ := Asset("../static/js/utils.js")
 	abstractDashboard, _ := Asset("../static/js/abstractDashboard.js")
-	logsDashboard, _ := Asset("../static/js/logsDashboard.js")
+
+	var dashboardScript string
+
+	if mode == LogDashboardMode {
+		logsDashboard, _ := Asset("../static/js/logsDashboard.js")
+		dashboardScript = string(logsDashboard)
+	} else {
+		requestDashboard, _ := Asset("../static/js/requestDashboard.js")
+		dashboardScript = string(requestDashboard)
+	}
 
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":      MinifyHtml(header),
-		"HIGHLIGHT_STYLES":   MinifyCss(string(highlightStyles)),
-		"GOSCOPE_STYLES":     MinifyCss(string(goscopeStyles)),
+		"COMMON_HEADER":      MinifyHTML(header),
+		"HIGHLIGHT_STYLES":   MinifyCSS(string(highlightStyles)),
+		"GOSCOPE_STYLES":     MinifyCSS(string(goscopeStyles)),
 		"ENTRIES_PER_PAGE":   os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		"COMMON_NAVBAR":      MinifyHtml(navbar),
-		"COMMON_FOOTER":      MinifyHtml(string(footer)),
+		"COMMON_NAVBAR":      MinifyHTML(navbar),
+		"COMMON_FOOTER":      MinifyHTML(string(footer)),
 		"UTIL_SCRIPTS":       MinifyJs(string(utilScripts)),
 		"ABSTRACT_DASHBOARD": MinifyJs(string(abstractDashboard)),
-		"LOG_DASHBOARD":      MinifyJs(string(logsDashboard)),
 	}
-	ShowGoScopePage(c, MinifyHtml(string(logsView)), variables)
+	if mode == LogDashboardMode {
+		variables["LOG_DASHBOARD"] = dashboardScript
+	} else {
+		variables["REQUEST_DASHBOARD"] = dashboardScript
+	}
+	ShowGoScopePage(c, MinifyHTML(baseTemplate), variables)
+}
+func LogDashboard(c *gin.Context) {
+	ShowDashboard(c, LogDashboardMode)
 }
 
 func ShowLog(c *gin.Context) {
-	var request RecordByUri
+	var request RecordByURI
 	err := c.ShouldBindUri(&request)
 
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	logDetails := GetDetailedLog(request.Uid)
+	logDetails := GetDetailedLog(request.UID)
 	// Markup
 	logView, _ := Asset("../static/html/single_log.html")
 	commonHeader, _ := Asset("../static/html/common_head.html")
-	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
+	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
+	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
 	// Styles
 	highlightStyles, _ := Asset("../static/css/highlight.css")
 	goscopeStyles, _ := Asset("../static/css/goscope.css")
@@ -63,14 +89,14 @@ func ShowLog(c *gin.Context) {
 
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":    MinifyHtml(header),
-		"HIGHLIGHT_STYLES": MinifyCss(string(highlightStyles)),
-		"GOSCOPE_STYLES":   MinifyCss(string(goscopeStyles)),
+		"COMMON_HEADER":    MinifyHTML(header),
+		"HIGHLIGHT_STYLES": MinifyCSS(string(highlightStyles)),
+		"GOSCOPE_STYLES":   MinifyCSS(string(goscopeStyles)),
 		"SINGLE_LOG":       MinifyJs(string(singleLog)),
 		"TIME":             UnixTimeToHuman(logDetails.Time),
 		"MESSAGE":          logDetails.Error,
 	}
-	ShowGoScopePage(c, MinifyHtml(string(logView)), variables)
+	ShowGoScopePage(c, MinifyHTML(string(logView)), variables)
 }
 
 func SearchLog(c *gin.Context) {
