@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
+// Show the dashboard of the HTTP request/responses.
 func RequestDashboard(c *gin.Context) {
 	ShowDashboard(c, RequestDashboardMode)
 }

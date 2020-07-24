@@ -16,6 +16,7 @@ const (
 	SecondsInOneMinute = 60
 )
 
+// Show system information of the current host.
 func ShowSystemInfo(c *gin.Context) {
 	// Markup
 	sysinfoView, _ := Asset("../static/html/system_info.html")

@@ -14,6 +14,7 @@ import (
 	uuid "github.com/nu7hatch/gouuid"
 )
 
+// Get all details from a request via its UID.
 func GetDetailedRequest(requestUID string) DetailedRequest {
 	db := GetDB()
 	defer db.Close()

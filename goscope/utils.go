@@ -22,6 +22,7 @@ import (
 	"github.com/tdewolff/minify/v2/js"
 )
 
+// Check the wanted path is not in the do not log list.
 func CheckExcludedPaths(path string) bool {
 	result := true
 	items := []string{

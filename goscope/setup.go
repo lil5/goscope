@@ -9,12 +9,14 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+
 	// Import MYSQL Driver
 	_ "github.com/go-sql-driver/mysql"
 	// Import PostgreSQL Driver
 	_ "github.com/lib/pq"
 )
 
+// Ensure necessary application variables are set.
 func CheckVariablesAreSet() {
 	variables := []string{
 		"APPLICATION_ID",

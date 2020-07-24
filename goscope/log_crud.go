@@ -71,6 +71,7 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	return result
 }
 
+// Get a summarized list of application logs from the DB.
 func GetLogs(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)

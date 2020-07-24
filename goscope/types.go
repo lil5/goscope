@@ -72,6 +72,7 @@ type BodyLogWriter struct {
 	body *bytes.Buffer
 }
 
+// HTTP request body object.
 func (w BodyLogWriter) Write(b []byte) (int, error) {
 	w.body.Write(b)
 	return w.ResponseWriter.Write(b)

@@ -17,6 +17,7 @@ import (
 	uuid "github.com/nu7hatch/gouuid"
 )
 
+// Log an HTTP response to the DB and print to Stdout.
 func ResponseLogger(c *gin.Context) {
 	if CheckExcludedPaths(c.FullPath()) {
 		blw := &BodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
