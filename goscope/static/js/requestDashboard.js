@@ -10,7 +10,7 @@ class RequestDashboard extends AbstractDashboard {
      */
     constructor(activeLink, activeSymbol) {
         super('/goscope/requests', '/goscope/search/requests');
-        document.getElementById(activeLink).className = "active-navbar-link";
+        document.getElementById(activeLink).classList.add("active-navbar-link");
         document.getElementById(activeSymbol).style.fill = "var(--main-highlight-color)";
     }
 
