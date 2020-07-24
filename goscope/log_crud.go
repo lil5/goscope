@@ -2,11 +2,12 @@ package goscope
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetDetailedLog(requestUID string) ExceptionRecord {
@@ -19,7 +20,6 @@ func GetDetailedLog(requestUID string) ExceptionRecord {
 	var request ExceptionRecord
 
 	err := row.Scan(&request.UID, &request.Error, &request.Time)
-
 	if err != nil {
 		log.Println(err.Error())
 		return request
@@ -66,6 +66,13 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 		result = append(result, request)
 	}
 
+	err = rows.Close()
+	if err != nil {
+		log.Println(err.Error())
+
+		return result
+	}
+
 	return result
 }
 
@@ -103,5 +110,14 @@ func GetLogs(c *gin.Context) {
 
 		result = append(result, request)
 	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
 	c.JSON(http.StatusOK, result)
 }

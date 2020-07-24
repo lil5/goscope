@@ -5,6 +5,7 @@ package goscope
 
 import (
 	"bytes"
+
 	"github.com/gin-gonic/gin"
 )
 

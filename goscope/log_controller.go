@@ -1,12 +1,13 @@
 package goscope
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func ShowDashboard(c *gin.Context, mode int) {
@@ -61,8 +62,10 @@ func ShowDashboard(c *gin.Context, mode int) {
 	} else {
 		variables["REQUEST_DASHBOARD"] = dashboardScript
 	}
+
 	ShowGoScopePage(c, MinifyHTML(baseTemplate), variables)
 }
+
 func LogDashboard(c *gin.Context) {
 	ShowDashboard(c, LogDashboardMode)
 }

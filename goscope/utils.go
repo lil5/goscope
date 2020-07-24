@@ -8,17 +8,18 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/tdewolff/minify/v2"
-	"github.com/tdewolff/minify/v2/css"
-	"github.com/tdewolff/minify/v2/html"
-	"github.com/tdewolff/minify/v2/js"
 	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/css"
+	"github.com/tdewolff/minify/v2/html"
+	"github.com/tdewolff/minify/v2/js"
 )
 
 func CheckExcludedPaths(path string) bool {
@@ -106,6 +107,7 @@ func GetDB() *sql.DB {
 
 	return db
 }
+
 func MinifyCSS(uncompressed string) string {
 	m := minify.New()
 	m.AddFunc("text/css", css.Minify)

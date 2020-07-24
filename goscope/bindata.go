@@ -19,7 +19,6 @@
 
 package goscope
 
-
 import (
 	"bytes"
 	"compress/gzip"
@@ -52,7 +51,6 @@ func bindataRead(data, name string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-
 type asset struct {
 	bytes []byte
 	info  fileInfoEx
@@ -74,21 +72,27 @@ type bindataFileInfo struct {
 func (fi bindataFileInfo) Name() string {
 	return fi.name
 }
+
 func (fi bindataFileInfo) Size() int64 {
 	return fi.size
 }
+
 func (fi bindataFileInfo) Mode() os.FileMode {
 	return fi.mode
 }
+
 func (fi bindataFileInfo) ModTime() time.Time {
 	return fi.modTime
 }
+
 func (fi bindataFileInfo) MD5Checksum() string {
 	return fi.md5checksum
 }
+
 func (fi bindataFileInfo) IsDir() bool {
 	return false
 }
+
 func (fi bindataFileInfo) Sys() interface{} {
 	return nil
 }
@@ -131,8 +135,6 @@ func bindataStaticCssGoscopecssBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticCssGoscopecss() (*asset, error) {
 	bytes, err := bindataStaticCssGoscopecssBytes()
 	if err != nil {
@@ -140,11 +142,11 @@ func bindataStaticCssGoscopecss() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/css/goscope.css",
-		size: 2723,
+		name:        "../static/css/goscope.css",
+		size:        2723,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595539076, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595539076, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -177,8 +179,6 @@ func bindataStaticCssHighlightcssBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticCssHighlightcss() (*asset, error) {
 	bytes, err := bindataStaticCssHighlightcssBytes()
 	if err != nil {
@@ -186,11 +186,11 @@ func bindataStaticCssHighlightcss() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/css/highlight.css",
-		size: 941,
+		name:        "../static/css/highlight.css",
+		size:        941,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595334044, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595334044, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -215,8 +215,6 @@ func bindataStaticHtmlCommonfooterhtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlCommonfooterhtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlCommonfooterhtmlBytes()
 	if err != nil {
@@ -224,11 +222,11 @@ func bindataStaticHtmlCommonfooterhtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/common_footer.html",
-		size: 265,
+		name:        "../static/html/common_footer.html",
+		size:        265,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595574323, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595574323, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -257,8 +255,6 @@ func bindataStaticHtmlCommonheadhtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlCommonheadhtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlCommonheadhtmlBytes()
 	if err != nil {
@@ -266,11 +262,11 @@ func bindataStaticHtmlCommonheadhtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/common_head.html",
-		size: 506,
+		name:        "../static/html/common_head.html",
+		size:        506,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595500749, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595500749, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -406,8 +402,6 @@ func bindataStaticHtmlCommonnavbarhtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlCommonnavbarhtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlCommonnavbarhtmlBytes()
 	if err != nil {
@@ -415,11 +409,11 @@ func bindataStaticHtmlCommonnavbarhtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/common_navbar.html",
-		size: 8457,
+		name:        "../static/html/common_navbar.html",
+		size:        8457,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595577980, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595577980, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -471,8 +465,6 @@ func bindataStaticHtmlLogdashboardhtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlLogdashboardhtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlLogdashboardhtmlBytes()
 	if err != nil {
@@ -480,11 +472,11 @@ func bindataStaticHtmlLogdashboardhtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/log_dashboard.html",
-		size: 2213,
+		name:        "../static/html/log_dashboard.html",
+		size:        2213,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595538989, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595538989, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -536,8 +528,6 @@ func bindataStaticHtmlRequestdashboardhtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlRequestdashboardhtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlRequestdashboardhtmlBytes()
 	if err != nil {
@@ -545,11 +535,11 @@ func bindataStaticHtmlRequestdashboardhtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/request_dashboard.html",
-		size: 2221,
+		name:        "../static/html/request_dashboard.html",
+		size:        2221,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595538989, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595538989, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -583,8 +573,6 @@ func bindataStaticHtmlSingleloghtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlSingleloghtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlSingleloghtmlBytes()
 	if err != nil {
@@ -592,11 +580,11 @@ func bindataStaticHtmlSingleloghtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/single_log.html",
-		size: 807,
+		name:        "../static/html/single_log.html",
+		size:        807,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595502178, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595502178, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -642,8 +630,6 @@ func bindataStaticHtmlSinglerequesthtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlSinglerequesthtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlSinglerequesthtmlBytes()
 	if err != nil {
@@ -651,11 +637,11 @@ func bindataStaticHtmlSinglerequesthtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/single_request.html",
-		size: 3012,
+		name:        "../static/html/single_request.html",
+		size:        3012,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595502178, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595502178, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -698,8 +684,6 @@ func bindataStaticHtmlSysteminfohtmlBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticHtmlSysteminfohtml() (*asset, error) {
 	bytes, err := bindataStaticHtmlSysteminfohtmlBytes()
 	if err != nil {
@@ -707,11 +691,11 @@ func bindataStaticHtmlSysteminfohtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/html/system_info.html",
-		size: 1946,
+		name:        "../static/html/system_info.html",
+		size:        1946,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595535578, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595535578, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -772,8 +756,6 @@ func bindataStaticJsAbstractDashboardjsBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticJsAbstractDashboardjs() (*asset, error) {
 	bytes, err := bindataStaticJsAbstractDashboardjsBytes()
 	if err != nil {
@@ -781,11 +763,11 @@ func bindataStaticJsAbstractDashboardjs() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/js/abstractDashboard.js",
-		size: 6543,
+		name:        "../static/js/abstractDashboard.js",
+		size:        6543,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595537958, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595537958, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -833,8 +815,6 @@ func bindataStaticJsLogsDashboardjsBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticJsLogsDashboardjs() (*asset, error) {
 	bytes, err := bindataStaticJsLogsDashboardjsBytes()
 	if err != nil {
@@ -842,11 +822,11 @@ func bindataStaticJsLogsDashboardjs() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/js/logsDashboard.js",
-		size: 2182,
+		name:        "../static/js/logsDashboard.js",
+		size:        2182,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595537958, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595537958, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -896,8 +876,6 @@ func bindataStaticJsRequestDashboardjsBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticJsRequestDashboardjs() (*asset, error) {
 	bytes, err := bindataStaticJsRequestDashboardjsBytes()
 	if err != nil {
@@ -905,11 +883,11 @@ func bindataStaticJsRequestDashboardjs() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/js/requestDashboard.js",
-		size: 2523,
+		name:        "../static/js/requestDashboard.js",
+		size:        2523,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595537958, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595537958, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -933,8 +911,6 @@ func bindataStaticJsSingleLogjsBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticJsSingleLogjs() (*asset, error) {
 	bytes, err := bindataStaticJsSingleLogjsBytes()
 	if err != nil {
@@ -942,11 +918,11 @@ func bindataStaticJsSingleLogjs() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/js/singleLog.js",
-		size: 173,
+		name:        "../static/js/singleLog.js",
+		size:        173,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595334044, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595334044, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -974,8 +950,6 @@ func bindataStaticJsSingleRequestjsBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticJsSingleRequestjs() (*asset, error) {
 	bytes, err := bindataStaticJsSingleRequestjsBytes()
 	if err != nil {
@@ -983,11 +957,11 @@ func bindataStaticJsSingleRequestjs() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/js/singleRequest.js",
-		size: 444,
+		name:        "../static/js/singleRequest.js",
+		size:        444,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595334044, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595334044, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
@@ -1036,8 +1010,6 @@ func bindataStaticJsUtilsjsBytes() ([]byte, error) {
 	)
 }
 
-
-
 func bindataStaticJsUtilsjs() (*asset, error) {
 	bytes, err := bindataStaticJsUtilsjsBytes()
 	if err != nil {
@@ -1045,18 +1017,17 @@ func bindataStaticJsUtilsjs() (*asset, error) {
 	}
 
 	info := bindataFileInfo{
-		name: "../static/js/utils.js",
-		size: 2213,
+		name:        "../static/js/utils.js",
+		size:        2213,
 		md5checksum: "",
-		mode: os.FileMode(420),
-		modTime: time.Unix(1595334044, 0),
+		mode:        os.FileMode(420),
+		modTime:     time.Unix(1595334044, 0),
 	}
 
 	a := &asset{bytes: bytes, info: info}
 
 	return a, nil
 }
-
 
 //
 // Asset loads and returns the asset for the given name.
@@ -1163,18 +1134,18 @@ func AssetDir(name string) ([]string, error) {
 			node = node.Children[p]
 			if node == nil {
 				return nil, &os.PathError{
-					Op: "open",
+					Op:   "open",
 					Path: name,
-					Err: os.ErrNotExist,
+					Err:  os.ErrNotExist,
 				}
 			}
 		}
 	}
 	if node.Func != nil {
 		return nil, &os.PathError{
-			Op: "open",
+			Op:   "open",
 			Path: name,
-			Err: os.ErrNotExist,
+			Err:  os.ErrNotExist,
 		}
 	}
 	rv := make([]string, 0, len(node.Children))
@@ -1183,7 +1154,6 @@ func AssetDir(name string) ([]string, error) {
 	}
 	return rv, nil
 }
-
 
 type bintree struct {
 	Func     func() (*asset, error)
@@ -1194,26 +1164,26 @@ var _bintree = &bintree{Func: nil, Children: map[string]*bintree{
 	"..": {Func: nil, Children: map[string]*bintree{
 		"static": {Func: nil, Children: map[string]*bintree{
 			"css": {Func: nil, Children: map[string]*bintree{
-				"goscope.css": {Func: bindataStaticCssGoscopecss, Children: map[string]*bintree{}},
+				"goscope.css":   {Func: bindataStaticCssGoscopecss, Children: map[string]*bintree{}},
 				"highlight.css": {Func: bindataStaticCssHighlightcss, Children: map[string]*bintree{}},
 			}},
 			"html": {Func: nil, Children: map[string]*bintree{
-				"common_footer.html": {Func: bindataStaticHtmlCommonfooterhtml, Children: map[string]*bintree{}},
-				"common_head.html": {Func: bindataStaticHtmlCommonheadhtml, Children: map[string]*bintree{}},
-				"common_navbar.html": {Func: bindataStaticHtmlCommonnavbarhtml, Children: map[string]*bintree{}},
-				"log_dashboard.html": {Func: bindataStaticHtmlLogdashboardhtml, Children: map[string]*bintree{}},
+				"common_footer.html":     {Func: bindataStaticHtmlCommonfooterhtml, Children: map[string]*bintree{}},
+				"common_head.html":       {Func: bindataStaticHtmlCommonheadhtml, Children: map[string]*bintree{}},
+				"common_navbar.html":     {Func: bindataStaticHtmlCommonnavbarhtml, Children: map[string]*bintree{}},
+				"log_dashboard.html":     {Func: bindataStaticHtmlLogdashboardhtml, Children: map[string]*bintree{}},
 				"request_dashboard.html": {Func: bindataStaticHtmlRequestdashboardhtml, Children: map[string]*bintree{}},
-				"single_log.html": {Func: bindataStaticHtmlSingleloghtml, Children: map[string]*bintree{}},
-				"single_request.html": {Func: bindataStaticHtmlSinglerequesthtml, Children: map[string]*bintree{}},
-				"system_info.html": {Func: bindataStaticHtmlSysteminfohtml, Children: map[string]*bintree{}},
+				"single_log.html":        {Func: bindataStaticHtmlSingleloghtml, Children: map[string]*bintree{}},
+				"single_request.html":    {Func: bindataStaticHtmlSinglerequesthtml, Children: map[string]*bintree{}},
+				"system_info.html":       {Func: bindataStaticHtmlSysteminfohtml, Children: map[string]*bintree{}},
 			}},
 			"js": {Func: nil, Children: map[string]*bintree{
 				"abstractDashboard.js": {Func: bindataStaticJsAbstractDashboardjs, Children: map[string]*bintree{}},
-				"logsDashboard.js": {Func: bindataStaticJsLogsDashboardjs, Children: map[string]*bintree{}},
-				"requestDashboard.js": {Func: bindataStaticJsRequestDashboardjs, Children: map[string]*bintree{}},
-				"singleLog.js": {Func: bindataStaticJsSingleLogjs, Children: map[string]*bintree{}},
-				"singleRequest.js": {Func: bindataStaticJsSingleRequestjs, Children: map[string]*bintree{}},
-				"utils.js": {Func: bindataStaticJsUtilsjs, Children: map[string]*bintree{}},
+				"logsDashboard.js":     {Func: bindataStaticJsLogsDashboardjs, Children: map[string]*bintree{}},
+				"requestDashboard.js":  {Func: bindataStaticJsRequestDashboardjs, Children: map[string]*bintree{}},
+				"singleLog.js":         {Func: bindataStaticJsSingleLogjs, Children: map[string]*bintree{}},
+				"singleRequest.js":     {Func: bindataStaticJsSingleRequestjs, Children: map[string]*bintree{}},
+				"utils.js":             {Func: bindataStaticJsUtilsjs, Children: map[string]*bintree{}},
 			}},
 		}},
 	}},
@@ -1229,7 +1199,7 @@ func RestoreAsset(dir, name string) error {
 	if err != nil {
 		return err
 	}
-	err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0755))
+	err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0o755))
 	if err != nil {
 		return err
 	}

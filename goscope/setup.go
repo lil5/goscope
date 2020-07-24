@@ -5,13 +5,14 @@ package goscope
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	// Import MYSQL Driver
 	_ "github.com/go-sql-driver/mysql"
 	// Import PostgreSQL Driver
 	_ "github.com/lib/pq"
-	"log"
-	"os"
 )
 
 func CheckVariablesAreSet() {

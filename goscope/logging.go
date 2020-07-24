@@ -6,14 +6,15 @@ package goscope
 import (
 	"bytes"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	uuid "github.com/nu7hatch/gouuid"
 	"html"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	uuid "github.com/nu7hatch/gouuid"
 )
 
 func ResponseLogger(c *gin.Context) {

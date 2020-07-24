@@ -3,14 +3,15 @@ package goscope
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	uuid "github.com/nu7hatch/gouuid"
 	"html"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	uuid "github.com/nu7hatch/gouuid"
 )
 
 func GetDetailedRequest(requestUID string) DetailedRequest {
@@ -41,7 +42,6 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 		&result.Referrer,
 		&result.UserAgent,
 	)
-
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -118,6 +118,15 @@ func GetRequests(c *gin.Context) {
 		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
 		result = append(result, request)
 	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
 	c.JSON(http.StatusOK, result)
 }
 
@@ -204,6 +213,12 @@ func SearchRequests(searchString string, offset int) []SummarizedRequest {
 		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
 
 		result = append(result, request)
+	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println(err.Error())
+		return result
 	}
 
 	return result
