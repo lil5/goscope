@@ -1,7 +1,7 @@
 # GoScope
 
 [![Build Status](https://travis-ci.com/averageflow/goscope.svg?branch=master)](https://travis-ci.com/averageflow/goscope)
-![golangci-lint](https://github.com/averageflow/goscope/workflows/golangci-lint/badge.svg)
+![golangci-lint](https://github.com/averageflow/goscope/workflows/golangci-lint/badge.svg?branch=master)
 
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
