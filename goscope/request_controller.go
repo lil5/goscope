@@ -11,19 +11,19 @@ import (
 
 func Dashboard(c *gin.Context) {
 	// Markup
-	dashboardView, _ := Asset("static/html/request_dashboard.html")
-	commonHeader, _ := Asset("static/html/common_head.html")
-	footer, _ := Asset("static/html/common_footer.html")
-	commonNavbar, _ := Asset("static/html/common_navbar.html")
+	dashboardView, _ := Asset("../static/html/request_dashboard.html")
+	commonHeader, _ := Asset("../static/html/common_head.html")
+	footer, _ := Asset("../static/html/common_footer.html")
+	commonNavbar, _ := Asset("../static/html/common_navbar.html")
 	navbar := ReplaceVariablesInTemplate(string(commonNavbar), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	// Styles
-	highlightStyles, _ := Asset("static/css/highlight.css")
-	goscopeStyles, _ := Asset("static/css/goscope.css")
+	highlightStyles, _ := Asset("../static/css/highlight.css")
+	goscopeStyles, _ := Asset("../static/css/goscope.css")
 	// Scripts
-	utilScripts, _ := Asset("static/js/utils.js")
-	abstractDashboard, _ := Asset("static/js/abstractDashboard.js")
-	requestDashboard, _ := Asset("static/js/requestDashboard.js")
+	utilScripts, _ := Asset("../static/js/utils.js")
+	abstractDashboard, _ := Asset("../static/js/abstractDashboard.js")
+	requestDashboard, _ := Asset("../static/js/requestDashboard.js")
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
 		"COMMON_HEADER":      MinifyHtml(header),
@@ -48,14 +48,14 @@ func ShowRequest(c *gin.Context) {
 	requestDetails := GetDetailedRequest(request.Uid)
 	responseDetails := GetDetailedResponse(request.Uid)
 	// Markup
-	requestView, _ := Asset("static/html/single_request.html")
-	commonHeader, _ := Asset("static/html/common_head.html")
+	requestView, _ := Asset("../static/html/single_request.html")
+	commonHeader, _ := Asset("../static/html/common_head.html")
 	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	// Styles
-	highlightStyles, _ := Asset("static/css/highlight.css")
-	goscopeStyles, _ := Asset("static/css/goscope.css")
+	highlightStyles, _ := Asset("../static/css/highlight.css")
+	goscopeStyles, _ := Asset("../static/css/goscope.css")
 	// Scripts
-	singleRequest, _ := Asset("static/js/singleRequest.js")
+	singleRequest, _ := Asset("../static/js/singleRequest.js")
 
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),

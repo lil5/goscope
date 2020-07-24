@@ -67,4 +67,4 @@ This means that you only need to call your usual `log.Println` or `log.Printf` s
 ### Contributing
 
 Any change to assets in the `static` folder will require a rebuild of the `bindata.go`. For this you will require to have the package installed (via `go get -u github.com/shuLhan/go-bindata/...
-`) and then navigate in terminal to the root of the project and run `cd goscope && go-bindata -nomemcopy  static/...`. For live edits use the debug mode `cd goscope && go-bindata -debug static/...`, then edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.
+`) and then navigate in terminal to the root of the project and run `cd goscope && go-bindata -nomemcopy  ../static/...`. For live edits use the debug mode `cd goscope && go-bindata -debug ../static/...`, then edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.

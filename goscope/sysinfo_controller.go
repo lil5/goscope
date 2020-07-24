@@ -16,12 +16,12 @@ const (
 
 func ShowSystemInfo(c *gin.Context) {
 	// Markup
-	sysinfoView, _ := Asset("static/html/system_info.html")
-	commonHeader, _ := Asset("static/html/common_head.html")
+	sysinfoView, _ := Asset("../static/html/system_info.html")
+	commonHeader, _ := Asset("../static/html/common_head.html")
 	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	// Styles
-	highlightStyles, _ := Asset("static/css/highlight.css")
-	goscopeStyles, _ := Asset("static/css/goscope.css")
+	highlightStyles, _ := Asset("../static/css/highlight.css")
+	goscopeStyles, _ := Asset("../static/css/goscope.css")
 
 	cpuStatus, _ := cpu.Info()
 	firstCpu := cpuStatus[0]

@@ -11,19 +11,19 @@ import (
 
 func LogDashboard(c *gin.Context) {
 	// Markup
-	logsView, _ := Asset("static/html/log_dashboard.html")
-	commonHeader, _ := Asset("static/html/common_head.html")
-	footer, _ := Asset("static/html/common_footer.html")
-	commonNavbar, _ := Asset("static/html/common_navbar.html")
+	logsView, _ := Asset("../static/html/log_dashboard.html")
+	commonHeader, _ := Asset("../static/html/common_head.html")
+	footer, _ := Asset("../static/html/common_footer.html")
+	commonNavbar, _ := Asset("../static/html/common_navbar.html")
 	navbar := ReplaceVariablesInTemplate(string(commonNavbar), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	// Styles
-	highlightStyles, _ := Asset("static/css/highlight.css")
-	goscopeStyles, _ := Asset("static/css/goscope.css")
+	highlightStyles, _ := Asset("../static/css/highlight.css")
+	goscopeStyles, _ := Asset("../static/css/goscope.css")
 	// Scripts
-	utilScripts, _ := Asset("static/js/utils.js")
-	abstractDashboard, _ := Asset("static/js/abstractDashboard.js")
-	logsDashboard, _ := Asset("static/js/logsDashboard.js")
+	utilScripts, _ := Asset("../static/js/utils.js")
+	abstractDashboard, _ := Asset("../static/js/abstractDashboard.js")
+	logsDashboard, _ := Asset("../static/js/logsDashboard.js")
 
 	variables := map[string]string{
 		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
@@ -48,14 +48,14 @@ func ShowLog(c *gin.Context) {
 	}
 	logDetails := GetDetailedLog(request.Uid)
 	// Markup
-	logView, _ := Asset("static/html/single_log.html")
-	commonHeader, _ := Asset("static/html/common_head.html")
+	logView, _ := Asset("../static/html/single_log.html")
+	commonHeader, _ := Asset("../static/html/common_head.html")
 	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
 	// Styles
-	highlightStyles, _ := Asset("static/css/highlight.css")
-	goscopeStyles, _ := Asset("static/css/goscope.css")
+	highlightStyles, _ := Asset("../static/css/highlight.css")
+	goscopeStyles, _ := Asset("../static/css/goscope.css")
 	// Scripts
-	singleLog, _ := Asset("static/js/singleLog.js")
+	singleLog, _ := Asset("../static/js/singleLog.js")
 
 	variables := map[string]string{
 		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
