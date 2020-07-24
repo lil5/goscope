@@ -30,8 +30,10 @@ func Setup(engine *gin.Engine) {
 	CheckVariablesAreSet()
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
+
 	logger := &LoggerGoScope{}
 	gin.DefaultErrorWriter = logger
+
 	log.SetFlags(log.Lshortfile)
 	log.SetOutput(logger)
 	// Use the logging middleware

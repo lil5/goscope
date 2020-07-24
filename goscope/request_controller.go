@@ -30,7 +30,7 @@ func Dashboard(c *gin.Context) {
 		"HIGHLIGHT_STYLES":   MinifyCss(string(highlightStyles)),
 		"GOSCOPE_STYLES":     MinifyCss(string(goscopeStyles)),
 		"ENTRIES_PER_PAGE":   os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		"COMMON_NAVBAR":      MinifyHtml(string(navbar)),
+		"COMMON_NAVBAR":      MinifyHtml(navbar),
 		"COMMON_FOOTER":      MinifyHtml(string(footer)),
 		"UTIL_SCRIPTS":       MinifyJs(string(utilScripts)),
 		"ABSTRACT_DASHBOARD": MinifyJs(string(abstractDashboard)),
@@ -42,9 +42,11 @@ func Dashboard(c *gin.Context) {
 func ShowRequest(c *gin.Context) {
 	var request RecordByUri
 	err := c.ShouldBindUri(&request)
+
 	if err != nil {
 		log.Println(err.Error())
 	}
+
 	requestDetails := GetDetailedRequest(request.Uid)
 	responseDetails := GetDetailedResponse(request.Uid)
 	// Markup
@@ -89,9 +91,11 @@ func ShowRequest(c *gin.Context) {
 func SearchRequest(c *gin.Context) {
 	var request SearchRequestPayload
 	err := c.ShouldBindBodyWith(&request, binding.JSON)
+
 	if err != nil {
 		log.Println(err.Error())
 	}
+
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	result := SearchRequests(request.Query, int(offset))

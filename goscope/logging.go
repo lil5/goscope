@@ -27,18 +27,23 @@ func ResponseLogger(c *gin.Context) {
 		// We have to create a new Buffer, because rdr1 will be read and consumed.
 		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 		c.Request.Body = rdr2
+
 		go DumpResponse(c, blw, readBody(rdr1))
 	}
+
 	c.Next()
 }
 
 func readBody(reader io.Reader) string {
 	buf := new(bytes.Buffer)
 	_, err := buf.ReadFrom(reader)
+
 	if err != nil {
 		log.Println(err.Error())
 	}
+
 	s := buf.String()
+
 	return s
 }
 
@@ -53,12 +58,16 @@ func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 
 func writeLogs(message string) {
 	fmt.Printf("%v", message)
+
 	db := GetDB()
+
 	defer db.Close()
+
 	uid, _ := uuid.NewV4()
 	query := "INSERT INTO logs (uid, application, error, time) VALUES " +
 		"(?, ?, ?, ?)"
 	_, err := db.Exec(query, uid.String(), os.Getenv("APPLICATION_ID"), html.EscapeString(message), time.Now().Unix())
+
 	if err != nil {
 		log.Println(err.Error())
 	}

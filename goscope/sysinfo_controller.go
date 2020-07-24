@@ -12,6 +12,7 @@ import (
 
 const (
 	BytesInOneGigabyte = 1073741824
+	SecondsInOneMinute = 60
 )
 
 func ShowSystemInfo(c *gin.Context) {
@@ -45,7 +46,7 @@ func ShowSystemInfo(c *gin.Context) {
 		"HOST_NAME":           hostStatus.Hostname,
 		"HOST_OS":             hostStatus.OS,
 		"HOST_PLATFORM":       hostStatus.Platform,
-		"HOST_UPTIME":         fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/60/60),
+		"HOST_UPTIME":         fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/SecondsInOneMinute/SecondsInOneMinute),
 		"MEMORY_AVAILABLE":    fmt.Sprintf("%.2f GB", float64(memoryStatus.Available)/BytesInOneGigabyte),
 		"MEMORY_TOTAL":        fmt.Sprintf("%.2f GB", float64(memoryStatus.Total)/BytesInOneGigabyte),
 		"SWAP_USED":           fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),

@@ -15,8 +15,10 @@ func LogDashboard(c *gin.Context) {
 	commonHeader, _ := Asset("../static/html/common_head.html")
 	footer, _ := Asset("../static/html/common_footer.html")
 	commonNavbar, _ := Asset("../static/html/common_navbar.html")
-	navbar := ReplaceVariablesInTemplate(string(commonNavbar), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
-	header := ReplaceVariablesInTemplate(string(commonHeader), map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")})
+	navbarVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
+	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
+	navbar := ReplaceVariablesInTemplate(string(commonNavbar), navbarVariables)
+	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
 	// Styles
 	highlightStyles, _ := Asset("../static/css/highlight.css")
 	goscopeStyles, _ := Asset("../static/css/goscope.css")
@@ -43,9 +45,11 @@ func LogDashboard(c *gin.Context) {
 func ShowLog(c *gin.Context) {
 	var request RecordByUri
 	err := c.ShouldBindUri(&request)
+
 	if err != nil {
 		log.Println(err.Error())
 	}
+
 	logDetails := GetDetailedLog(request.Uid)
 	// Markup
 	logView, _ := Asset("../static/html/single_log.html")
@@ -72,9 +76,11 @@ func ShowLog(c *gin.Context) {
 func SearchLog(c *gin.Context) {
 	var request SearchRequestPayload
 	err := c.ShouldBindBodyWith(&request, binding.JSON)
+
 	if err != nil {
 		log.Println(err.Error())
 	}
+
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	result := SearchLogs(request.Query, int(offset))

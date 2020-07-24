@@ -43,11 +43,13 @@ func CheckExcludedPaths(path string) bool {
 		"/goscope/search/requests",
 		"/goscope/search/logs",
 	}
+
 	for _, s := range items {
 		if path == s {
 			result = false
 		}
 	}
+
 	return result
 }
 
@@ -55,9 +57,12 @@ func UnixTimeToHuman(rawTime int) string {
 	loc, err := time.LoadLocation(os.Getenv("APPLICATION_TIMEZONE"))
 	if err != nil {
 		log.Println(err.Error())
+
 		loc, _ = time.LoadLocation("Europe/Amsterdam")
 	}
+
 	timeInstance := time.Unix(int64(rawTime), 0)
+
 	return timeInstance.In(loc).Format("15:04:05 Mon, 2 Jan 2006 ")
 }
 
@@ -65,12 +70,15 @@ func prettifyJson(rawString string) string {
 	if rawString == "" {
 		return ""
 	}
+
 	var prettyJSON bytes.Buffer
 	err := json.Indent(&prettyJSON, []byte(rawString), "", "    ")
+
 	if err != nil {
 		log.Println(err.Error())
 		return rawString
 	}
+
 	return prettyJSON.String()
 }
 
@@ -78,6 +86,7 @@ func ReplaceVariablesInTemplate(rawTemplate string, variables map[string]string)
 	for i, s := range variables {
 		rawTemplate = strings.ReplaceAll(rawTemplate, fmt.Sprintf("{{.%s}}", i), s)
 	}
+
 	return rawTemplate
 }
 
@@ -87,21 +96,26 @@ func GetDB() *sql.DB {
 		log.Println(err.Error())
 		panic(err.Error())
 	}
+
 	err = db.Ping()
+
 	if err != nil {
 		log.Println(err.Error())
 		panic(err.Error())
 	}
+
 	return db
 }
 func MinifyCss(uncompressed string) string {
 	m := minify.New()
 	m.AddFunc("text/css", css.Minify)
 	minified, err := m.String("text/css", uncompressed)
+
 	if err != nil {
 		log.Println(err.Error())
 		return ""
 	}
+
 	return minified
 }
 
@@ -109,10 +123,12 @@ func MinifyJs(uncompressed string) string {
 	m := minify.New()
 	m.AddFuncRegexp(regexp.MustCompile("^(application|text)/(x-)?(java|ecma)script$"), js.Minify)
 	minified, err := m.String("application/javascript", uncompressed)
+
 	if err != nil {
 		log.Println(err.Error())
 		return ""
 	}
+
 	return minified
 }
 
@@ -120,10 +136,12 @@ func MinifyHtml(uncompressed string) string {
 	m := minify.New()
 	m.AddFunc("text/html", html.Minify)
 	minified, err := m.String("text/html", uncompressed)
+
 	if err != nil {
 		log.Println(err.Error())
 		return ""
 	}
+
 	return minified
 }
 
