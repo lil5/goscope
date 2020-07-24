@@ -1,5 +1,7 @@
 # GoScope
 
+[![Build Status](https://travis-ci.com/averageflow/goscope.svg?branch=master)](https://travis-ci.com/averageflow/goscope)
+
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
 The aim of this application is to be a plug and play addition to your application, not a hurdle, thus to setup, you only require a one-liner in your main function.
