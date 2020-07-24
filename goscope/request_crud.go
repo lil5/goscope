@@ -110,6 +110,8 @@ func GetRequests(c *gin.Context) {
 		return
 	}
 
+	defer rows.Close()
+
 	var result []SummarizedRequest
 
 	for rows.Next() {
@@ -117,14 +119,6 @@ func GetRequests(c *gin.Context) {
 
 		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
 		result = append(result, request)
-	}
-
-	err = rows.Close()
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
-
-		return
 	}
 
 	c.JSON(http.StatusOK, result)
@@ -206,6 +200,7 @@ func SearchRequests(searchString string, offset int) []SummarizedRequest {
 		log.Println(err.Error())
 		return result
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var request SummarizedRequest
@@ -213,12 +208,6 @@ func SearchRequests(searchString string, offset int) []SummarizedRequest {
 		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
 
 		result = append(result, request)
-	}
-
-	err = rows.Close()
-	if err != nil {
-		log.Println(err.Error())
-		return result
 	}
 
 	return result

@@ -54,6 +54,8 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 		return result
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		var request ExceptionRecord
 
@@ -64,13 +66,6 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 		}
 
 		result = append(result, request)
-	}
-
-	err = rows.Close()
-	if err != nil {
-		log.Println(err.Error())
-
-		return result
 	}
 
 	return result
@@ -95,6 +90,8 @@ func GetLogs(c *gin.Context) {
 		return
 	}
 
+	defer rows.Close()
+
 	var result []ExceptionRecord
 
 	for rows.Next() {
@@ -109,14 +106,6 @@ func GetLogs(c *gin.Context) {
 		}
 
 		result = append(result, request)
-	}
-
-	err = rows.Close()
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
-
-		return
 	}
 
 	c.JSON(http.StatusOK, result)
