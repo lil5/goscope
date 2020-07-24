@@ -27,6 +27,7 @@ body {
     background: var(--main-background-color-800);
     color: var(--main-text-color);
     font-family: "Manrope", "sans-serif";
+    min-height: 100vh;
 }
 
 code,
@@ -37,17 +38,19 @@ code,
 .navbar-link {
     text-decoration: none;
     color: var(--main-text-color);
-    border: none;
 }
 
-.active-navbar-link {
-    text-decoration: none;
+.navbar-link-active {
     color: var(--main-highlight-color);
 }
 
-.navbar-link:hover {
+.navbar-link-hover:hover {
     text-decoration: underline;
     color: var(--main-highlight-color);
+}
+
+.navbar-link-hover:hover .navbar-link-svg-hover {
+    fill: var(--main-highlight-color);
 }
 
 .custom-td {
