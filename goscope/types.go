@@ -8,6 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ExceptionRecord struct {
+	Error string `json:"error"`
+	Time  int    `json:"time"`
+	Uid   string `json:"uid"`
+}
+
 type SummarizedRequest struct {
 	Method         string `json:"method"`
 	Path           string `json:"path"`
@@ -16,11 +22,6 @@ type SummarizedRequest struct {
 	ResponseStatus int    `json:"response_status"`
 }
 
-type ExceptionRecord struct {
-	Error string `json:"error"`
-	Time  int    `json:"time"`
-	Uid   string `json:"uid"`
-}
 type RecordByUri struct {
 	Uid string `uri:"id" binding:"required"`
 }
