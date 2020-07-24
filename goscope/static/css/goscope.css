@@ -54,10 +54,6 @@ code,
     background: var(--main-background-color-600);
 }
 
-th {
-    border-radius: 4px;
-}
-
 .eye-image {
     fill: var(--main-text-color);
 }
@@ -83,49 +79,35 @@ table {
 
 .tab-button {
     color: var(--main-text-color);
-    border: none;
     background: var(--main-background-color-600);
-    border-radius: 4px;
 }
 
 .badge-success {
-    padding: 4px;
-    border-radius: 4px;
     color: var(--main-text-color);
     background-color: #1f9d55;
 }
 
 .badge-info {
-    padding: 4px;
-    border-radius: 4px;
     color: var(--main-text-color);
     background-color: #1c3d5a;
 }
 
 .badge-turq {
-    padding: 4px;
-    border-radius: 4px;
     color: var(--main-text-color);
     background-color: #503194;
 }
 
 .badge-secondary {
-    border-radius: 4px;
-    padding: 4px;
     color: var(--main-text-color);
     background-color: #494444;
 }
 
 .badge-danger {
-    border-radius: 4px;
-    padding: 4px;
     color: var(--main-text-color);
     background-color: #621b18;
 }
 
 .badge-warning {
-    border-radius: 4px;
-    padding: 4px;
     color: var(--main-text-color);
     background-color: #684f1d;
 }
@@ -133,7 +115,6 @@ table {
 .search-input {
     background: var(--main-background-color-700);
     color: var(--main-text-color);
-    border-radius: 8px;
     border-color: var(--main-background-color-400);
     transition: border-color 0.2s ease-in;
 }
@@ -163,39 +144,4 @@ SVG Icons - svgicons.sparkk.fr
 .svg-icon circle {
     stroke: var(--main-text-color);
     stroke-width: 1;
-}
-
-.navbar-container h3 {
-    font-size: large;
-    margin: 0.7em;
-    line-height: initial;
-}
-
-.navbar-container svg {
-    width: 1.5em;
-    height: 1.5em;
-}
-
-.goscope-entries-table {
-    min-width: 70%;
-    max-width: 85%;
-    line-height: 1.6em;
-    margin: 0 auto;
-}
-
-@media only screen and (max-width: 900px) {
-    .navbar-container h3 {
-        font-size: medium;
-        margin: 0.7em;
-        line-height: initial;
-    }
-
-}
-
-@media only screen and (min-width: 1200px) {
-    .goscope-entries-table {
-        min-width: 50%;
-        max-width: 75%;
-    }
-
 }
