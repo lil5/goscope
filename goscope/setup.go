@@ -5,11 +5,18 @@ package goscope
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
+
+	"github.com/gin-gonic/gin"
+
+	// Import MYSQL Driver
+	_ "github.com/go-sql-driver/mysql"
+	// Import PostgreSQL Driver
+	_ "github.com/lib/pq"
 )
 
+// Ensure necessary application variables are set.
 func CheckVariablesAreSet() {
 	variables := []string{
 		"APPLICATION_ID",
@@ -30,15 +37,17 @@ func Setup(engine *gin.Engine) {
 	CheckVariablesAreSet()
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
+
 	logger := &LoggerGoScope{}
 	gin.DefaultErrorWriter = logger
+
 	log.SetFlags(log.Lshortfile)
 	log.SetOutput(logger)
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
 	goscopeGroup := engine.Group("/goscope")
-	goscopeGroup.GET("/", Dashboard)
+	goscopeGroup.GET("/", RequestDashboard)
 	goscopeGroup.GET("/logs", LogDashboard)
 	goscopeGroup.GET("/info", ShowSystemInfo)
 	goscopeGroup.GET("/log-records", GetLogs)

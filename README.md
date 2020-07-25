@@ -1,5 +1,7 @@
 # GoScope
 
+[![Build Status](https://travis-ci.com/averageflow/goscope.svg?branch=master)](https://travis-ci.com/averageflow/goscope)
+
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
 The aim of this application is to be a plug and play addition to your application, not a hurdle, thus to setup, you only require a one-liner in your main function.
@@ -64,4 +66,4 @@ This means that you only need to call your usual `log.Println` or `log.Printf` s
 ### Contributing
 
 Any change to assets in the `static` folder will require a rebuild of the `bindata.go`. For this you will require to have the package installed (via `go get -u github.com/shuLhan/go-bindata/...
-`) and then navigate in terminal to the root of the project and run `cd goscope && go-bindata -nomemcopy  static/...`. For live edits use the debug mode `cd goscope && go-bindata -debug static/...`, then edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.
+`) and then navigate in terminal to the root of the project and run `cd goscope && go-bindata -nomemcopy  ../static/...`. For live edits use the debug mode `cd goscope && go-bindata -debug ../static/...`, then edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.
