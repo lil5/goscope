@@ -6,149 +6,150 @@
  */
 
 :root {
-    --main-highlight-color: #7cc3bf;
-    --main-text-color: #fff;
-    --main-background-color-400: #454545;
-    --main-background-color-600: #2B2B2D;
-    --main-background-color-700: #232323;
-    --main-background-color-800: #1c1c1c;
+	--main-highlight-color: #7cc3bf;
+	--main-text-color: #fff;
+	--main-background-color-400: #454545;
+	--main-background-color-600: #2b2b2d;
+	--main-background-color-700: #232323;
+	--main-background-color-800: #1c1c1c;
 }
 
-h1, h2, h3 {
-    font-family: "Manrope", "sans-serif";
+h1,
+h2,
+h3 {
+	font-family: 'Manrope', 'sans-serif';
 }
 
 input[type='search'],
 input[type='text'] {
-    outline: none;
+	outline: none;
 }
 
 body {
-    background: var(--main-background-color-800);
-    color: var(--main-text-color);
-    font-family: "Manrope", "sans-serif";
-    min-height: 100vh;
+	background: var(--main-background-color-800);
+	color: var(--main-text-color);
+	font-family: 'Manrope', 'sans-serif';
+	min-height: 100vh;
 }
 
 code,
 .monospaced {
-    font-family: "Fira Mono", monospace
+	font-family: 'Fira Mono', monospace;
 }
 
 .goscope-background-700 {
-    background-color: var(--main-background-color-700);
+	background-color: var(--main-background-color-700);
 }
 
 .navbar-link {
-    text-decoration: none;
-    color: var(--main-text-color);
+	text-decoration: none;
+	color: var(--main-text-color);
 }
 
 .navbar-link-active {
-    color: var(--main-highlight-color);
+	color: var(--main-highlight-color);
 }
 
 .navbar-link-hover:hover {
-    text-decoration: underline;
-    color: var(--main-highlight-color);
+	text-decoration: underline;
+	color: var(--main-highlight-color);
 }
 
 .navbar-link-hover:hover .navbar-link-svg-hover {
-    fill: var(--main-highlight-color);
+	fill: var(--main-highlight-color);
 }
 
 .custom-td {
-    background: var(--main-background-color-600);
+	background: var(--main-background-color-600);
 }
 
 .eye-image {
-    fill: var(--main-text-color);
+	fill: var(--main-text-color);
 }
 
 .eye-image:hover {
-    fill: var(--main-highlight-color);
+	fill: var(--main-highlight-color);
 }
 
 table {
-    border-spacing: 2px;
-    border-collapse: separate;
+	border-spacing: 2px;
+	border-collapse: separate;
 }
 
 .paginate-button {
-    color: var(--main-text-color);
-    border: none;
+	color: var(--main-text-color);
+	border: none;
 }
 
 .paginate-button:hover {
-    color: var(--main-highlight-color);
-    text-decoration: underline;
+	color: var(--main-highlight-color);
+	text-decoration: underline;
 }
 
 .tab-button {
-    color: var(--main-text-color);
-    background: var(--main-background-color-600);
+	color: var(--main-text-color);
+	background: var(--main-background-color-600);
 }
 
 .badge-success {
-    color: var(--main-text-color);
-    background-color: #1f9d55;
+	color: var(--main-text-color);
+	background-color: #1f9d55;
 }
 
 .badge-info {
-    color: var(--main-text-color);
-    background-color: #1c3d5a;
+	color: var(--main-text-color);
+	background-color: #1c3d5a;
 }
 
 .badge-turq {
-    color: var(--main-text-color);
-    background-color: #503194;
+	color: var(--main-text-color);
+	background-color: #503194;
 }
 
 .badge-secondary {
-    color: var(--main-text-color);
-    background-color: #494444;
+	color: var(--main-text-color);
+	background-color: #494444;
 }
 
 .badge-danger {
-    color: var(--main-text-color);
-    background-color: #621b18;
+	color: var(--main-text-color);
+	background-color: #621b18;
 }
 
 .badge-warning {
-    color: var(--main-text-color);
-    background-color: #684f1d;
+	color: var(--main-text-color);
+	background-color: #684f1d;
 }
 
 .search-input {
-    background: var(--main-background-color-700);
-    color: var(--main-text-color);
-    border-color: var(--main-background-color-400);
-    transition: border-color 0.2s ease-in;
+	background: var(--main-background-color-700);
+	color: var(--main-text-color);
+	border-color: var(--main-background-color-400);
+	transition: border-color 0.2s ease-in;
 }
 .search-input:focus,
 .search-input:active {
-    border-color: var(--main-highlight-color);
+	border-color: var(--main-highlight-color);
 }
-
 
 /* -----
 SVG Icons - svgicons.sparkk.fr
 ----- */
 
 .svg-icon {
-    width: 1em;
-    height: 1em;
+	width: 1em;
+	height: 1em;
 }
 
 .svg-icon {
-    fill: var(--main-text-color);
+	fill: var(--main-text-color);
 }
 
 .svg-icon:hover {
-    fill: var(--main-highlight-color);
+	fill: var(--main-highlight-color);
 }
 
 .svg-icon circle {
-    stroke: var(--main-text-color);
-    stroke-width: 1;
+	stroke: var(--main-text-color);
+	stroke-width: 1;
 }
