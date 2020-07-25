@@ -36,8 +36,8 @@ func ResponseLogger(c *gin.Context) {
 
 func readBody(reader io.Reader) string {
 	buf := new(bytes.Buffer)
-	_, err := buf.ReadFrom(reader)
 
+	_, err := buf.ReadFrom(reader)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -66,8 +66,8 @@ func writeLogs(message string) {
 	uid, _ := uuid.NewV4()
 	query := "INSERT INTO logs (uid, application, error, time) VALUES " +
 		"(?, ?, ?, ?)"
-	_, err := db.Exec(query, uid.String(), os.Getenv("APPLICATION_ID"), html.EscapeString(message), time.Now().Unix())
 
+	_, err := db.Exec(query, uid.String(), os.Getenv("APPLICATION_ID"), html.EscapeString(message), time.Now().Unix())
 	if err != nil {
 		log.Println(err.Error())
 	}

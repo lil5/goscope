@@ -17,8 +17,8 @@ func RequestDashboard(c *gin.Context) {
 
 func ShowRequest(c *gin.Context) {
 	var request RecordByURI
-	err := c.ShouldBindUri(&request)
 
+	err := c.ShouldBindUri(&request)
 	if err != nil {
 		log.Println(err.Error())
 	}

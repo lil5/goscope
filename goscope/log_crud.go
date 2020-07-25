@@ -36,18 +36,19 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	defer db.Close()
 
 	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
-		"ELSE error END AS error, time FROM logs WHERE application = '%[1]v' AND " +
-		"(uid LIKE '%%%[3]v%%' OR application LIKE '%%%[3]v%%' " +
-		"OR error LIKE '%%%[3]v%%' OR time LIKE '%%%[3]v%%') " +
-		"ORDER BY time DESC LIMIT %[2]v OFFSET %[4]v;"
-	preparedQuery := fmt.Sprintf(
+		"ELSE error END AS error, time FROM logs WHERE application = ? AND " +
+		"(uid LIKE ? OR application LIKE ? " +
+		"OR error LIKE ? OR time LIKE ?) " +
+		"ORDER BY time DESC LIMIT ? OFFSET ?;"
+
+	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
+	rows, err := db.Query(
 		query,
 		os.Getenv("APPLICATION_ID"),
+		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
 		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		searchString,
 		offset,
 	)
-	rows, err := db.Query(preparedQuery)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -81,8 +82,13 @@ func GetLogs(c *gin.Context) {
 
 	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
 		"ELSE error END AS error, time FROM logs WHERE application = ? " +
-		"ORDER BY time DESC LIMIT %v OFFSET ?;"
-	rows, err := db.Query(fmt.Sprintf(query, os.Getenv("GOSCOPE_ENTRIES_PER_PAGE")), os.Getenv("APPLICATION_ID"), offset)
+		"ORDER BY time DESC LIMIT ? OFFSET ?;"
+	rows, err := db.Query(
+		query,
+		os.Getenv("APPLICATION_ID"),
+		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		offset,
+	)
 
 	if err != nil {
 		log.Println(err.Error())

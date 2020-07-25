@@ -72,8 +72,8 @@ func LogDashboard(c *gin.Context) {
 
 func ShowLog(c *gin.Context) {
 	var request RecordByURI
-	err := c.ShouldBindUri(&request)
 
+	err := c.ShouldBindUri(&request)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -99,13 +99,14 @@ func ShowLog(c *gin.Context) {
 		"TIME":             UnixTimeToHuman(logDetails.Time),
 		"MESSAGE":          logDetails.Error,
 	}
+
 	ShowGoScopePage(c, MinifyHTML(string(logView)), variables)
 }
 
 func SearchLog(c *gin.Context) {
 	var request SearchRequestPayload
-	err := c.ShouldBindBodyWith(&request, binding.JSON)
 
+	err := c.ShouldBindBodyWith(&request, binding.JSON)
 	if err != nil {
 		log.Println(err.Error())
 	}

@@ -97,10 +97,11 @@ func GetRequests(c *gin.Context) {
 
 	query := "SELECT requests.uid, requests.method, requests.path, requests.time, responses.status FROM requests " +
 		"INNER JOIN responses ON requests.uid = responses.request_uid " +
-		"WHERE requests.application = ? ORDER BY time DESC LIMIT %v OFFSET ?;"
+		"WHERE requests.application = ? ORDER BY time DESC LIMIT ? OFFSET ?;"
 	rows, err := db.Query(
-		fmt.Sprintf(query, os.Getenv("GOSCOPE_ENTRIES_PER_PAGE")),
+		query,
 		os.Getenv("APPLICATION_ID"),
+		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
 		offset,
 	)
 
@@ -175,27 +176,33 @@ func SearchRequests(searchString string, offset int) []SummarizedRequest {
 	defer db.Close()
 
 	query := "SELECT requests.uid, requests.method, requests.path, requests.time, responses.status FROM requests " +
-		"INNER JOIN responses ON requests.uid = responses.request_uid WHERE requests.application = '%[2]v' AND " +
-		"(requests.uid LIKE '%%%[3]v%%' OR requests.application LIKE '%%%[3]v%%' " +
-		"OR requests.client_ip LIKE '%%%[3]v%%' OR requests.method LIKE '%%%[3]v%%' " +
-		"OR requests.path LIKE '%%%[3]v%%' " +
-		"OR requests.url LIKE '%%%[3]v%%' OR requests.host LIKE '%%%[3]v%%' " +
-		"OR requests.body LIKE '%%%[3]v%%' OR requests.referrer LIKE '%%%[3]v%%' " +
-		"OR requests.user_agent LIKE '%%%[3]v%%' OR requests.time LIKE '%%%[3]v%%'" +
-		"OR responses.uid LIKE '%%%[3]v%%' OR responses.request_uid LIKE '%%%[3]v%%' " +
-		"OR responses.application LIKE '%%%[3]v%%' OR responses.client_ip LIKE '%%%[3]v%%' " +
-		"OR responses.status LIKE '%%%[3]v%%' " +
-		"OR responses.body LIKE '%%%[3]v%%' OR responses.path LIKE '%%%[3]v%%' " +
-		"OR responses.headers LIKE '%%%[3]v%%' OR responses.size LIKE '%%%[3]v%%' " +
-		"OR responses.time LIKE '%%%[3]v%%') ORDER BY time DESC LIMIT %[1]v OFFSET %[4]v;"
-	preparedQuery := fmt.Sprintf(
+		"INNER JOIN responses ON requests.uid = responses.request_uid WHERE requests.application = ? AND " +
+		"(requests.uid LIKE ? OR requests.application LIKE ? " +
+		"OR requests.client_ip LIKE ? OR requests.method LIKE ? " +
+		"OR requests.path LIKE ? " +
+		"OR requests.url LIKE ? OR requests.host LIKE ? " +
+		"OR requests.body LIKE ? OR requests.referrer LIKE ? " +
+		"OR requests.user_agent LIKE ? OR requests.time LIKE ? " +
+		"OR responses.uid LIKE ? OR responses.request_uid LIKE ? " +
+		"OR responses.application LIKE ? OR responses.client_ip LIKE ? " +
+		"OR responses.status LIKE ? " +
+		"OR responses.body LIKE ? OR responses.path LIKE ? " +
+		"OR responses.headers LIKE ? OR responses.size LIKE ? " +
+		"OR responses.time LIKE ?) ORDER BY time DESC LIMIT ? OFFSET ?;"
+
+	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
+	rows, err := db.Query(
 		query,
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
 		os.Getenv("APPLICATION_ID"),
-		searchString,
+		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
+		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
+		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
+		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
+		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
+		searchWildcard,
+		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
 		offset,
 	)
-	rows, err := db.Query(preparedQuery)
 
 	if err != nil {
 		log.Println(err.Error())
