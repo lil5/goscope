@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "lint": "prettier --write static",
+    "lint:test": "prettier static"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
+}
