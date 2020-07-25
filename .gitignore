@@ -4,3 +4,4 @@ coverage.out
 gin-bin
 tmp/
 app
+node_modules
