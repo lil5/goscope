@@ -3,6 +3,6 @@
     Authors:
         - Josep Bigorra (averageflow)
  */
-document.addEventListener("DOMContentLoaded", function () {
-    hljs.initHighlightingOnLoad();
-});
+document.addEventListener('DOMContentLoaded', function () {
+	hljs.initHighlightingOnLoad()
+})
