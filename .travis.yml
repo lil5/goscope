@@ -1,13 +1,21 @@
-language: go
-go:
-  - 1.14.x
-  - master
-os:
-  - linux
-  - osx
-sudo: false
-install: true
-script:
-  - go build -o app
-  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
-  - $(go env GOPATH)/bin/golangci-lint run -p=bugs,complexity,format,performance,style,unused
+matrix:
+  include:
+    - language: go
+      go:
+        - 1.14.x
+        - master
+      os:
+        - linux
+        - osx
+      sudo: false
+      install: true
+      script:
+        - go build -o app
+        - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+        - $(go env GOPATH)/bin/golangci-lint run -p=bugs,complexity,format,performance,style,unused
+    - language: node_js
+      cache: yarn
+      install:
+        - yarn
+      script:
+        - lint:test
