@@ -14,6 +14,8 @@ matrix:
         - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
         - $(go env GOPATH)/bin/golangci-lint run -p=bugs,complexity,format,performance,style,unused
     - language: node_js
+      node_js:
+        - 13
       cache: yarn
       install:
         - yarn
