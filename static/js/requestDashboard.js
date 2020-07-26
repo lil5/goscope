@@ -43,7 +43,7 @@ class RequestDashboard extends AbstractDashboard {
 			let requestMoment = item.time
 			let elapsed = secondsToString(now - requestMoment)
 			requestTable.innerHTML += `
-            <tr class="text-center">\
+            <tr class="text-center">
 			    <td class="p-3 custom-td">${applyStatusColor(item.response_status)}</td>
                 <td class="p-3 custom-td">${applyMethodColor(item.method)}</td>
                 <td class="monospaced p-3 custom-td">${item.path}</td>
