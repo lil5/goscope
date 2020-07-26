@@ -22,65 +22,65 @@ p-4 font-xl" onclick="openTab('request-tab')">Request
 <div class="m-3 p-3 text-center" style="line-height: 2em;">
     <div id="request-tab" class="view-tab md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">
         <h1 class="font-xl m-2">Request at {{.REQUEST_TIME}} - {{.APPLICATION_NAME}} - GoScope</h1>
-        <p>Client IP Address:
+        <p>Client IP Address:</p>
         <pre><code class="plaintext">{{.REQUEST_CLIENT_IP}}</code></pre>
-        </p>
-        <p>Host:
+        
+        <p>Host:</p>
         <pre><code class="plaintext">{{.REQUEST_HOST}}</code></pre>
-        </p>
-        <p>Verb:
+        
+        <p>Verb:</p>
         <pre><code class="plaintext">{{.REQUEST_METHOD}}</code></pre>
-        </p>
-        <p>Path:
+        
+        <p>Path:</p>
         <pre><code class="plaintext">{{.REQUEST_PATH}}</code></pre>
-        </p>
-        <p>Url:
+        
+        <p>Url:</p>
         <pre><code class="plaintext">{{.REQUEST_URL}}</code></pre>
-        </p>
-        <p>Referrer:
+        
+        <p>Referrer:</p>
         <pre><code class="plaintext">{{.REQUEST_REFERRER}}</code></pre>
-        </p>
-        <p>Time:
+        
+        <p>Time:</p>
         <pre><code class="plaintext">{{.REQUEST_TIME}}</code></pre>
-        </p>
-        <p>Uid:
+        
+        <p>Uid:</p>
         <pre><code class="plaintext">{{.REQUEST_UID}}</code></pre>
-        </p>
-        <p>User Agent:
+        
+        <p>User Agent:</p>
         <pre><code class="plaintext">{{.REQUEST_USER_AGENT}}</code></pre>
-        </p>
-        <p>Headers:
+        
+        <p>Headers:</p>
         <pre><code class="language-json">{{.REQUEST_HEADERS}}</code></pre>
-        </p>
-        <p>Body:
+        
+        <p>Body:</p>
         <pre><code class="language-json">{{.REQUEST_BODY}}</code></pre>
-        </p>
+        
     </div>
     <div id="response-tab" class="view-tab md:w-2/3 lg:w-2/3 text-left" style="margin:0 auto;">
         <h1 class="font-xl m-2">Response at {{.RESPONSE_TIME}}</h1>
-        <p>Client IP Address:
+        <p>Client IP Address:</p>
         <pre><code class="plaintext">{{.RESPONSE_CLIENT_IP}}</code></pre>
-        </p>
-        <p>Status:
+        
+        <p>Status:</p>
         <pre><code class="plaintext">{{.RESPONSE_STATUS}}</code></pre>
-        </p>
-        <p>Path:
+        
+        <p>Path:</p>
         <pre><code class="plaintext">{{.RESPONSE_PATH}}</code></pre>
-        </p>
-        <p>Time:
+        
+        <p>Time:</p>
         <pre><code class="plaintext">{{.RESPONSE_TIME}}</code></pre>
-        </p>
-        <p>Uid:
+        
+        <p>Uid:</p>
         <pre><code class="plaintext">{{.RESPONSE_UID}}</code></pre>
-        </p>
-        <p>Size:
+        
+        <p>Size:</p>
         <pre><code class="plaintext">{{.RESPONSE_SIZE}}</code></pre>
-        </p>
-        <p>Headers:
+        
+        <p>Headers:</p>
         <pre><code class="language-json">{{.RESPONSE_HEADERS}}</code></pre>
-        <p>Body:
+
+        <p>Body:</p>
         <pre><code class="language-json">{{.RESPONSE_BODY}}</code></pre>
-        </p>
     </div>
 </div>
 <script>{{.SINGLE_REQUEST}}</script>
