@@ -20,4 +20,4 @@ matrix:
       install:
         - yarn
       script:
-        - lint:test
+        - yarn run lint:test
