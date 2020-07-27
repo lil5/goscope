@@ -10,19 +10,15 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/averageflow/goscope/repository"
+
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
 )
 
 // Get all details from a request via its UID.
 func GetDetailedRequest(requestUID string) DetailedRequest {
-	db := GetDB()
-	defer db.Close()
-
-	resultingQuery := "SELECT uid, client_ip, method, path, " +
-		"url, host, time, headers, body, referrer, user_agent " +
-		"FROM requests WHERE uid = ? LIMIT 1;"
-	row := db.QueryRow(resultingQuery, requestUID)
+	row := repository.GetDetailedRequest(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
 
 	var body string
 
@@ -91,27 +87,12 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 func GetRequests(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db := GetDB()
+	rows := repository.GetRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), int(offset))
 
-	defer db.Close()
-
-	query := "SELECT requests.uid, requests.method, requests.path, requests.time, responses.status FROM requests " +
-		"INNER JOIN responses ON requests.uid = responses.request_uid " +
-		"WHERE requests.application = ? ORDER BY time DESC LIMIT ? OFFSET ?;"
-	rows, err := db.Query(
-		query,
-		os.Getenv("APPLICATION_ID"),
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		offset,
-	)
-
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
-
+	if rows == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error querying DB"})
 		return
 	}
-
 	defer rows.Close()
 
 	var result []SummarizedRequest
@@ -119,7 +100,17 @@ func GetRequests(c *gin.Context) {
 	for rows.Next() {
 		var request SummarizedRequest
 
-		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
+		err := rows.Scan(
+			&request.UID,
+			&request.Method,
+			&request.Path,
+			&request.Time,
+			&request.ResponseStatus,
+		)
+		if err != nil {
+			log.Println(err.Error())
+		}
+
 		result = append(result, request)
 	}
 
@@ -171,49 +162,25 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 func SearchRequests(searchString string, offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
-	db := GetDB()
-
-	defer db.Close()
-
-	query := "SELECT requests.uid, requests.method, requests.path, requests.time, responses.status FROM requests " +
-		"INNER JOIN responses ON requests.uid = responses.request_uid WHERE requests.application = ? AND " +
-		"(requests.uid LIKE ? OR requests.application LIKE ? " +
-		"OR requests.client_ip LIKE ? OR requests.method LIKE ? " +
-		"OR requests.path LIKE ? " +
-		"OR requests.url LIKE ? OR requests.host LIKE ? " +
-		"OR requests.body LIKE ? OR requests.referrer LIKE ? " +
-		"OR requests.user_agent LIKE ? OR requests.time LIKE ? " +
-		"OR responses.uid LIKE ? OR responses.request_uid LIKE ? " +
-		"OR responses.application LIKE ? OR responses.client_ip LIKE ? " +
-		"OR responses.status LIKE ? " +
-		"OR responses.body LIKE ? OR responses.path LIKE ? " +
-		"OR responses.headers LIKE ? OR responses.size LIKE ? " +
-		"OR responses.time LIKE ?) ORDER BY time DESC LIMIT ? OFFSET ?;"
-
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows, err := db.Query(
-		query,
-		os.Getenv("APPLICATION_ID"),
-		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		searchWildcard,
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		offset,
-	)
+	rows := repository.SearchRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
 
-	if err != nil {
-		log.Println(err.Error())
-		return result
-	}
 	defer rows.Close()
 
 	for rows.Next() {
 		var request SummarizedRequest
 
-		_ = rows.Scan(&request.UID, &request.Method, &request.Path, &request.Time, &request.ResponseStatus)
+		err := rows.Scan(
+			&request.UID,
+			&request.Method,
+			&request.Path,
+			&request.Time,
+			&request.ResponseStatus,
+		)
+
+		if err != nil {
+			log.Println(err.Error())
+		}
 
 		result = append(result, request)
 	}

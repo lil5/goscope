@@ -24,6 +24,8 @@ GOSCOPE_DATABASE_TYPE: "mysql"
 GOSCOPE_ENTRIES_PER_PAGE: 50
 ```
 
+GoScope has been extended to work with a repository pattern, thus has the capability of supporting any database driver/engine that will work with Go and uses the `sql` package (returning `*sql.Rows` or `*sql.Row`). 
+NoSQL databases are currently not supported, although we think that it would be a great addition, so if you have the know-how please don't hesitate to make a Pull Request.
 In the .env file you can specify either the `mysql` driver or `postgres` driver, which will use the `github.com/go-sql-driver/mysql` or `github.com/lib/pq`
 The application expects a database with a setup that can be recreated by taking a look at the `mysql-setup.sql` file in the root of this repository.
 
@@ -57,13 +59,17 @@ In order to understand possible unexpected situations or simply to reassure you 
 
 ### Logging
 
-GoScope hooks into the logging mechanism of your application by using a custom `io.Writer` that prints to the console for ease of development and saves the logs into the database, for further displaying in the web environment.
-
-This means that you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
+GoScope hooks into the logging mechanism of your application by using a custom `io.Writer`. 
+This prints to the console for ease of development and saves the logs into the database, for further displaying in the web environment.
+Thus you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
 
 ![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
 
 ### Contributing
 
 Any change to assets in the `static` folder will require a rebuild of the `bindata.go`. For this you will require to have the package installed (via `go get -u github.com/shuLhan/go-bindata/...
-`) and then navigate in terminal to the root of the project and run `cd goscope && go-bindata -nomemcopy  ../static/...`. For live edits use the debug mode `cd goscope && go-bindata -debug ../static/...`, then edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.
+`) and then navigate in terminal to the root of the project and run: 
+- If in local development (live edits): `cd goscope && go-bindata -debug ../static/...`
+- For pushing to the repo: `cd goscope && go-bindata -nomemcopy  ../static/...`
+
+Edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.

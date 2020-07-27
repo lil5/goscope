@@ -7,15 +7,16 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/averageflow/goscope/repository"
+
 	"github.com/gin-gonic/gin"
 )
 
 func GetDetailedLog(requestUID string) ExceptionRecord {
-	db := GetDB()
-	defer db.Close()
-
-	query := "SELECT uid, error, time FROM logs WHERE uid = ?;"
-	row := db.QueryRow(query, requestUID)
+	row := repository.GetDetailedLog(
+		os.Getenv("GOSCOPE_DATABASE_TYPE"),
+		requestUID,
+	)
 
 	var request ExceptionRecord
 
@@ -35,25 +36,8 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 
 	defer db.Close()
 
-	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
-		"ELSE error END AS error, time FROM logs WHERE application = ? AND " +
-		"(uid LIKE ? OR application LIKE ? " +
-		"OR error LIKE ? OR time LIKE ?) " +
-		"ORDER BY time DESC LIMIT ? OFFSET ?;"
-
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows, err := db.Query(
-		query,
-		os.Getenv("APPLICATION_ID"),
-		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		offset,
-	)
-
-	if err != nil {
-		log.Println(err.Error())
-		return result
-	}
+	rows := repository.SearchLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
 
 	defer rows.Close()
 
@@ -76,24 +60,10 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 func GetLogs(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	db := GetDB()
 
-	defer db.Close()
-
-	query := "SELECT uid, CASE WHEN LENGTH(error) > 80 THEN CONCAT(SUBSTRING(error, 1, 80), '...') " +
-		"ELSE error END AS error, time FROM logs WHERE application = ? " +
-		"ORDER BY time DESC LIMIT ? OFFSET ?;"
-	rows, err := db.Query(
-		query,
-		os.Getenv("APPLICATION_ID"),
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		offset,
-	)
-
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
-
+	rows := repository.GetLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), int(offset))
+	if rows == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error querying DB"})
 		return
 	}
 

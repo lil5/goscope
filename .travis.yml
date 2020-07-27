@@ -10,9 +10,10 @@ matrix:
       sudo: false
       install: true
       script:
-        - go build -o app
-        - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+        - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.29.0
         - $(go env GOPATH)/bin/golangci-lint run -p=bugs,complexity,format,performance,style,unused
+        - go build -o app
+
     - language: node_js
       node_js:
         - 13
