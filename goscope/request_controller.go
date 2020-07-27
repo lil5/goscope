@@ -65,6 +65,18 @@ func ShowRequest(c *gin.Context) {
 	ShowGoScopePage(c, MinifyHTML(string(requestView)), variables)
 }
 
+func RequestList(c *gin.Context) {
+	offsetQuery := c.DefaultQuery("offset", "0")
+	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
+	entriesPerPage, _ := strconv.ParseInt(os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), 10, 32)
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"entriesPerPage":  entriesPerPage,
+		"data":            GetRequests(int(offset)),
+	}
+	c.JSON(http.StatusOK, variables)
+}
+
 func SearchRequest(c *gin.Context) {
 	var request SearchRequestPayload
 	err := c.ShouldBindBodyWith(&request, binding.JSON)

@@ -66,6 +66,19 @@ func ShowDashboard(c *gin.Context, mode int) {
 	ShowGoScopePage(c, MinifyHTML(baseTemplate), variables)
 }
 
+func LogList(c *gin.Context) {
+	offsetQuery := c.DefaultQuery("offset", "0")
+	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
+	entriesPerPage, _ := strconv.ParseInt(os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), 10, 32)
+
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"entriesPerPage":  entriesPerPage,
+		"data":            GetLogs(int(offset)),
+	}
+	c.JSON(http.StatusOK, variables)
+}
+
 func LogDashboard(c *gin.Context) {
 	ShowDashboard(c, LogDashboardMode)
 }
