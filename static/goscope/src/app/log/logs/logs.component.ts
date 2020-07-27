@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Logs} from '../logs';
-import {LogService} from "../log.service";
+import {Logs} from '../../logs';
+import {LogService} from "../../log.service";
 
 @Component({
-  selector: 'app-logs',
+  selector: 'log-logs',
   templateUrl: './logs.component.html',
   styleUrls: ['./logs.component.scss']
 })

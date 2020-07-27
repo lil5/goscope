@@ -5,22 +5,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule }    from '@angular/common/http';
-import { LogsComponent } from './logs/logs.component';
-import { LogDetailsComponent } from './log-details/log-details.component';
 import {RequestModule} from "./request/request.module";
+import {LogModule} from "./log/log.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    LogsComponent,
-    LogDetailsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     RequestModule,
+    LogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

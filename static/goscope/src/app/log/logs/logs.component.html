@@ -5,7 +5,7 @@
     <th class="custom-td">Time</th>
     <th class="custom-td"></th>
   </tr>
-  <app-log-details [log]="selectedLog"></app-log-details>
+  <log-log-details [log]="selectedLog"></log-log-details>
   <tr *ngFor="let log of logs" class="text-center">
     <td class="monospaced p-3 custom-td">{{log.error}}</td>
     <td class="p-3 custom-td">{{log.time}}</td>
