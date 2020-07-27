@@ -7,8 +7,9 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule }    from '@angular/common/http';
 import { LogsComponent } from './logs/logs.component';
 import { LogDetailsComponent } from './log-details/log-details.component';
-import { RequestsComponent } from './requests/requests.component';
-import { RequestDetailsComponent } from './request-details/request-details.component';
+import {RequestModule} from "./request/request.module";
+// import {RequestListComponent} from "./request/request-list/request-list.component";
+// import {RequestDetailsComponent} from "./request/request-details/request-details.component";
 
 @NgModule({
   declarations: [
@@ -16,13 +17,14 @@ import { RequestDetailsComponent } from './request-details/request-details.compo
     NavbarComponent,
     LogsComponent,
     LogDetailsComponent,
-    RequestsComponent,
-    RequestDetailsComponent
+    // RequestListComponent,
+    // RequestDetailsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    RequestModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
