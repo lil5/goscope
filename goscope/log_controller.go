@@ -79,10 +79,6 @@ func LogList(c *gin.Context) {
 	c.JSON(http.StatusOK, variables)
 }
 
-func LogDashboard(c *gin.Context) {
-	ShowDashboard(c, LogDashboardMode)
-}
-
 func ShowLog(c *gin.Context) {
 	var request RecordByURI
 
@@ -92,28 +88,14 @@ func ShowLog(c *gin.Context) {
 	}
 
 	logDetails := GetDetailedLog(request.UID)
-	// Markup
-	logView, _ := Asset("../static/html/single_log.html")
-	commonHeader, _ := Asset("../static/html/common_head.html")
-	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
-	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
-	// Styles
-	highlightStyles, _ := Asset("../static/css/highlight.css")
-	goscopeStyles, _ := Asset("../static/css/goscope.css")
-	// Scripts
-	singleLog, _ := Asset("../static/js/singleLog.js")
 
-	variables := map[string]string{
-		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":    MinifyHTML(header),
-		"HIGHLIGHT_STYLES": MinifyCSS(string(highlightStyles)),
-		"GOSCOPE_STYLES":   MinifyCSS(string(goscopeStyles)),
-		"SINGLE_LOG":       MinifyJs(string(singleLog)),
-		"TIME":             UnixTimeToHuman(logDetails.Time),
-		"MESSAGE":          logDetails.Error,
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"data": gin.H{
+			"logDetails": logDetails,
+		},
 	}
-
-	ShowGoScopePage(c, MinifyHTML(string(logView)), variables)
+	c.JSON(http.StatusOK, variables)
 }
 
 func SearchLog(c *gin.Context) {

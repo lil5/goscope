@@ -48,16 +48,14 @@ func Setup(engine *gin.Engine) {
 	// Setup necessary routes
 	goscopeGroup := engine.Group("/goscope")
 	goscopeGroup.GET("/", RequestDashboard)
-	goscopeGroup.GET("/logs", LogDashboard)
+
 	goscopeGroup.GET("/info", ShowSystemInfo)
-	//goscopeGroup.GET("/log-records", GetLogs)
-	goscopeGroup.GET("/log-records/:id", ShowLog)
-	//goscopeGroup.GET("/requests", GetRequests)
-	goscopeGroup.GET("/requests/:id", ShowRequest)
-	goscopeGroup.POST("/search/requests", SearchRequest)
-	goscopeGroup.POST("/search/logs", SearchLog)
 
 	apiGroup := goscopeGroup.Group("/api")
 	apiGroup.GET("/logs", LogList)
+	apiGroup.GET("/requests/:id", ShowRequest)
+	apiGroup.GET("/logs/:id", ShowLog)
 	apiGroup.GET("/requests", RequestList)
+	apiGroup.POST("/search/requests", SearchRequest)
+	apiGroup.POST("/search/logs", SearchLog)
 }
