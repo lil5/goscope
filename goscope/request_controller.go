@@ -19,6 +19,7 @@ func RequestList(c *gin.Context) {
 		"entriesPerPage":  entriesPerPage,
 		"data":            GetRequests(int(offset)),
 	}
+	c.Header("Access-Control-Allow-Origin", "*")
 	c.JSON(http.StatusOK, variables)
 }
 

@@ -24,7 +24,8 @@ export class RequestListComponent implements OnInit {
   }
 
   getRequests(): void {
-    this.requests = this.requestService.getRequests();
+    this.requestService.getRequests().subscribe(requests => this.requests = requests.data);
+    console.log(this.requests)
   }
 
 }

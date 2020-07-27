@@ -5,3 +5,8 @@ export interface Requests {
   uid: string
   responseStatus: number
 }
+
+export interface RequestsEndpointResponse {
+  applicationName: string
+  data: Requests[]
+}
