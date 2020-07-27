@@ -6,18 +6,23 @@
     <th class="custom-td">Happened</th>
     <th class="custom-td"></th>
   </tr>
-  <app-request-details [request]="selectedRequest"></app-request-details>
+
   <tr *ngFor="let request of requests" class="text-center">
     <td class="p-3 custom-td">{{request.responseStatus}}</td>
     <td class="monospaced p-3 custom-td">{{request.method}}</td>
     <td class="p-3 custom-td">{{request.path}}</td>
     <td class="p-3 custom-td">{{request.time}}</td>
     <td class="p-3 custom-td">
-    <span (click)="onSelect(request)" class="cursor-pointer">
+      <a routerLink="/requests/{{request.uid}}" class="cursor-pointer">
       View
-    </span>
+    </a>
+    <!--<span (click)="onSelect(request)" class="cursor-pointer">
+      View
+    </span>-->
     </td>
+
   </tr>
 
 </table>
 
+<!--<app-request-details [request]="selectedRequest"></app-request-details>-->

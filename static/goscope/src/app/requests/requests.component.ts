@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../request.service";
 import {Requests} from "../requests";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-requests',
