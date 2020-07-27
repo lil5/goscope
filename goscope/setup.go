@@ -47,7 +47,15 @@ func Setup(engine *gin.Engine) {
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
 	goscopeGroup := engine.Group("/goscope")
+
 	goscopeGroup.GET("/", ShowDashboard)
+	goscopeGroup.GET("/polyfills.js", GetStaticFile)
+	goscopeGroup.GET("/main.js", GetStaticFile)
+	goscopeGroup.GET("/styles.css", GetStaticFile)
+	goscopeGroup.GET("/runtime.js", GetStaticFile)
+	goscopeGroup.GET("/favicon.ico", GetStaticFile)
+	goscopeGroup.GET("/logs", ShowDashboard)
+	goscopeGroup.GET("/requests", ShowDashboard)
 
 	apiGroup := goscopeGroup.Group("/api")
 	apiGroup.GET("/logs", LogList)

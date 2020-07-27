@@ -1,0 +1,18 @@
+<table class="goscope-entries-table">
+  <tr>
+    <th class="custom-td">Message</th>
+    <th class="custom-td">Time</th>
+    <th class="custom-td"></th>
+  </tr>
+  <tr *ngFor="let log of logs" class="text-center">
+    <td class="monospaced p-3 custom-td">{{log.error}}</td>
+    <td class="p-3 custom-td">{{log.time}}</td>
+    <td class="p-3 custom-td">
+    <span (click)="onSelect(log)" class="cursor-pointer">
+      View
+    </span>
+    </td>
+  </tr>
+  <app-log-details [log]="selectedLog"></app-log-details>
+</table>
+

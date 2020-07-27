@@ -1,13 +1,15 @@
 package goscope
 
 import (
-	"os"
+	"fmt"
+	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 func ShowDashboard(c *gin.Context) {
-	// Markup
+	/*// Markup
 	baseTemplate, _ := Asset("../static/html/dashboard.html")
 
 	commonHeader, _ := Asset("../static/html/common_head.html")
@@ -41,5 +43,16 @@ func ShowDashboard(c *gin.Context) {
 	variables["LOG_DASHBOARD"] = string(logsDashboard)
 	variables["REQUEST_DASHBOARD"] = string(requestDashboard)
 
-	ShowGoScopePage(c, MinifyHTML(string(baseTemplate)), variables)
+	ShowGoScopePage(c, MinifyHTML(string(baseTemplate)), variables)*/
+	file, _ := Asset("../static/goscope/dist/goscope/index.html")
+	reader := strings.NewReader(string(file))
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
+}
+
+func GetStaticFile(c *gin.Context) {
+	pathSplit := strings.Split(c.Request.RequestURI, "/")
+	requestedFile := pathSplit[len(pathSplit)-1]
+	file, _ := Asset(fmt.Sprintf("../static/goscope/dist/goscope/%s", requestedFile))
+	reader := strings.NewReader(string(file))
+	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }

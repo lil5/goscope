@@ -1,0 +1,20 @@
+<table class="goscope-entries-table">
+  <tr>
+    <th class="custom-td">Status</th>
+    <th class="custom-td">Verb</th>
+    <th class="custom-td text-center">Path</th>
+    <th class="custom-td">Happened</th>
+    <th class="custom-td"></th>
+  </tr>
+  <tr *ngFor="let request of requests" class="text-center">
+    <td class="monospaced p-3 custom-td">{{request.method}}</td>
+    <td class="p-3 custom-td">{{request.time}}</td>
+    <td class="p-3 custom-td">
+    <span (click)="onSelect(request)" class="cursor-pointer">
+      View
+    </span>
+    </td>
+  </tr>
+  <app-request-details [request]="selectedRequest"></app-request-details>
+</table>
+

@@ -73,3 +73,5 @@ Any change to assets in the `static` folder will require a rebuild of the `binda
 - For pushing to the repo: `cd goscope && go-bindata -nomemcopy  ../static/...`
 
 Edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.
+
+`ng build --prod --output-hashing none --base-href /goscope/`
