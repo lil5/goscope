@@ -18,13 +18,13 @@ import (
 
 // Get all details from a request via its UID.
 func GetDetailedRequest(requestUID string) DetailedRequest {
-	row := repository.GetDetailedRequest(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
-
 	var body string
 
 	var headers string
 
 	var result DetailedRequest
+
+	row := repository.GetDetailedRequest(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -50,19 +50,13 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 }
 
 func GetDetailedResponse(requestUID string) DetailedResponse {
-	db := GetDB()
-	defer db.Close()
-
-	resultingQuery := "SELECT uid, client_ip, status, time, " +
-		"body, path, headers, size FROM responses " +
-		"WHERE request_uid = ? LIMIT 1;"
-	row := db.QueryRow(resultingQuery, requestUID)
-
 	var body string
 
 	var headers string
 
 	var result DetailedResponse
+
+	row := repository.GetDetailedResponse(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
 
 	err := row.Scan(
 		&result.UID,

@@ -120,3 +120,24 @@ func SearchRequests(connection string, searchWildcard string, offset int) *sql.R
 
 	return rows
 }
+
+func GetDetailedResponse(connection string, requestUID string) *sql.Row {
+	db := GetDB()
+	defer db.Close()
+
+	var query string
+
+	if connection == MySQL {
+		query = "SELECT `uid`, `client_ip`, `status`, `time`, " +
+			"`body`, `path`, `headers`, `size` FROM `responses` " +
+			"WHERE `request_uid` = ? LIMIT 1;"
+	} else if connection == PostgreSQL {
+		query = `SELECT "uid", "client_ip", "status", "time",
+			"body", "path", "headers", "size" FROM "responses"
+			WHERE "request_uid" = ? LIMIT 1;`
+	}
+
+	row := db.QueryRow(query, requestUID)
+
+	return row
+}
