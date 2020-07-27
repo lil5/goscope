@@ -8,8 +8,6 @@ import { HttpClientModule }    from '@angular/common/http';
 import { LogsComponent } from './logs/logs.component';
 import { LogDetailsComponent } from './log-details/log-details.component';
 import {RequestModule} from "./request/request.module";
-// import {RequestListComponent} from "./request/request-list/request-list.component";
-// import {RequestDetailsComponent} from "./request/request-details/request-details.component";
 
 @NgModule({
   declarations: [
@@ -17,8 +15,6 @@ import {RequestModule} from "./request/request.module";
     NavbarComponent,
     LogsComponent,
     LogDetailsComponent,
-    // RequestListComponent,
-    // RequestDetailsComponent
   ],
   imports: [
     BrowserModule,
