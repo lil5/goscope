@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../request.service";
 import {Requests} from "../requests";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-requests',
@@ -24,7 +25,7 @@ export class RequestsComponent implements OnInit {
   }
 
   getRequests(): void {
-    this.requests = this.requestService.getRequests();
+    this.requestService.getRequests().subscribe(requests => this.requests = requests);
   }
 
 }

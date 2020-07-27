@@ -1,30 +1,18 @@
 import {Injectable} from '@angular/core';
 import {Requests} from "./requests";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
+  private requestsUrl = 'http://localhost:7004/goscope/api/requests';
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
-  getRequests(): Requests[] {
-    return [
-      {
-        uid: "test",
-        time: 123,
-        method: "POST",
-        path: "/",
-        responseStatus: 200,
-      },
-      {
-        uid: "test",
-        time: 123,
-        method: "POST",
-        path: "/",
-        responseStatus: 200,
-      },
-    ];
+  getRequests(): Observable<Requests[]> {
+    return this.http.get<Requests[]>(this.requestsUrl)
   }
 }
