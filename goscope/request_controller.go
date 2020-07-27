@@ -10,11 +10,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
-// Show the dashboard of the HTTP request/responses.
-func RequestDashboard(c *gin.Context) {
-	ShowDashboard(c, RequestDashboardMode)
-}
-
 func RequestList(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)

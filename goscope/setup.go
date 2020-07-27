@@ -47,7 +47,7 @@ func Setup(engine *gin.Engine) {
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
 	goscopeGroup := engine.Group("/goscope")
-	goscopeGroup.GET("/", RequestDashboard)
+	goscopeGroup.GET("/", ShowDashboard)
 
 	apiGroup := goscopeGroup.Group("/api")
 	apiGroup.GET("/logs", LogList)
