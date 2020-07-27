@@ -7,7 +7,9 @@
     <th class="custom-td"></th>
   </tr>
   <tr *ngFor="let request of requests" class="text-center">
+    <td class="p-3 custom-td">{{request.responseStatus}}</td>
     <td class="monospaced p-3 custom-td">{{request.method}}</td>
+    <td class="p-3 custom-td">{{request.path}}</td>
     <td class="p-3 custom-td">{{request.time}}</td>
     <td class="p-3 custom-td">
     <span (click)="onSelect(request)" class="cursor-pointer">
