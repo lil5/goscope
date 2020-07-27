@@ -67,11 +67,11 @@ Thus you only need to call your usual `log.Println` or `log.Printf` statements o
 
 ### Contributing
 
+To build the Angular app run `ng build --prod --output-hashing none --base-href /goscope/`.
 Any change to assets in the `static` folder will require a rebuild of the `bindata.go`. For this you will require to have the package installed (via `go get -u github.com/shuLhan/go-bindata/...
 `) and then navigate in terminal to the root of the project and run: 
-- If in local development (live edits): `cd goscope && go-bindata -debug ../static/...`
-- For pushing to the repo: `cd goscope && go-bindata -nomemcopy  ../static/...`
+- If in local development (live edits): `cd goscope && go-bindata -debug ../static/goscope/dist/...`
+- For pushing to the repo: `cd goscope && go-bindata -nomemcopy  ../static/goscope/dist/...`
 
 Edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`.
 
-`ng build --prod --output-hashing none --base-href /goscope/`
