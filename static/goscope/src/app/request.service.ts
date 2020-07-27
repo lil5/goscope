@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Requests} from "./requests";
+import {RequestsEndpointResponse} from "./requests";
 import {HttpClient} from '@angular/common/http';
 import {Observable} from "rxjs";
 
@@ -12,7 +12,7 @@ export class RequestService {
   constructor(private http: HttpClient) {
   }
 
-  getRequests(): Observable<Requests[]> {
-    return this.http.get<Requests[]>(this.requestsUrl)
+  getRequests(): Observable<RequestsEndpointResponse> {
+    return this.http.get<RequestsEndpointResponse>(this.requestsUrl)
   }
 }
