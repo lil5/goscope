@@ -51,5 +51,7 @@ func ShowSystemInfo(c *gin.Context) {
 			"usedSwap":        fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),
 		},
 	}
+
+	c.Header("Access-Control-Allow-Origin", "*")
 	c.JSON(http.StatusOK, variables)
 }

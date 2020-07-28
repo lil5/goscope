@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
-import {RequestService} from "../request.service";
-import {DetailedRequest, DetailedResponse} from "../requests";
+import {RequestService} from '../request.service';
+import {DetailedRequest, DetailedResponse} from '../requests';
 import 'highlight.js/styles/dark.css';
 
 @Component({
@@ -11,8 +11,8 @@ import 'highlight.js/styles/dark.css';
   styleUrls: ['./request-details.component.scss']
 })
 export class RequestDetailsComponent implements OnInit {
-  requestDetails: DetailedRequest
-  responseDetails: DetailedResponse
+  requestDetails: DetailedRequest;
+  responseDetails: DetailedResponse;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,8 +31,8 @@ export class RequestDetailsComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     this.requestService.getRequest(id)
       .subscribe(request => {
-        this.requestDetails = request.data.request
-        this.responseDetails = request.data.response
+        this.requestDetails = request.data.request;
+        this.responseDetails = request.data.response;
       });
   }
 

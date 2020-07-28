@@ -1,0 +1,41 @@
+<div class="container p-3 m-3">
+  <span class="cursor-pointer navbar-link" (click)="goBack()">← Back</span><br/>
+  <h2>CPU</h2>
+  <p>Core Count</p>
+  <pre><code [highlight]>{{systemInformation.cpu.coreCount}}</code></pre>
+  <p>Model</p>
+  <pre><code [highlight]>{{systemInformation.cpu.modelName}}</code></pre>
+</div>
+<div class="container p-3 m-3">
+  <h2>Disk</h2>
+  <p>Free space</p>
+  <pre><code [highlight]>{{systemInformation.disk.freeSpace}}</code></pre>
+  <p>Partition Type</p>
+  <pre><code [highlight]>{{systemInformation.disk.partitionType}}</code></pre>
+  <p>Mount Path</p>
+  <pre><code [highlight]>{{systemInformation.disk.mountPath}}</code></pre>
+  <p>Total Space</p>
+  <pre><code [highlight]>{{systemInformation.disk.totalSpace}}</code></pre>
+</div>
+<div class="container p-3 m-3">
+  <h2>Host</h2>
+  <p>Kernel Arch</p>
+  <pre><code [highlight]>{{systemInformation.host.kernelArch}}</code></pre>
+  <p>Kernel Version</p>
+  <pre><code [highlight]>{{systemInformation.host.kernelVersion}}</code></pre>
+  <p>Hostname</p>
+  <pre><code [highlight]>{{systemInformation.host.hostname}}</code></pre>
+  <p>Host OS</p>
+  <pre><code [highlight]>{{systemInformation.host.hostOS}}</code></pre>
+  <p>Platform</p>
+  <pre><code [highlight]>{{systemInformation.host.hostPlatform}}</code></pre>
+  <p>Uptime</p>
+  <pre><code [highlight]>{{systemInformation.host.uptime}}</code></pre>
+</div>
+<div class="container p-3 m-3">
+  <h2>Memory</h2>
+  <p>Status</p>
+  <pre><code [highlight]>{{systemInformation.memory.availableMemory}} available of {{systemInformation.memory.totalMemory}}</code></pre>
+  <p>Swap usage</p>
+  <pre><code [highlight]>{{systemInformation.memory.usedSwap}}</code></pre>
+</div>

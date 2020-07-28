@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {DetailedLogsReponse, LogsEndpointResponse} from "./logRecord";
-import {HttpClient} from '@angular/common/http';
-import {Observable} from "rxjs";
+import {DetailedLogsReponse, LogsEndpointResponse} from './logRecord';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,12 @@ export class LogService {
   constructor(private http: HttpClient) {
   }
 
-  getLogs(): Observable<LogsEndpointResponse> {
-    return this.http.get<LogsEndpointResponse>(this.logsUrl);
+  getLogs(offset: number): Observable<LogsEndpointResponse> {
+    const options = { params: new HttpParams().set('offset', String(offset)) }
+    return this.http.get<LogsEndpointResponse>(this.logsUrl, options);
   }
 
   getLog(id: string): Observable<DetailedLogsReponse> {
-    return this.http.get<DetailedLogsReponse>(`${this.logsUrl}/${id}`)
+    return this.http.get<DetailedLogsReponse>(`${this.logsUrl}/${id}`);
   }
 }

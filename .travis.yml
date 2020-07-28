@@ -17,8 +17,8 @@ matrix:
     - language: node_js
       node_js:
         - 13
-      cache: yarn
+      cache: npm
       install:
-        - yarn
+        - npm
       script:
-        - yarn run lint:test
+        - npm run lint

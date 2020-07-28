@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {DetailedLogsReponse} from "../logRecord";
-import {ActivatedRoute} from "@angular/router";
-import {Location} from "@angular/common";
-import {LogService} from "../log.service";
+import {DetailedLogsReponse} from '../logRecord';
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
+import {LogService} from '../log.service';
 import 'highlight.js/styles/dark.css';
 
 @Component({
@@ -12,7 +12,7 @@ import 'highlight.js/styles/dark.css';
 })
 
 export class LogDetailsComponent implements OnInit {
-  logDetails: DetailedLogsReponse
+  logDetails: DetailedLogsReponse;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,14 +22,14 @@ export class LogDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getLog()
+    this.getLog();
   }
 
   getLog(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.logService.getLog(id)
       .subscribe(log => {
-        this.logDetails = log
+        this.logDetails = log;
       });
   }
 

@@ -1,5 +1,21 @@
 $main-highlight-color: #7cc3bf;
 
+.navbar-link {
+	text-decoration: none;
+	color: #fff;
+	border: none;
+}
+
+.active-navbar-link {
+	text-decoration: none;
+	color: $main-highlight-color;
+}
+
+.navbar-link:hover {
+	text-decoration: underline;
+	color: $main-highlight-color;
+}
+
 .goscope-entries-table {
 	min-width: 70%;
 	max-width: 85%;
@@ -67,3 +83,5 @@ fill: #fff;
 fill: $main-highlight-color;
 }
 
+.pagination-buttons {
+}

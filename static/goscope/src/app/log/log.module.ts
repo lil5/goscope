@@ -1,9 +1,9 @@
-import {BrowserModule} from "@angular/platform-browser";
-import {HIGHLIGHT_OPTIONS, HighlightModule} from "ngx-highlightjs";
-import {HttpClientModule} from "@angular/common/http";
-import {LogDetailsComponent} from "./log-details/log-details.component";
-import {LogsComponent} from "./logs/logs.component";
-import {NgModule} from "@angular/core";
+import {BrowserModule} from '@angular/platform-browser';
+import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
+import {HttpClientModule} from '@angular/common/http';
+import {LogDetailsComponent} from './log-details/log-details.component';
+import {LogsComponent} from './logs/logs.component';
+import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
 @NgModule({

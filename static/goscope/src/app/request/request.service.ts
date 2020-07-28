@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {DetailedRequestResponse, Requests, RequestsEndpointResponse} from "./requests";
-import {HttpClient} from '@angular/common/http';
-import {Observable} from "rxjs";
+import {DetailedRequestResponse, Requests, RequestsEndpointResponse} from './requests';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,11 @@ export class RequestService {
   constructor(private http: HttpClient) {
   }
 
-  getRequests(): Observable<RequestsEndpointResponse> {
-    return this.http.get<RequestsEndpointResponse>(this.requestsUrl)
+  getRequests(offset: number): Observable<RequestsEndpointResponse> {
+    const options = { params: new HttpParams().set('offset', String(offset)) }
+    return this.http.get<RequestsEndpointResponse>(this.requestsUrl, options);
   }
   getRequest(id: string): Observable<DetailedRequestResponse> {
-    return this.http.get<DetailedRequestResponse>(`${this.requestsUrl}/${id}`)
+    return this.http.get<DetailedRequestResponse>(`${this.requestsUrl}/${id}`);
   }
 }
