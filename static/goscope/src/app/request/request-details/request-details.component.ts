@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Logs} from "../../logs";
+import {Logs} from "../../log/logs";
 import {Requests} from "../requests";
 
 @Component({

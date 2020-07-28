@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Logs} from '../../logs';
-import {LogService} from "../../log.service";
+import {Logs} from '../logs';
+import {LogService} from "../log.service";
 
 @Component({
   selector: 'log-logs',
@@ -23,7 +23,7 @@ export class LogsComponent implements OnInit {
   }
 
   getLogs(): void {
-    this.logs = this.logService.getLogs();
+    this.logService.getLogs().subscribe(logs => this.logs = logs.data);
   }
 
 }

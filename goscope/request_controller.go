@@ -19,6 +19,7 @@ func RequestList(c *gin.Context) {
 		"entriesPerPage":  entriesPerPage,
 		"data":            GetRequests(int(offset)),
 	}
+
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.JSON(http.StatusOK, variables)
 }
@@ -41,6 +42,8 @@ func ShowRequest(c *gin.Context) {
 			"response": responseDetails,
 		},
 	}
+
+	c.Header("Access-Control-Allow-Origin", "*")
 	c.JSON(http.StatusOK, variables)
 }
 
@@ -55,5 +58,7 @@ func SearchRequest(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	result := SearchRequests(request.Query, int(offset))
+
+	c.Header("Access-Control-Allow-Origin", "*")
 	c.JSON(http.StatusOK, result)
 }

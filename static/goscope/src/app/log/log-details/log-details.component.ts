@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Logs} from "../../logs";
+import {Logs} from "../logs";
 
 @Component({
   selector: 'log-log-details',
