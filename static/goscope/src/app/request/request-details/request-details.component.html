@@ -1,1 +1,50 @@
-<p>Request details</p>
+<div class="container p-3 m-3">
+  <span class="cursor-pointer" (click)="goBack()">← Back</span><br/>
+  <h2>Request details</h2>
+
+  <p>Client IP</p>
+  <pre><code [highlight]>{{requestDetails.clientIP}}</code></pre>
+  <p>Headers</p>
+  <pre><code [highlight]>{{requestDetails.headers}}</code></pre>
+  <p>Host</p>
+  <pre><code [highlight]>{{requestDetails.host}}</code></pre>
+  <p>Method</p>
+  <pre><code [highlight]>{{requestDetails.method}}</code></pre>
+  <p>Path</p>
+  <pre><code [highlight]>{{requestDetails.path}}</code></pre>
+  <p>Referrer</p>
+  <pre><code [highlight]>{{requestDetails.referrer}}</code></pre>
+  <p>Time</p>
+  <pre><code [highlight]>{{requestDetails.time}}</code></pre>
+  <p>UID</p>
+  <pre><code [highlight]>{{requestDetails.uid}}</code></pre>
+  <p>URL</p>
+  <pre><code [highlight]>{{requestDetails.url}}</code></pre>
+  <p>User Agent</p>
+  <pre><code [highlight]>{{requestDetails.userAgent}}</code></pre>
+  <p>Body</p>
+  <pre><code [highlight]>{{requestDetails.body}}</code></pre>
+</div>
+
+<div class="container p-3 m-3">
+  <h2>Response details</h2>
+  <p>Client IP</p>
+  <pre><code [highlight]>{{responseDetails.clientIP}}</code></pre>
+  <p>Headers</p>
+  <pre><code [highlight]>{{responseDetails.headers}}</code></pre>
+  <p>Path</p>
+  <pre><code [highlight]>{{responseDetails.path}}</code></pre>
+  <p>Size</p>
+  <pre><code [highlight]>{{responseDetails.size}}</code></pre>
+  <p>Status</p>
+  <pre><code [highlight]>{{responseDetails.status}}</code></pre>
+  <p>Time</p>
+  <pre><code [highlight]>{{responseDetails.time}}</code></pre>
+  <p>RequestUID</p>
+  <pre><code [highlight]>{{responseDetails.requestUID}}</code></pre>
+  <p>UID</p>
+  <pre><code [highlight]>{{responseDetails.uid}}</code></pre>
+  <p>Body</p>
+  <pre><code [highlight]>{{responseDetails.body}}</code></pre>
+</div>
+

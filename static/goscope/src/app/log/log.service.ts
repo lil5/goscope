@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {LogsEndpointResponse} from "./logs";
+import {DetailedLogsReponse, LogsEndpointResponse} from "./logRecord";
 import {HttpClient} from '@angular/common/http';
 import {Observable} from "rxjs";
 
@@ -14,5 +14,9 @@ export class LogService {
 
   getLogs(): Observable<LogsEndpointResponse> {
     return this.http.get<LogsEndpointResponse>(this.logsUrl);
+  }
+
+  getLog(id: string): Observable<DetailedLogsReponse> {
+    return this.http.get<DetailedLogsReponse>(`${this.logsUrl}/${id}`)
   }
 }

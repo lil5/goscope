@@ -1,6 +1,8 @@
-<div *ngIf="log">
-  <h2>Log Details</h2>
-  <div><span>id: </span>{{log.uid}}</div>
-  <div><span>time: </span>{{log.time}}</div>
-  <div><span>error: </span>{{log.error}}</div>
+<div class="container p-3 m-3">
+  <span class="cursor-pointer" (click)="goBack()">← Back</span><br/>
+  <h2>Log details</h2>
+  <p>Message</p>
+  <pre><code [highlight]>{{logDetails.data.logDetails.error}}</code></pre>
+  <p>Time</p>
+  <pre><code [highlight]>{{logDetails.data.logDetails.time}}</code></pre>
 </div>

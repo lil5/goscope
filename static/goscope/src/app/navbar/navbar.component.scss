@@ -4,7 +4,7 @@
         - Josep Bigorra (averageflow)
  */
 
-
+$main-highlight-color: #7cc3bf;
 
 .navbar-link {
 	text-decoration: none;
@@ -14,12 +14,12 @@
 
 .active-navbar-link {
 	text-decoration: none;
-	color: var(--main-highlight-color);
+	color: $main-highlight-color;
 }
 
 .navbar-link:hover {
 	text-decoration: underline;
-	color: var(--main-highlight-color);
+	color: $main-highlight-color;
 }
 
 .search-input {
@@ -43,7 +43,7 @@ SVG Icons - svgicons.sparkk.fr
 }
 
 .svg-icon:hover {
-	fill: var(--main-highlight-color);
+	fill: $main-highlight-color;
 }
 
 .svg-icon circle {

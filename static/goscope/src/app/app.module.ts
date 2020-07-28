@@ -8,6 +8,7 @@ import { HttpClientModule }    from '@angular/common/http';
 import {RequestModule} from "./request/request.module";
 import {LogModule} from "./log/log.module";
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +20,7 @@ import {LogModule} from "./log/log.module";
     HttpClientModule,
     RequestModule,
     LogModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

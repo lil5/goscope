@@ -25,7 +25,7 @@ export interface DetailedResponse {
 }
 
 export interface DetailedRequest {
-body: string
+  body: string
   clientIP: string
   headers: string
   host: string
