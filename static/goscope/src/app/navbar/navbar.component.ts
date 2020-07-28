@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {RequestService} from "../request/request.service";
 
 @Component({
   selector: 'app-navbar',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   applicationName = 'GoScope';
-  constructor() { }
+  searchQuery: string;
+  constructor(private requestService: RequestService,) { }
 
   ngOnInit(): void {
   }
 
+  updateSearchQuery(textChanged: any): void {
+    this.searchQuery = textChanged.target.value;
+  }
+  searchButtonPressed(): void {
+    console.log(this.searchQuery)
+    this.requestService.searchRequest(this.searchQuery).subscribe(response => console.log(response));
+  }
 }

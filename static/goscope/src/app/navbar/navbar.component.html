@@ -41,12 +41,13 @@
       System
     </a>
     <input
+      (change)="updateSearchQuery($event)"
       placeholder="Search ..."
       id="search-input"
       class="md:p-2 l:p2 m-3 search-input"
       type="search"
     />
-    <button id="search-button" style="border: none;">
+    <button (click)="searchButtonPressed()" id="search-button" style="border: none;">
       <svg
         class="eye-image svg-icon"
         style="width: 2em; height: 2em;"
