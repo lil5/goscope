@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {RequestsEndpointResponse} from "./requests";
+import {DetailedRequestResponse, Requests, RequestsEndpointResponse} from "./requests";
 import {HttpClient} from '@angular/common/http';
 import {Observable} from "rxjs";
 
@@ -14,5 +14,8 @@ export class RequestService {
 
   getRequests(): Observable<RequestsEndpointResponse> {
     return this.http.get<RequestsEndpointResponse>(this.requestsUrl)
+  }
+  getRequest(id: string): Observable<DetailedRequestResponse> {
+    return this.http.get<DetailedRequestResponse>(`${this.requestsUrl}/${id}`)
   }
 }
