@@ -3,11 +3,11 @@ import {RequestService} from "../request.service";
 import {Requests} from "../requests";
 
 @Component({
-  selector: 'app-requests',
-  templateUrl: './requests.component.html',
-  styleUrls: ['./requests.component.scss']
+  selector: 'request-request-list',
+  templateUrl: './request-list.component.html',
+  styleUrls: ['./request-list.component.scss']
 })
-export class RequestsComponent implements OnInit {
+export class RequestListComponent implements OnInit {
   requests: Requests[]
 
   constructor(private requestService: RequestService) {
