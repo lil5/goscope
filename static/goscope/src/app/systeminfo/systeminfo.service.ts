@@ -7,7 +7,7 @@ import {SystemInfoDetailsResponse} from './systeminfodetails';
   providedIn: 'root'
 })
 export class SysteminfoService {
-  private infoUrl = 'http://localhost:7004/goscope/api/info';
+  private infoUrl = '/goscope/api/info';
 
   constructor(private http: HttpClient) {
   }

@@ -7,8 +7,8 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class RequestService {
-  private requestsUrl = 'http://localhost:7004/goscope/api/requests';
-  private searchRequestsUrl = 'http://localhost:7004/goscope/api/search/requests';
+  private requestsUrl = '/goscope/api/requests';
+  private searchRequestsUrl = '/goscope/api/search/requests';
 
   constructor(private http: HttpClient) {
   }

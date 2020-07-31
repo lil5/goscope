@@ -7,8 +7,8 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class LogService {
-  private logsUrl = 'http://localhost:7004/goscope/api/logs';
-  private searchLogsUrl = 'http://localhost:7004/goscope/api/search/logs';
+  private logsUrl = '/goscope/api/logs';
+  private searchLogsUrl = '/goscope/api/search/logs';
 
   constructor(private http: HttpClient) {
   }
