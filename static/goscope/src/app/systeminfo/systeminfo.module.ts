@@ -1,6 +1,6 @@
-import {BrowserModule} from "@angular/platform-browser";
+import {BrowserModule} from '@angular/platform-browser';
 import {DetailsComponent} from './details/details.component';
-import {HIGHLIGHT_OPTIONS, HighlightModule} from "ngx-highlightjs";
+import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
 import {NgModule} from '@angular/core';
 
 

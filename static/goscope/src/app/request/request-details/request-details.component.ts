@@ -6,7 +6,7 @@ import {DetailedRequest, DetailedResponse} from '../requests';
 import 'highlight.js/styles/dark.css';
 
 @Component({
-  selector: 'request-request-details',
+  selector: 'app-request-details',
   templateUrl: './request-details.component.html',
   styleUrls: ['./request-details.component.scss']
 })

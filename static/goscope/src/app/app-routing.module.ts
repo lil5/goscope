@@ -6,7 +6,7 @@ import {RequestModule} from './request/request.module';
 import {LogModule} from './log/log.module';
 import {RequestDetailsComponent} from './request/request-details/request-details.component';
 import {LogDetailsComponent} from './log/log-details/log-details.component';
-import {DetailsComponent} from "./systeminfo/details/details.component";
+import {DetailsComponent} from './systeminfo/details/details.component';
 
 const routes: Routes = [
   {path: 'logs', component: LogsComponent},

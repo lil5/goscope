@@ -4,15 +4,18 @@ import {LogService} from '../log.service';
 import {intervalToLevels} from '../../time-utils';
 
 @Component({
-  selector: 'log-logs',
+  selector: 'app-logs',
   templateUrl: './logs.component.html',
   styleUrls: ['./logs.component.scss']
 })
 export class LogsComponent implements OnInit {
   logs: LogRecord[];
   now: number;
-  offset: number = 0;
-  didGetNewContent: boolean = false;
+  offset = 0;
+  didGetNewContent = false;
+  searchOffset = 0;
+  searchModeEnabled = false;
+  searchQuery: string;
 
   constructor(private logService: LogService) {
   }
@@ -29,21 +32,68 @@ export class LogsComponent implements OnInit {
   timeDiffToHuman(value: number): string {
     return intervalToLevels(value);
   }
+
   previousPage(): void {
-    if (this.offset >= 50) {
-      this.offset -= 50
-      this.getLogs();
-      if (!this.didGetNewContent) {
-        this.offset += 50
+    if (!this.searchModeEnabled) {
+      if (this.offset >= 50) {
+        this.offset -= 50;
+        this.getLogs();
+        if (!this.didGetNewContent) {
+          this.offset += 50;
+        }
+      }
+    } else {
+      if (this.searchOffset >= 50) {
+        this.searchOffset -= 50;
+        this.getLogs();
+        if (!this.didGetNewContent) {
+          this.searchOffset += 50;
+        }
       }
     }
   }
 
-  nextPage(): void {
-    this.offset += 50
+  updateSearchQuery(textChanged: any): void {
+    this.searchQuery = textChanged.target.value.trim();
+  }
+
+  searchButtonPressed(): void {
+    if (this.searchQuery !== '' && this.searchQuery) {
+      this.searchModeEnabled = true;
+      document.getElementById('search-cancel-button').style.display = 'flex';
+      this.searchLogs();
+    }
+  }
+
+  cancelSearchButtonPressed(): void {
+    this.searchModeEnabled = false;
+    document.getElementById('search-cancel-button').style.display = 'none';
+    this.offset = 0;
+    this.searchOffset = 0;
     this.getLogs();
-    if (!this.didGetNewContent) {
-      this.offset -= 50
+  }
+
+  searchLogs(): void {
+    this.logService.searchLog(this.searchOffset, this.searchQuery).subscribe(requests => {
+      this.logs = requests.data;
+      console.log(requests.data);
+      this.didGetNewContent = true;
+    });
+  }
+
+  nextPage(): void {
+    if (!this.searchModeEnabled) {
+      this.offset += 50;
+      this.getLogs();
+      if (!this.didGetNewContent) {
+        this.offset -= 50;
+      }
+    } else {
+      this.searchOffset += 50;
+      this.searchLogs();
+      if (!this.didGetNewContent) {
+        this.searchOffset -= 50;
+      }
     }
   }
 }

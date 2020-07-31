@@ -49,6 +49,8 @@ func CheckExcludedPaths(path string) bool {
 		"/goscope/api/logs",
 		"/goscope/api/logs/:id",
 		"/goscope/api/info",
+		"/goscope/api/search/logs",
+		"/goscope/api/search/requests",
 	}
 
 	for _, s := range items {

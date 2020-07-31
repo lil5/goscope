@@ -4,14 +4,14 @@ export function intervalToLevels(interval: number): string {
     units: ['d ', 'h ', 'm ', 's '],
   };
   const cbFun = (d, c) => {
-    let bb = d[1] % c[0],
-      aa = (d[1] - bb) / c[0];
+    const bb = d[1] % c[0];
+    let aa = (d[1] - bb) / c[0];
     aa = aa > 0 ? aa + c[1] : '';
     return [d[0] + aa, bb];
   };
   const rslt = levels.scale
     .map((d, i, a) => {
-      return a.slice(i).reduce((d, c) => d * c);
+      return a.slice(i).reduce((e, f) => e * f);
     })
     .map((d, i) => [d, levels.units[i]])
     .reduce(cbFun, ['', interval]);

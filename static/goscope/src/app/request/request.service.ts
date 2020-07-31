@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DetailedRequestResponse, Requests, RequestsEndpointResponse} from './requests';
+import {DetailedRequestResponse, RequestsEndpointResponse} from './requests';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
@@ -14,12 +14,16 @@ export class RequestService {
   }
 
   getRequests(offset: number): Observable<RequestsEndpointResponse> {
-    const options = { params: new HttpParams().set('offset', String(offset)) }
+    const options = {params: new HttpParams().set('offset', String(offset))};
     return this.http.get<RequestsEndpointResponse>(this.requestsUrl, options);
   }
-  searchRequest(query: string): Observable<RequestsEndpointResponse> {
-    return this.http.post<RequestsEndpointResponse>(this.searchRequestsUrl, {"query": query});
+
+  searchRequest(offset: number, query: string): Observable<RequestsEndpointResponse> {
+    const options = {params: new HttpParams().set('offset', String(offset))};
+    return this.http.post<RequestsEndpointResponse>(this.searchRequestsUrl, {query}, options);
   }
+
+
   getRequest(id: string): Observable<DetailedRequestResponse> {
     return this.http.get<DetailedRequestResponse>(`${this.requestsUrl}/${id}`);
   }

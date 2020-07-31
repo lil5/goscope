@@ -4,15 +4,18 @@ import {Requests} from '../requests';
 import {intervalToLevels} from '../../time-utils';
 
 @Component({
-  selector: 'request-request-list',
+  selector: 'app-request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss']
 })
 export class RequestListComponent implements OnInit {
   requests: Requests[];
   now: number;
-  offset: number = 0;
-  didGetNewContent: boolean = false;
+  offset = 0;
+  searchOffset = 0;
+  searchModeEnabled = false;
+  didGetNewContent = false;
+  searchQuery: string;
 
   constructor(private requestService: RequestService) {
   }
@@ -22,33 +25,80 @@ export class RequestListComponent implements OnInit {
     this.getRequests();
   }
 
+  updateSearchQuery(textChanged: any): void {
+    this.searchQuery = textChanged.target.value.trim();
+  }
+
+  searchButtonPressed(): void {
+    if (this.searchQuery !== '' && this.searchQuery){
+      this.searchModeEnabled = true;
+      document.getElementById('search-cancel-button').style.display = 'flex';
+      this.searchRequests();
+    }
+  }
+
+  cancelSearchButtonPressed(): void {
+    this.searchModeEnabled = false;
+    document.getElementById('search-cancel-button').style.display = 'none';
+    this.offset = 0;
+    this.searchOffset = 0;
+    this.getRequests();
+  }
+
+
+  searchRequests(): void {
+    this.requestService.searchRequest(this.searchOffset, this.searchQuery).subscribe(requests => {
+      this.requests = requests.data;
+      console.log(requests.data);
+      this.didGetNewContent = true;
+    });
+  }
+
   getRequests(): void {
     this.requestService.getRequests(this.offset).subscribe(requests => {
       if (requests.data !== null && requests.data.length > 0) {
-        this.requests = requests.data
-        console.log(requests.data)
-        this.didGetNewContent = true
+        this.requests = requests.data;
+        console.log(requests.data);
+        this.didGetNewContent = true;
       } else {
-        this.didGetNewContent = false
+        this.didGetNewContent = false;
       }
     });
   }
 
   previousPage(): void {
-    if (this.offset >= 50) {
-      this.offset -= 50
-      this.getRequests();
-      if (!this.didGetNewContent) {
-        this.offset += 50
+    if (!this.searchModeEnabled) {
+      if (this.offset >= 50) {
+        this.offset -= 50;
+        this.getRequests();
+        if (!this.didGetNewContent) {
+          this.offset += 50;
+        }
+      }
+    } else {
+      if (this.searchOffset >= 50) {
+        this.searchOffset -= 50;
+        this.searchRequests();
+        if (!this.didGetNewContent) {
+          this.searchOffset += 50;
+        }
       }
     }
   }
 
   nextPage(): void {
-    this.offset += 50
-    this.getRequests();
-    if (!this.didGetNewContent) {
-      this.offset -= 50
+    if (!this.searchModeEnabled) {
+      this.offset += 50;
+      this.getRequests();
+      if (!this.didGetNewContent) {
+        this.offset -= 50;
+      }
+    } else {
+      this.searchOffset += 50;
+      this.searchRequests();
+      if (!this.didGetNewContent) {
+        this.searchOffset -= 50;
+      }
     }
   }
 

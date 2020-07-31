@@ -59,6 +59,19 @@ func SearchRequest(c *gin.Context) {
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	result := SearchRequests(request.Query, int(offset))
 
+	entriesPerPage, _ := strconv.ParseInt(os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), 10, 32)
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"entriesPerPage":  entriesPerPage,
+		"data":            result,
+	}
+
 	c.Header("Access-Control-Allow-Origin", "*")
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, variables)
+}
+
+func SearchRequestOptions(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Headers", "*")
+	c.JSON(http.StatusOK, nil)
 }

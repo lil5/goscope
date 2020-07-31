@@ -85,3 +85,33 @@ fill: $main-highlight-color;
 
 .pagination-buttons {
 }
+
+.navbar-link {
+	text-decoration: none;
+	color: #fff;
+	border: none;
+}
+
+.active-navbar-link {
+	text-decoration: none;
+	color: $main-highlight-color;
+}
+
+.navbar-link:hover {
+	text-decoration: underline;
+	color: $main-highlight-color;
+}
+
+.search-input {
+	background: #232323;
+	color: #fff;
+	border-radius: 8px;
+	border-color: #454545;
+}
+
+.navbar-container {
+background: #333;
+font-family: 'Manrope', 'sans-serif';
+}
+
+

@@ -6,7 +6,7 @@ import {LogService} from '../log.service';
 import 'highlight.js/styles/dark.css';
 
 @Component({
-  selector: 'log-log-details',
+  selector: 'app-log-details',
   templateUrl: './log-details.component.html',
   styleUrls: ['./log-details.component.scss']
 })

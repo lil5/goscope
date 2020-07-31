@@ -63,6 +63,8 @@ func Setup(engine *gin.Engine) {
 	apiGroup.GET("/logs/:id", ShowLog)
 	apiGroup.GET("/requests", RequestList)
 	apiGroup.POST("/search/requests", SearchRequest)
+	apiGroup.OPTIONS("/search/requests", SearchRequestOptions)
 	apiGroup.POST("/search/logs", SearchLog)
+	apiGroup.OPTIONS("/search/logs", SearchLogOptions)
 	apiGroup.GET("/info", ShowSystemInfo)
 }
