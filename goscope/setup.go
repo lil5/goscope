@@ -58,6 +58,7 @@ func Setup(engine *gin.Engine) {
 	goscopeGroup.GET("/requests", ShowDashboard)
 
 	apiGroup := goscopeGroup.Group("/api")
+	apiGroup.GET("/application-name", GetAppName)
 	apiGroup.GET("/logs", LogList)
 	apiGroup.GET("/requests/:id", ShowRequest)
 	apiGroup.GET("/logs/:id", ShowLog)

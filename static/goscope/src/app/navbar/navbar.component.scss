@@ -29,10 +29,6 @@ $main-highlight-color: #7cc3bf;
 	border-color: #454545;
 }
 
-/* -----
-SVG Icons - svgicons.sparkk.fr
------ */
-
 .svg-icon {
 	width: 1em;
 	height: 1em;
@@ -51,8 +47,15 @@ SVG Icons - svgicons.sparkk.fr
 	stroke-width: 1;
 }
 .navbar-container {
-background: #333;
-font-family: 'Manrope', 'sans-serif';
+  background: #333;
+  font-family: 'Manrope', 'sans-serif';
+  justify-content: space-evenly;
 }
 
+.navbar-container::before {
+  content: "";
+}
 
+.navbar-container::after {
+  content: "";
+}

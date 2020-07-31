@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {RequestService} from '../request.service';
 import {Requests} from '../requests';
 import {intervalToLevels} from '../../time-utils';
@@ -6,7 +6,8 @@ import {intervalToLevels} from '../../time-utils';
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
-  styleUrls: ['./request-list.component.scss']
+  styleUrls: ['./request-list.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class RequestListComponent implements OnInit {
   requests: Requests[];

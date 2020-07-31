@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RequestService} from '../request/request.service';
+import {AppdetailsService} from './appdetails.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,13 +7,17 @@ import {RequestService} from '../request/request.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  applicationName = 'GoScope';
+  applicationName = '';
 
-  constructor(private requestService: RequestService) {
+  constructor(private appdetailsService: AppdetailsService) {
   }
 
   ngOnInit(): void {
+    this.getAppName();
   }
 
+  getAppName(): void {
+    this.appdetailsService.getApplicationName().subscribe(info => this.applicationName = info.applicationName);
+  }
 
 }

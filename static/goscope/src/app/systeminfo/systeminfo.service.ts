@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SystemInfoDetailsResponse} from './systeminfodetails';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SysteminfoService {
-  private infoUrl = '/goscope/api/info';
+  private infoUrl = environment.apiSysInfoUrl;
 
   constructor(private http: HttpClient) {
   }

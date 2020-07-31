@@ -1,6 +1,6 @@
-<div class="container p-3 m-3">
+<div class="container p-3 m-3 detailed-view">
   <span class="cursor-pointer navbar-link" (click)="goBack()">← Back</span><br/>
-  <h2>Request details</h2>
+  <br/><h2>Request details</h2><br/>
 
   <p>Client IP</p>
   <pre><code [highlight]>{{requestDetails.clientIP}}</code></pre>
@@ -26,7 +26,7 @@
   <pre><code [highlight]>{{requestDetails.body}}</code></pre>
 </div>
 
-<div class="container p-3 m-3">
+<div class="container p-3 m-3 detailed-view">
   <h2>Response details</h2>
   <p>Client IP</p>
   <pre><code [highlight]>{{responseDetails.clientIP}}</code></pre>

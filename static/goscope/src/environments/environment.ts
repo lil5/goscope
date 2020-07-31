@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiRequestsUrl: 'http://localhost:7004/goscope/api/requests',
+  apiSearchRequestsUrl: 'http://localhost:7004/goscope/api/search/requests',
+  apiLogsUrl: 'http://localhost:7004/goscope/api/logs',
+  apiSearchLogsUrl: 'http://localhost:7004/goscope/api/search/logs',
+  apiSysInfoUrl: 'http://localhost:7004/goscope/api/info',
+  apiApplicationNameUrl: 'http://localhost:7004/goscope/api/application-name'
 };
 
 /*
