@@ -23,5 +23,4 @@ matrix:
       install:
         - cd static/goscope && npm install
       script:
-        - cd static/goscope
         - ng lint
