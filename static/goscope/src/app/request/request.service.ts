@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 })
 export class RequestService {
   private requestsUrl = environment.apiRequestsUrl;
-  private searchRequestsUrl = environment.apiSearchLogsUrl;
+  private searchRequestsUrl = environment.apiSearchRequestsUrl;
 
   constructor(private http: HttpClient) {
   }

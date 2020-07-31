@@ -17,10 +17,11 @@ matrix:
     - language: node_js
       node_js:
         - 13
-      cache: npm
+      cache:
+        directories:
+          - ./static/goscope/node_modules
       install:
-        - npm
+        - cd static/goscope && npm install
       script:
         - cd static/goscope
-        - npm install
         - ng lint
