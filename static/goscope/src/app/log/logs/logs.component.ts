@@ -76,7 +76,6 @@ export class LogsComponent implements OnInit {
   searchLogs(): void {
     this.logService.searchLog(this.searchOffset, this.searchQuery).subscribe(requests => {
       this.logs = requests.data;
-      console.log(requests.data);
       this.didGetNewContent = true;
     });
   }

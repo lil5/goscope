@@ -50,7 +50,6 @@ export class RequestListComponent implements OnInit {
   searchRequests(): void {
     this.requestService.searchRequest(this.searchOffset, this.searchQuery).subscribe(requests => {
       this.requests = requests.data;
-      console.log(requests.data);
       this.didGetNewContent = true;
     });
   }
@@ -59,7 +58,6 @@ export class RequestListComponent implements OnInit {
     this.requestService.getRequests(this.offset).subscribe(requests => {
       if (requests.data !== null && requests.data.length > 0) {
         this.requests = requests.data;
-        console.log(requests.data);
         this.didGetNewContent = true;
       } else {
         this.didGetNewContent = false;
