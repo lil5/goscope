@@ -6,7 +6,6 @@ package goscope
 import (
 	"bytes"
 	"fmt"
-	"html"
 	"io"
 	"io/ioutil"
 	"log"
@@ -67,7 +66,13 @@ func writeLogs(message string) {
 	query := "INSERT INTO logs (uid, application, error, time) VALUES " +
 		"(?, ?, ?, ?)"
 
-	_, err := db.Exec(query, uid.String(), os.Getenv("APPLICATION_ID"), html.EscapeString(message), time.Now().Unix())
+	_, err := db.Exec(
+		query,
+		uid.String(),
+		os.Getenv("APPLICATION_ID"),
+		message,
+		time.Now().Unix(),
+	)
 	if err != nil {
 		log.Println(err.Error())
 	}

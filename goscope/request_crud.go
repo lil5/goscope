@@ -3,7 +3,6 @@ package goscope
 import (
 	"encoding/json"
 	"fmt"
-	"html"
 	"log"
 	"os"
 	"time"
@@ -41,8 +40,8 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 		log.Println(err.Error())
 	}
 
-	result.Body = prettifyJSON(html.UnescapeString(body))
-	result.Headers = html.UnescapeString(headers)
+	result.Body = prettifyJSON(body)
+	result.Headers = prettifyJSON(headers)
 
 	return result
 }
@@ -70,8 +69,8 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 		log.Println(err.Error())
 	}
 
-	result.Body = prettifyJSON(html.UnescapeString(body))
-	result.Headers = html.UnescapeString(headers)
+	result.Body = prettifyJSON(body)
+	result.Headers = prettifyJSON(headers)
 
 	return result
 }
@@ -117,9 +116,21 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
 		"headers, body, referrer, url, user_agent) VALUES " +
 		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	_, err := db.Exec(query, requestUID.String(), os.Getenv("APPLICATION_ID"), c.ClientIP(), c.Request.Method,
-		c.FullPath(), c.Request.Host, now, html.EscapeString(string(headers)), html.EscapeString(body),
-		c.Request.Referer(), c.Request.RequestURI, c.Request.UserAgent())
+	_, err := db.Exec(
+		query,
+		requestUID.String(),
+		os.Getenv("APPLICATION_ID"),
+		c.ClientIP(),
+		c.Request.Method,
+		c.FullPath(),
+		c.Request.Host,
+		now,
+		string(headers),
+		body,
+		c.Request.Referer(),
+		c.Request.RequestURI,
+		c.Request.UserAgent(),
+	)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -138,9 +149,9 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 		c.ClientIP(),
 		blw.Status(),
 		now,
-		html.EscapeString(blw.body.String()),
+		blw.body.String(),
 		c.FullPath(),
-		html.EscapeString(string(headers)),
+		string(headers),
 		blw.body.Len(),
 	)
 
