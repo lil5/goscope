@@ -41,7 +41,7 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 		log.Println(err.Error())
 	}
 
-	result.Body = html.UnescapeString(body)
+	result.Body = prettifyJSON(html.UnescapeString(body))
 	result.Headers = html.UnescapeString(headers)
 
 	return result
@@ -70,7 +70,7 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 		log.Println(err.Error())
 	}
 
-	result.Body = html.UnescapeString(body)
+	result.Body = prettifyJSON(html.UnescapeString(body))
 	result.Headers = html.UnescapeString(headers)
 
 	return result
