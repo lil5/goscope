@@ -10,64 +10,19 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
-func ShowDashboard(c *gin.Context, mode int) {
-	// Markup
-	var baseTemplate string
+func LogList(c *gin.Context) {
+	offsetQuery := c.DefaultQuery("offset", "0")
+	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
+	entriesPerPage, _ := strconv.ParseInt(os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), 10, 32)
 
-	if mode == LogDashboardMode {
-		logsView, _ := Asset("../static/html/log_dashboard.html")
-		baseTemplate = string(logsView)
-	} else {
-		requestView, _ := Asset("../static/html/request_dashboard.html")
-		baseTemplate = string(requestView)
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"entriesPerPage":  entriesPerPage,
+		"data":            GetLogs(int(offset)),
 	}
 
-	commonHeader, _ := Asset("../static/html/common_head.html")
-	footer, _ := Asset("../static/html/common_footer.html")
-	commonNavbar, _ := Asset("../static/html/common_navbar.html")
-	navbarVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
-	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
-	navbar := ReplaceVariablesInTemplate(string(commonNavbar), navbarVariables)
-	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
-	// Styles
-	highlightStyles, _ := Asset("../static/css/highlight.css")
-	goscopeStyles, _ := Asset("../static/css/goscope.css")
-	// Scripts
-	utilScripts, _ := Asset("../static/js/utils.js")
-	abstractDashboard, _ := Asset("../static/js/abstractDashboard.js")
-
-	var dashboardScript string
-
-	if mode == LogDashboardMode {
-		logsDashboard, _ := Asset("../static/js/logsDashboard.js")
-		dashboardScript = string(logsDashboard)
-	} else {
-		requestDashboard, _ := Asset("../static/js/requestDashboard.js")
-		dashboardScript = string(requestDashboard)
-	}
-
-	variables := map[string]string{
-		"APPLICATION_NAME":   os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":      MinifyHTML(header),
-		"HIGHLIGHT_STYLES":   MinifyCSS(string(highlightStyles)),
-		"GOSCOPE_STYLES":     MinifyCSS(string(goscopeStyles)),
-		"ENTRIES_PER_PAGE":   os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
-		"COMMON_NAVBAR":      MinifyHTML(navbar),
-		"COMMON_FOOTER":      MinifyHTML(string(footer)),
-		"UTIL_SCRIPTS":       MinifyJs(string(utilScripts)),
-		"ABSTRACT_DASHBOARD": MinifyJs(string(abstractDashboard)),
-	}
-	if mode == LogDashboardMode {
-		variables["LOG_DASHBOARD"] = dashboardScript
-	} else {
-		variables["REQUEST_DASHBOARD"] = dashboardScript
-	}
-
-	ShowGoScopePage(c, MinifyHTML(baseTemplate), variables)
-}
-
-func LogDashboard(c *gin.Context) {
-	ShowDashboard(c, LogDashboardMode)
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.JSON(http.StatusOK, variables)
 }
 
 func ShowLog(c *gin.Context) {
@@ -79,28 +34,16 @@ func ShowLog(c *gin.Context) {
 	}
 
 	logDetails := GetDetailedLog(request.UID)
-	// Markup
-	logView, _ := Asset("../static/html/single_log.html")
-	commonHeader, _ := Asset("../static/html/common_head.html")
-	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
-	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
-	// Styles
-	highlightStyles, _ := Asset("../static/css/highlight.css")
-	goscopeStyles, _ := Asset("../static/css/goscope.css")
-	// Scripts
-	singleLog, _ := Asset("../static/js/singleLog.js")
 
-	variables := map[string]string{
-		"APPLICATION_NAME": os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":    MinifyHTML(header),
-		"HIGHLIGHT_STYLES": MinifyCSS(string(highlightStyles)),
-		"GOSCOPE_STYLES":   MinifyCSS(string(goscopeStyles)),
-		"SINGLE_LOG":       MinifyJs(string(singleLog)),
-		"TIME":             UnixTimeToHuman(logDetails.Time),
-		"MESSAGE":          logDetails.Error,
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"data": gin.H{
+			"logDetails": logDetails,
+		},
 	}
 
-	ShowGoScopePage(c, MinifyHTML(string(logView)), variables)
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.JSON(http.StatusOK, variables)
 }
 
 func SearchLog(c *gin.Context) {
@@ -114,5 +57,21 @@ func SearchLog(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
 	result := SearchLogs(request.Query, int(offset))
-	c.JSON(http.StatusOK, result)
+
+	entriesPerPage, _ := strconv.ParseInt(os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"), 10, 32)
+
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"entriesPerPage":  entriesPerPage,
+		"data":            result,
+	}
+
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.JSON(http.StatusOK, variables)
+}
+
+func SearchLogOptions(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Headers", "*")
+	c.JSON(http.StatusOK, nil)
 }

@@ -1,0 +1,61 @@
+/*
+    License: MIT
+    Authors:
+        - Josep Bigorra (averageflow)
+ */
+
+$main-highlight-color: #7cc3bf;
+
+.navbar-link {
+	text-decoration: none;
+	color: #fff;
+	border: none;
+}
+
+.active-navbar-link {
+	text-decoration: none;
+	color: $main-highlight-color;
+}
+
+.navbar-link:hover {
+	text-decoration: underline;
+	color: $main-highlight-color;
+}
+
+.search-input {
+	background: #232323;
+	color: #fff;
+	border-radius: 8px;
+	border-color: #454545;
+}
+
+.svg-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.svg-icon {
+	fill: #fff;
+}
+
+.svg-icon:hover {
+	fill: $main-highlight-color;
+}
+
+.svg-icon circle {
+	stroke: #ffffff;
+	stroke-width: 1;
+}
+.navbar-container {
+  background: #333;
+  font-family: 'Manrope', 'sans-serif';
+  justify-content: space-evenly;
+}
+
+.navbar-container::before {
+  content: "";
+}
+
+.navbar-container::after {
+  content: "";
+}

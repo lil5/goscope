@@ -11,14 +11,16 @@ matrix:
       install: true
       script:
         - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.29.0
-        - $(go env GOPATH)/bin/golangci-lint run -p=bugs,complexity,format,performance,style,unused
+        - $(go env GOPATH)/bin/golangci-lint run
         - go build -o app
 
     - language: node_js
       node_js:
         - 13
-      cache: yarn
+      cache: npm
       install:
-        - yarn
+        - npm
       script:
-        - yarn run lint:test
+        - cd static/goscope
+        - npm install
+        - ng lint

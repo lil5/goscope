@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"html"
 	"log"
-	"net/http"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/averageflow/goscope/repository"
@@ -43,7 +41,7 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 		log.Println(err.Error())
 	}
 
-	result.Body = html.UnescapeString(body)
+	result.Body = prettifyJSON(html.UnescapeString(body))
 	result.Headers = html.UnescapeString(headers)
 
 	return result
@@ -72,24 +70,21 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 		log.Println(err.Error())
 	}
 
-	result.Body = html.UnescapeString(body)
+	result.Body = prettifyJSON(html.UnescapeString(body))
 	result.Headers = html.UnescapeString(headers)
 
 	return result
 }
 
-func GetRequests(c *gin.Context) {
-	offsetQuery := c.DefaultQuery("offset", "0")
-	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	rows := repository.GetRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), int(offset))
+func GetRequests(offset int) []SummarizedRequest {
+	var result []SummarizedRequest
+
+	rows := repository.GetRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
 
 	if rows == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error querying DB"})
-		return
+		return result
 	}
 	defer rows.Close()
-
-	var result []SummarizedRequest
 
 	for rows.Next() {
 		var request SummarizedRequest
@@ -103,12 +98,13 @@ func GetRequests(c *gin.Context) {
 		)
 		if err != nil {
 			log.Println(err.Error())
+			return result
 		}
 
 		result = append(result, request)
 	}
 
-	c.JSON(http.StatusOK, result)
+	return result
 }
 
 func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {

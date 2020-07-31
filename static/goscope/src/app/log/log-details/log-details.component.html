@@ -1,0 +1,8 @@
+<div class="container p-3 m-3 detailed-view">
+  <span class="cursor-pointer navbar-link" (click)="goBack()">← Back</span><br/>
+  <br/><h2>Log details</h2><br/>
+  <p>Message</p>
+  <pre><code [highlight]>{{logDetails.data.logDetails.error}}</code></pre>
+  <p>Time</p>
+  <pre><code [highlight]>{{logDetails.data.logDetails.time}}</code></pre>
+</div>

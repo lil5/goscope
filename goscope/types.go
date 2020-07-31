@@ -25,7 +25,7 @@ type SummarizedRequest struct {
 	Path           string `json:"path"`
 	Time           int    `json:"time"`
 	UID            string `json:"uid"`
-	ResponseStatus int    `json:"response_status"`
+	ResponseStatus int    `json:"responseStatus"`
 }
 
 type RecordByURI struct {
@@ -33,8 +33,8 @@ type RecordByURI struct {
 }
 
 type SummarizedResponse struct {
-	RequestUID string `json:"request_uid"`
-	ClientIP   string `json:"client_ip"`
+	RequestUID string `json:"requestUID"`
+	ClientIP   string `json:"clientIP"`
 	Path       string `json:"path"`
 	Status     string `json:"status"`
 	Time       int    `json:"time"`
@@ -43,19 +43,19 @@ type SummarizedResponse struct {
 
 type DetailedResponse struct {
 	Body       string `json:"body"`
-	ClientIP   string `json:"client_ip"`
+	ClientIP   string `json:"clientIP"`
 	Headers    string `json:"headers"`
 	Path       string `json:"path"`
 	Size       int    `json:"size"`
 	Status     string `json:"status"`
 	Time       int    `json:"time"`
-	RequestUID string `json:"request_uid"`
+	RequestUID string `json:"requestUID"`
 	UID        string `json:"uid"`
 }
 
 type DetailedRequest struct {
 	Body      string `json:"body"`
-	ClientIP  string `json:"client_ip"`
+	ClientIP  string `json:"clientIP"`
 	Headers   string `json:"headers"`
 	Host      string `json:"host"`
 	Method    string `json:"method"`
@@ -64,7 +64,7 @@ type DetailedRequest struct {
 	Time      int    `json:"time"`
 	UID       string `json:"uid"`
 	URL       string `json:"url"`
-	UserAgent string `json:""`
+	UserAgent string `json:"userAgent"`
 }
 
 type BodyLogWriter struct {

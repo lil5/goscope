@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func GetDetailedLog(connection string, requestUID string) *sql.Row {
+func GetDetailedLog(connection, requestUID string) *sql.Row {
 	db := GetDB()
 	defer db.Close()
 
@@ -22,7 +22,7 @@ func GetDetailedLog(connection string, requestUID string) *sql.Row {
 	return row
 }
 
-func SearchLogs(connection string, searchWildcard string, offset int) *sql.Rows {
+func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
 	db := GetDB()
 	defer db.Close()
 

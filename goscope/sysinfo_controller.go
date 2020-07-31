@@ -2,6 +2,7 @@ package goscope
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -16,43 +17,46 @@ const (
 	SecondsInOneMinute = 60
 )
 
+func GetAppName(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.JSON(http.StatusOK, gin.H{"applicationName": os.Getenv("APPLICATION_NAME")})
+}
+
 // Show system information of the current host.
 func ShowSystemInfo(c *gin.Context) {
-	// Markup
-	sysinfoView, _ := Asset("../static/html/system_info.html")
-	commonHeader, _ := Asset("../static/html/common_head.html")
-	headerVariables := map[string]string{"APPLICATION_NAME": os.Getenv("APPLICATION_NAME")}
-	header := ReplaceVariablesInTemplate(string(commonHeader), headerVariables)
-	// Styles
-	highlightStyles, _ := Asset("../static/css/highlight.css")
-	goscopeStyles, _ := Asset("../static/css/goscope.css")
-
 	cpuStatus, _ := cpu.Info()
 	firstCPU := cpuStatus[0]
 	memoryStatus, _ := mem.VirtualMemory()
 	swapStatus, _ := mem.SwapMemory()
 	hostStatus, _ := host.Info()
 	diskStatus, _ := disk.Usage("/")
-	variables := map[string]string{
-		"APPLICATION_NAME":    os.Getenv("APPLICATION_NAME"),
-		"COMMON_HEADER":       MinifyHTML(header),
-		"CPU_CORE_COUNT":      fmt.Sprintf("%d Cores", firstCPU.Cores),
-		"CPU_MODEL_NAME":      firstCPU.ModelName,
-		"DISK_FREE":           fmt.Sprintf("%.2f GB", float64(diskStatus.Free)/BytesInOneGigabyte),
-		"DISK_PARTITION_TYPE": diskStatus.Fstype,
-		"DISK_PATH":           diskStatus.Path,
-		"DISK_TOTAL":          fmt.Sprintf("%.2f GB", float64(diskStatus.Total)/BytesInOneGigabyte),
-		"GOSCOPE_STYLES":      MinifyCSS(string(goscopeStyles)),
-		"HIGHLIGHT_STYLES":    MinifyCSS(string(highlightStyles)),
-		"HOST_KERNEL_ARCH":    hostStatus.KernelArch,
-		"HOST_KERNEL_VERSION": hostStatus.KernelVersion,
-		"HOST_NAME":           hostStatus.Hostname,
-		"HOST_OS":             hostStatus.OS,
-		"HOST_PLATFORM":       hostStatus.Platform,
-		"HOST_UPTIME":         fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/SecondsInOneMinute/SecondsInOneMinute),
-		"MEMORY_AVAILABLE":    fmt.Sprintf("%.2f GB", float64(memoryStatus.Available)/BytesInOneGigabyte),
-		"MEMORY_TOTAL":        fmt.Sprintf("%.2f GB", float64(memoryStatus.Total)/BytesInOneGigabyte),
-		"SWAP_USED":           fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),
+	variables := gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"cpu": gin.H{
+			"coreCount": fmt.Sprintf("%d Cores", firstCPU.Cores),
+			"modelName": firstCPU.ModelName,
+		},
+		"disk": gin.H{
+			"freeSpace":     fmt.Sprintf("%.2f GB", float64(diskStatus.Free)/BytesInOneGigabyte),
+			"partitionType": diskStatus.Fstype,
+			"mountPath":     diskStatus.Path,
+			"totalSpace":    fmt.Sprintf("%.2f GB", float64(diskStatus.Total)/BytesInOneGigabyte),
+		},
+		"host": gin.H{
+			"kernelArch":    hostStatus.KernelArch,
+			"kernelVersion": hostStatus.KernelVersion,
+			"hostname":      hostStatus.Hostname,
+			"hostOS":        hostStatus.OS,
+			"hostPlatform":  hostStatus.Platform,
+			"uptime":        fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/SecondsInOneMinute/SecondsInOneMinute),
+		},
+		"memory": gin.H{
+			"availableMemory": fmt.Sprintf("%.2f GB", float64(memoryStatus.Available)/BytesInOneGigabyte),
+			"totalMemory":     fmt.Sprintf("%.2f GB", float64(memoryStatus.Total)/BytesInOneGigabyte),
+			"usedSwap":        fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),
+		},
 	}
-	ShowGoScopePage(c, MinifyHTML(string(sysinfoView)), variables)
+
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.JSON(http.StatusOK, variables)
 }
