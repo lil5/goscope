@@ -17,6 +17,9 @@ func CheckExcludedPaths(path string) bool {
 	items := []string{
 		"",
 		"/goscope/",
+		"/goscope/1.js",
+		"/goscope/2.js",
+		"/goscope/3.js",
 		"/goscope/log-records",
 		"/goscope/log-records/:id",
 		"/goscope/logs",
