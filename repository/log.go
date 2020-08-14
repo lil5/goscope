@@ -11,7 +11,7 @@ func GetDetailedLog(connection, requestUID string) *sql.Row {
 	defer db.Close()
 
 	var query string
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `error`, `time` FROM `logs` WHERE `uid` = ?;"
 	} else if connection == PostgreSQL {
 		query = `SELECT "uid", "error", "time" FROM "logs" WHERE "uid" = ?;`
@@ -39,6 +39,12 @@ func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
 			("uid" LIKE ? OR "application" LIKE ?
 			OR "error" LIKE ? OR "time" LIKE ?)
 			ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+	} else if connection == SQLite {
+		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN SUBSTR(`error`, 1, 80) || '...' " +
+			"ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = ? AND " +
+			"(`uid` LIKE ? OR `application` LIKE ? " +
+			"OR `error` LIKE ? OR `time` LIKE ?) " +
+			"ORDER BY `time` DESC LIMIT ? OFFSET ?;"
 	}
 
 	rows, err := db.Query(
@@ -70,6 +76,10 @@ func GetLogs(connection string, offset int) *sql.Rows {
 		query = `SELECT "uid", CASE WHEN LENGTH("error") > 80 THEN CONCAT(SUBSTRING("error", 1, 80), '...') 
 		ELSE "error" END AS "error", "time" FROM "logs" WHERE "application" = ?
 		ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+	} else if connection == SQLite {
+		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN SUBSTR(`error`, 1, 80) || '...' " +
+			"ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = ? " +
+			"ORDER BY `time` DESC LIMIT ? OFFSET ?;"
 	}
 
 	rows, err := db.Query(

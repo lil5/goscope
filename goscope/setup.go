@@ -14,6 +14,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	// Import PostgreSQL Driver
 	_ "github.com/lib/pq"
+	// Import SQLite driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // Ensure necessary application variables are set.

@@ -19,15 +19,21 @@ The application requires that your `.env` file contains the following variables:
 APPLICATION_ID: "application-id"
 APPLICATION_NAME: "Your Application Name"
 APPLICATION_TIMEZONE: "Europe/Amsterdam"
-GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
+# for MySQL
+GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"  
 GOSCOPE_DATABASE_TYPE: "mysql"
+# for SQLite
+GOSCOPE_DATABASE_CONNECTION: "file:/Users/joe/workspace/goscope/setup/sqlite.sqlite" 
+GOSCOPE_DATABASE_TYPE: "sqlite3"
+
 GOSCOPE_ENTRIES_PER_PAGE: 50
 ```
 
 GoScope has been extended to work with a repository pattern, thus has the capability of supporting any database driver/engine that will work with Go and uses the `sql` package (returning `*sql.Rows` or `*sql.Row`). 
 NoSQL databases are currently not supported, although we think that it would be a great addition, so if you have the know-how please don't hesitate to make a Pull Request.
-In the .env file you can specify either the `mysql` driver or `postgres` driver, which will use the `github.com/go-sql-driver/mysql` or `github.com/lib/pq`
-The application expects a database with a setup that can be recreated by taking a look at the `mysql-setup.sql` file in the root of this repository.
+In the .env file you can specify either the `mysql` driver, `postgres` driver, or `sqlite3` driver, which will use the `github.com/go-sql-driver/mysql`, `github.com/lib/pq` or `github.com/mattn/go-sqlite3` respectively. Ensure you have the correct connection string in your env file.
+
+The application expects a database with a setup that can be recreated by taking a look at the `setup` folder in the root of this repository.
 
 ### Example
 Example implementation code, please note that you should use plain gin without middlewares, since GoScope will use Gin Gonic's logger and recovery middlewares, but with a customized twist, thus the requirement is that initially you have a clean `gin.Engine` instance.

@@ -7,19 +7,8 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
 	"os"
-	"regexp"
-	"strings"
-	"time"
-
-	"github.com/gin-gonic/gin"
-	"github.com/tdewolff/minify/v2"
-	"github.com/tdewolff/minify/v2/css"
-	"github.com/tdewolff/minify/v2/html"
-	"github.com/tdewolff/minify/v2/js"
 )
 
 // Check the wanted path is not in the do not log list.
@@ -68,19 +57,6 @@ func CheckExcludedPaths(path string) bool {
 	return result
 }
 
-func UnixTimeToHuman(rawTime int) string {
-	loc, err := time.LoadLocation(os.Getenv("APPLICATION_TIMEZONE"))
-	if err != nil {
-		log.Println(err.Error())
-
-		loc, _ = time.LoadLocation("Europe/Amsterdam")
-	}
-
-	timeInstance := time.Unix(int64(rawTime), 0)
-
-	return timeInstance.In(loc).Format("15:04:05 Mon, 2 Jan 2006 ")
-}
-
 func prettifyJSON(rawString string) string {
 	if rawString == "" {
 		return ""
@@ -95,14 +71,6 @@ func prettifyJSON(rawString string) string {
 	}
 
 	return prettyJSON.String()
-}
-
-func ReplaceVariablesInTemplate(rawTemplate string, variables map[string]string) string {
-	for i, s := range variables {
-		rawTemplate = strings.ReplaceAll(rawTemplate, fmt.Sprintf("{{.%s}}", i), s)
-	}
-
-	return rawTemplate
 }
 
 func GetDB() *sql.DB {
@@ -120,49 +88,4 @@ func GetDB() *sql.DB {
 	}
 
 	return db
-}
-
-func MinifyCSS(uncompressed string) string {
-	m := minify.New()
-	m.AddFunc("text/css", css.Minify)
-	minified, err := m.String("text/css", uncompressed)
-
-	if err != nil {
-		log.Println(err.Error())
-		return ""
-	}
-
-	return minified
-}
-
-func MinifyJs(uncompressed string) string {
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("^(application|text)/(x-)?(java|ecma)script$"), js.Minify)
-	minified, err := m.String("application/javascript", uncompressed)
-
-	if err != nil {
-		log.Println(err.Error())
-		return ""
-	}
-
-	return minified
-}
-
-func MinifyHTML(uncompressed string) string {
-	m := minify.New()
-	m.AddFunc("text/html", html.Minify)
-	minified, err := m.String("text/html", uncompressed)
-
-	if err != nil {
-		log.Println(err.Error())
-		return ""
-	}
-
-	return minified
-}
-
-func ShowGoScopePage(c *gin.Context, rawTemplate string, variables map[string]string) {
-	cleanTemplate := ReplaceVariablesInTemplate(rawTemplate, variables)
-	reader := strings.NewReader(cleanTemplate)
-	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }

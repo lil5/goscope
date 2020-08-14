@@ -11,7 +11,7 @@ func GetDetailedRequest(connection, requestUID string) *sql.Row {
 	defer db.Close()
 
 	var query string
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `client_ip`, `method`, `path`, `url`, " +
 			"`host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = ? LIMIT 1;"
 	} else if connection == PostgreSQL {
@@ -29,16 +29,16 @@ func GetRequests(connection string, offset int) *sql.Rows {
 	defer db.Close()
 
 	var query string
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
 			"`responses`.`status` FROM `requests` " +
 			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
-			"WHERE `requests`.`application` = ? ORDER BY `time` DESC LIMIT ? OFFSET ?;"
+			"WHERE `requests`.`application` = ? ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
 	} else if connection == PostgreSQL {
 		query = `SELECT "requests"."uid", "requests"."method", "requests"."path", "requests"."time", 
 			"responses"."status" FROM "requests" 
 			INNER JOIN "responses" ON "requests"."uid" = "responses"."request_uid" 
-			WHERE "requests"."application" = ? ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+			WHERE "requests"."application" = ? ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
 	}
 
 	rows, err := db.Query(
@@ -64,7 +64,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 
 	var query string
 
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
 			"`responses`.`status` FROM `requests` " +
 			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
@@ -80,7 +80,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 			"OR `responses`.`status` LIKE ? " +
 			"OR `responses`.`body` LIKE ? OR `responses`.`path` LIKE ? " +
 			"OR `responses`.`headers` LIKE ? OR `responses`.`size` LIKE ? " +
-			"OR `responses`.`time` LIKE ?) ORDER BY `time` DESC LIMIT ? OFFSET ?;"
+			"OR `responses`.`time` LIKE ?) ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
 	} else if connection == PostgreSQL {
 		query = `SELECT "requests"."uid", "requests"."method", "requests"."path", 
 			"requests"."time", "responses"."status" FROM "requests" 
@@ -97,7 +97,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 			OR "responses"."status" LIKE ? 
 			OR "responses"."body" LIKE ? OR "responses"."path" LIKE ? 
 			OR "responses"."headers" LIKE ? OR "responses"."size" LIKE ?
-			OR "responses"."time" LIKE ?) ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+			OR "responses"."time" LIKE ?) ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
 	}
 
 	rows, err := db.Query(
@@ -127,7 +127,7 @@ func GetDetailedResponse(connection, requestUID string) *sql.Row {
 
 	var query string
 
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `client_ip`, `status`, `time`, " +
 			"`body`, `path`, `headers`, `size` FROM `responses` " +
 			"WHERE `request_uid` = ? LIMIT 1;"
