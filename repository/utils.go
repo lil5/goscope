@@ -4,6 +4,13 @@ import (
 	"database/sql"
 	"log"
 	"os"
+
+	// Import MYSQL Driver
+	_ "github.com/go-sql-driver/mysql"
+	// Import PostgreSQL Driver
+	_ "github.com/lib/pq"
+	// Import SQLite driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func GetDB() *sql.DB {

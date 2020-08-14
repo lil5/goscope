@@ -11,7 +11,7 @@ func GetDetailedRequest(connection, requestUID string) *sql.Row {
 	defer db.Close()
 
 	var query string
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `client_ip`, `method`, `path`, `url`, " +
 			"`host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = ? LIMIT 1;"
 	} else if connection == PostgreSQL {
@@ -29,7 +29,7 @@ func GetRequests(connection string, offset int) *sql.Rows {
 	defer db.Close()
 
 	var query string
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
 			"`responses`.`status` FROM `requests` " +
 			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
@@ -64,7 +64,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 
 	var query string
 
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
 			"`responses`.`status` FROM `requests` " +
 			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
@@ -127,7 +127,7 @@ func GetDetailedResponse(connection, requestUID string) *sql.Row {
 
 	var query string
 
-	if connection == MySQL {
+	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `client_ip`, `status`, `time`, " +
 			"`body`, `path`, `headers`, `size` FROM `responses` " +
 			"WHERE `request_uid` = ? LIMIT 1;"

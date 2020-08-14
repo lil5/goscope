@@ -8,6 +8,7 @@ require (
 	github.com/google/go-cmp v0.5.1 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/lib/pq v1.7.0
+	github.com/mattn/go-sqlite3 v1.14.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/shirou/gopsutil v2.20.6+incompatible
 	github.com/shuLhan/go-bindata v3.4.0+incompatible // indirect
