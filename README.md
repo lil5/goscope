@@ -19,8 +19,13 @@ The application requires that your `.env` file contains the following variables:
 APPLICATION_ID: "application-id"
 APPLICATION_NAME: "Your Application Name"
 APPLICATION_TIMEZONE: "Europe/Amsterdam"
-GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"
+# for MySQL
+GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"  
 GOSCOPE_DATABASE_TYPE: "mysql"
+# for SQLite
+GOSCOPE_DATABASE_CONNECTION: "file:/Users/joe/workspace/goscope/setup/sqlite.sqlite" 
+GOSCOPE_DATABASE_TYPE: "sqlite3"
+
 GOSCOPE_ENTRIES_PER_PAGE: 50
 ```
 
