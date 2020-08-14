@@ -33,12 +33,12 @@ func GetRequests(connection string, offset int) *sql.Rows {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
 			"`responses`.`status` FROM `requests` " +
 			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
-			"WHERE `requests`.`application` = ? ORDER BY `time` DESC LIMIT ? OFFSET ?;"
+			"WHERE `requests`.`application` = ? ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
 	} else if connection == PostgreSQL {
 		query = `SELECT "requests"."uid", "requests"."method", "requests"."path", "requests"."time", 
 			"responses"."status" FROM "requests" 
 			INNER JOIN "responses" ON "requests"."uid" = "responses"."request_uid" 
-			WHERE "requests"."application" = ? ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+			WHERE "requests"."application" = ? ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
 	}
 
 	rows, err := db.Query(
@@ -80,7 +80,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 			"OR `responses`.`status` LIKE ? " +
 			"OR `responses`.`body` LIKE ? OR `responses`.`path` LIKE ? " +
 			"OR `responses`.`headers` LIKE ? OR `responses`.`size` LIKE ? " +
-			"OR `responses`.`time` LIKE ?) ORDER BY `time` DESC LIMIT ? OFFSET ?;"
+			"OR `responses`.`time` LIKE ?) ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
 	} else if connection == PostgreSQL {
 		query = `SELECT "requests"."uid", "requests"."method", "requests"."path", 
 			"requests"."time", "responses"."status" FROM "requests" 
@@ -97,7 +97,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 			OR "responses"."status" LIKE ? 
 			OR "responses"."body" LIKE ? OR "responses"."path" LIKE ? 
 			OR "responses"."headers" LIKE ? OR "responses"."size" LIKE ?
-			OR "responses"."time" LIKE ?) ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+			OR "responses"."time" LIKE ?) ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
 	}
 
 	rows, err := db.Query(

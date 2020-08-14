@@ -12,7 +12,6 @@ require (
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/shirou/gopsutil v2.20.6+incompatible
 	github.com/shuLhan/go-bindata v3.4.0+incompatible // indirect
-	github.com/tdewolff/minify/v2 v2.7.6
 	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305 // indirect
 	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f // indirect
 )

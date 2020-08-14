@@ -27,7 +27,7 @@ func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
 	defer db.Close()
 
 	var query string
-	if connection == MySQL || connection == SQLite {
+	if connection == MySQL {
 		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') " +
 			"ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = ? AND " +
 			"(`uid` LIKE ? OR `application` LIKE ? " +
@@ -39,6 +39,12 @@ func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
 			("uid" LIKE ? OR "application" LIKE ?
 			OR "error" LIKE ? OR "time" LIKE ?)
 			ORDER BY "time" DESC LIMIT ? OFFSET ?;`
+	} else if connection == SQLite {
+		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN SUBSTR(`error`, 1, 80) || '...' " +
+			"ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = ? AND " +
+			"(`uid` LIKE ? OR `application` LIKE ? " +
+			"OR `error` LIKE ? OR `time` LIKE ?) " +
+			"ORDER BY `time` DESC LIMIT ? OFFSET ?;"
 	}
 
 	rows, err := db.Query(
