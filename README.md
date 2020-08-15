@@ -71,6 +71,9 @@ Thus you only need to call your usual `log.Println` or `log.Printf` statements o
 
 ![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
 
+### Contributing
+
+Your help and ideas are needed to keep this project moving forward to become a more powerful tool commit by commit. Any bug that you may find is something that will make GoScope more robust. Whether you are more front-end or back-end there is work here for you. Take a look at the [contributing guidelines](CONTRIBUTING.md)
 
 ### API Documentation
 
