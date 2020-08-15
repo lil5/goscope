@@ -11,9 +11,9 @@ import {intervalToLevels} from '../../time-utils';
 export class LogsComponent implements OnInit {
   logs: LogRecord[];
   now: number;
-  offset = 0;
+  page = 1;
   didGetNewContent = false;
-  searchOffset = 0;
+  searchPage = 0;
   searchModeEnabled = false;
   searchQuery: string;
 
@@ -26,7 +26,7 @@ export class LogsComponent implements OnInit {
   }
 
   getLogs(): void {
-    this.logService.getLogs(this.offset).subscribe(logs => this.logs = logs.data);
+    this.logService.getLogs(this.page).subscribe(logs => this.logs = logs.data);
   }
 
   timeDiffToHuman(value: number): string {
@@ -35,20 +35,14 @@ export class LogsComponent implements OnInit {
 
   previousPage(): void {
     if (!this.searchModeEnabled) {
-      if (this.offset >= 50) {
-        this.offset -= 50;
+      if (this.page > 1) {
+        this.page--;
         this.getLogs();
-        if (!this.didGetNewContent) {
-          this.offset += 50;
-        }
       }
     } else {
-      if (this.searchOffset >= 50) {
-        this.searchOffset -= 50;
+      if (this.searchPage > 1) {
+        this.searchPage--;
         this.getLogs();
-        if (!this.didGetNewContent) {
-          this.searchOffset += 50;
-        }
       }
     }
   }
@@ -61,6 +55,7 @@ export class LogsComponent implements OnInit {
     if (this.searchQuery !== '' && this.searchQuery) {
       this.searchModeEnabled = true;
       document.getElementById('search-cancel-button').style.display = 'flex';
+      this.searchPage = 1;
       this.searchLogs();
     }
   }
@@ -68,30 +63,26 @@ export class LogsComponent implements OnInit {
   cancelSearchButtonPressed(): void {
     this.searchModeEnabled = false;
     document.getElementById('search-cancel-button').style.display = 'none';
-    this.offset = 0;
-    this.searchOffset = 0;
+    this.page = 1;
+    this.searchPage = 1;
     this.getLogs();
   }
 
   searchLogs(): void {
-    this.logService.searchLog(this.searchOffset, this.searchQuery).subscribe(requests => {
+    this.logService.searchLog(this.searchPage, this.searchQuery).subscribe(requests => {
       this.logs = requests.data;
       this.didGetNewContent = true;
     });
   }
 
   nextPage(): void {
-    if (!this.searchModeEnabled) {
-      this.offset += 50;
-      this.getLogs();
-      if (!this.didGetNewContent) {
-        this.offset -= 50;
-      }
-    } else {
-      this.searchOffset += 50;
-      this.searchLogs();
-      if (!this.didGetNewContent) {
-        this.searchOffset -= 50;
+    if (this.didGetNewContent) {
+      if (!this.searchModeEnabled) {
+        this.page++;
+        this.getLogs();
+      } else {
+        this.searchPage++;
+        this.searchLogs();
       }
     }
   }
