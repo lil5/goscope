@@ -9,11 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	LogDashboardMode = iota
-	RequestDashboardMode
-)
-
 type ExceptionRecord struct {
 	Error string `json:"error"`
 	Time  int    `json:"time"`
@@ -80,4 +75,36 @@ func (w BodyLogWriter) Write(b []byte) (int, error) {
 
 type SearchRequestPayload struct {
 	Query string `json:"query"`
+}
+
+type SystemInformationResponse struct {
+	ApplicationName string                          `json:"applicationName"`
+	CPU             SystemInformationResponseCPU    `json:"cpu"`
+	Disk            SystemInformationResponseDisk   `json:"disk"`
+	Host            SystemInformationResponseHost   `json:"host"`
+	Memory          SystemInformationResponseMemory `json:"memory"`
+}
+
+type SystemInformationResponseCPU struct {
+	CoreCount string `json:"coreCount"`
+	ModelName string `json:"modelName"`
+}
+type SystemInformationResponseDisk struct {
+	FreeSpace     string `json:"freeSpace"`
+	MountPath     string `json:"mountPath"`
+	PartitionType string `json:"partitionType"`
+	TotalSpace    string `json:"totalSpace"`
+}
+type SystemInformationResponseMemory struct {
+	Available string `json:"availableMemory"`
+	Total     string `json:"totalMemory"`
+	UsedSwap  string `json:"usedSwap"`
+}
+type SystemInformationResponseHost struct {
+	HostOS        string `json:"hostOS"`
+	HostPlatform  string `json:"hostPlatform"`
+	Hostname      string `json:"hostname"`
+	KernelArch    string `json:"kernelArch"`
+	KernelVersion string `json:"kernelVersion"`
+	Uptime        string `json:"uptime"`
 }

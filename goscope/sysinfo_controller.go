@@ -30,33 +30,34 @@ func ShowSystemInfo(c *gin.Context) {
 	swapStatus, _ := mem.SwapMemory()
 	hostStatus, _ := host.Info()
 	diskStatus, _ := disk.Usage("/")
-	variables := gin.H{
-		"applicationName": os.Getenv("APPLICATION_NAME"),
-		"cpu": gin.H{
-			"coreCount": fmt.Sprintf("%d Cores", firstCPU.Cores),
-			"modelName": firstCPU.ModelName,
+
+	responseBody := SystemInformationResponse{
+		ApplicationName: os.Getenv("APPLICATION_NAME"),
+		CPU: SystemInformationResponseCPU{
+			CoreCount: fmt.Sprintf("%d Cores", firstCPU.Cores),
+			ModelName: firstCPU.ModelName,
 		},
-		"disk": gin.H{
-			"freeSpace":     fmt.Sprintf("%.2f GB", float64(diskStatus.Free)/BytesInOneGigabyte),
-			"partitionType": diskStatus.Fstype,
-			"mountPath":     diskStatus.Path,
-			"totalSpace":    fmt.Sprintf("%.2f GB", float64(diskStatus.Total)/BytesInOneGigabyte),
+		Memory: SystemInformationResponseMemory{
+			Available: fmt.Sprintf("%.2f GB", float64(memoryStatus.Available)/BytesInOneGigabyte),
+			Total:     fmt.Sprintf("%.2f GB", float64(memoryStatus.Total)/BytesInOneGigabyte),
+			UsedSwap:  fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),
 		},
-		"host": gin.H{
-			"kernelArch":    hostStatus.KernelArch,
-			"kernelVersion": hostStatus.KernelVersion,
-			"hostname":      hostStatus.Hostname,
-			"hostOS":        hostStatus.OS,
-			"hostPlatform":  hostStatus.Platform,
-			"uptime":        fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/SecondsInOneMinute/SecondsInOneMinute),
+		Host: SystemInformationResponseHost{
+			HostOS:        hostStatus.OS,
+			HostPlatform:  hostStatus.Platform,
+			Hostname:      hostStatus.Hostname,
+			KernelArch:    hostStatus.KernelArch,
+			KernelVersion: hostStatus.KernelVersion,
+			Uptime:        fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/SecondsInOneMinute/SecondsInOneMinute),
 		},
-		"memory": gin.H{
-			"availableMemory": fmt.Sprintf("%.2f GB", float64(memoryStatus.Available)/BytesInOneGigabyte),
-			"totalMemory":     fmt.Sprintf("%.2f GB", float64(memoryStatus.Total)/BytesInOneGigabyte),
-			"usedSwap":        fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),
+		Disk: SystemInformationResponseDisk{
+			FreeSpace:     fmt.Sprintf("%.2f GB", float64(diskStatus.Free)/BytesInOneGigabyte),
+			MountPath:     diskStatus.Path,
+			PartitionType: diskStatus.Fstype,
+			TotalSpace:    fmt.Sprintf("%.2f GB", float64(diskStatus.Total)/BytesInOneGigabyte),
 		},
 	}
 
 	c.Header("Access-Control-Allow-Origin", "*")
-	c.JSON(http.StatusOK, variables)
+	c.JSON(http.StatusOK, responseBody)
 }
