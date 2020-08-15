@@ -1,7 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~highlight.js/styles/darcula.css';
 
-$main-highlight-color: #7cc3bf;
+:root {
+  --links: #7CC3BF;
+}
+@media (prefers-color-scheme: light) {
+  :root{
+    --links: #6CA8A5;
+  }
+}
+
+.text-center{
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
 
 code {
   font-family: 'Fira Mono', monospace;
@@ -49,9 +63,12 @@ code {
   background-color: #684f1d;
 }
 
-.eye-image {
-  fill: #fff;
+.svg-icon {
+  fill: var(--text-main);
 }
-.eye-image:hover {
-  fill: $main-highlight-color;
+button:hover,
+a:hover {
+  & .svg-icon {
+    fill: var(--links) !important;
+  }
 }
