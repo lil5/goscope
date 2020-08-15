@@ -1,16 +1,17 @@
-<div class="flex align-items-center text-center justify-content-center">
+<section>
+<div>
   <input
     (change)="updateSearchQuery($event)"
     (keyup.enter)="searchButtonPressed()"
     placeholder="Search ..."
     id="search-input"
-    class="md:p-2 l:p2 m-3 search-input"
+    style="float: left"
     type="search"
   />
-  <button (click)="searchButtonPressed()" id="search-button" style="border: none;">
+  <button (click)="searchButtonPressed()" id="search-button" style="float:left; display: flex">
     <svg
       class="eye-image svg-icon"
-      style="width: 2em; height: 2em;"
+      style="width: 1.2em; height: 1.2em;"
       viewBox="0 0 20 20"
     >
       <path
@@ -18,40 +19,44 @@
       ></path>
     </svg>
   </button>
-  <button (click)="cancelSearchButtonPressed()" id="search-cancel-button" style="border: none; display: none;">
-    <svg style="width: 2em; height: 2em;" class="eye-image svg-icon" viewBox="0 0 20 20">
+  <button (click)="cancelSearchButtonPressed()" id="search-cancel-button" style="float: left; display: none;">
+    <svg style="width: 1.2em; height: 1.2em;" class="eye-image svg-icon" viewBox="0 0 20 20">
       <path
         d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"
       ></path>
     </svg>
   </button>
 </div>
-<table class="goscope-entries-table p-2">
+<table>
+  <thead>
   <tr>
-    <th class="custom-td">Status</th>
-    <th class="custom-td">Verb</th>
-    <th class="custom-td text-center">Path</th>
-    <th class="custom-td">Happened</th>
-    <th class="custom-td"></th>
+    <th>Status</th>
+    <th>Verb</th>
+    <th>Path</th>
+    <th>Happened</th>
+    <th></th>
   </tr>
-
-  <tr *ngFor="let request of requests" class="text-center">
-    <td class="p-3 custom-td" [innerHTML]="applyStatusColor(request.responseStatus)"></td>
-    <td class="monospaced p-3 custom-td" [innerHTML]="applyMethodColor(request.method)"></td>
-    <td class="p-3 custom-td">{{request.path}}</td>
-    <td class="p-3 custom-td">{{timeDiffToHuman(this.now - request.time)}} ago</td>
-    <td class="p-3 custom-td">
-      <a routerLink="/requests/{{request.uid}}" class="cursor-pointer">
-        <svg class="eye-image" style="width:1.2em;height:1.2em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 16">
-          <path
-            d="M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z">
-          </path>
-        </svg>
-      </a>
-    </td>
-  </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let request of requests">
+      <td [innerHTML]="applyStatusColor(request.responseStatus)"></td>
+      <td [innerHTML]="applyMethodColor(request.method)"></td>
+      <td>{{request.path}}</td>
+      <td>{{timeDiffToHuman(this.now - request.time)}} ago</td>
+      <td>
+        <a routerLink="/requests/{{request.uid}}">
+          <svg class="eye-image" style="width:1.2em;height:1.2em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 16">
+            <path
+              d="M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z">
+            </path>
+          </svg>
+        </a>
+      </td>
+    </tr>
+  </tbody>
 </table>
-<div class="pagination-buttons text-center font-xl">
-  <span (click)="previousPage()" class="navbar-link cursor-pointer">← prev</span>&nbsp;&nbsp;&nbsp;
-  <span (click)="nextPage()" class="navbar-link cursor-pointer">next →</span>
-</div>
+<nav>
+  <button (click)="previousPage()">← prev</button>
+  <button (click)="nextPage()">next →</button>
+</nav>
+</section>

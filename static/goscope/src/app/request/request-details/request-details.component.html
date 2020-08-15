@@ -1,50 +1,51 @@
-<div class="container p-3 m-3 detailed-view">
-  <span class="cursor-pointer navbar-link" (click)="goBack()">← Back</span><br/>
-  <br/><h2>Request details</h2><br/>
+<button class="cursor-pointer navbar-link" (click)="goBack()">← Back</button>
 
-  <p>Client IP</p>
-  <pre><code [highlight]>{{requestDetails.clientIP}}</code></pre>
-  <p>Headers</p>
-  <pre><code [highlight]>{{requestDetails.headers}}</code></pre>
-  <p>Host</p>
-  <pre><code [highlight]>{{requestDetails.host}}</code></pre>
-  <p>Method</p>
-  <pre><code [highlight]>{{requestDetails.method}}</code></pre>
-  <p>Path</p>
-  <pre><code [highlight]>{{requestDetails.path}}</code></pre>
-  <p>Referrer</p>
-  <pre><code [highlight]>{{requestDetails.referrer}}</code></pre>
-  <p>Time</p>
-  <pre><code [highlight]>{{requestDetails.time}}</code></pre>
-  <p>UID</p>
-  <pre><code [highlight]>{{requestDetails.uid}}</code></pre>
-  <p>URL</p>
-  <pre><code [highlight]>{{requestDetails.url}}</code></pre>
-  <p>User Agent</p>
-  <pre><code [highlight]>{{requestDetails.userAgent}}</code></pre>
-  <p>Body</p>
-  <pre><code [highlight]>{{requestDetails.body}}</code></pre>
-</div>
+<section>
+  <h2>Request details</h2>
+  <dl>
+    <dt>Client IP</dt>
+    <dd><code [highlight]>{{requestDetails.clientIP}}</code></dd>
+    <dt>Headers</dt>
+    <dd><code [highlight]>{{requestDetails.headers}}</code></dd>
+    <dt>Host</dt>
+    <dd><code [highlight]>{{requestDetails.host}}</code></dd>
+    <dt>Method</dt>
+    <dd><code [highlight]>{{requestDetails.method}}</code></dd>
+    <dt>Path</dt>
+    <dd><code [highlight]>{{requestDetails.path}}</code></dd>
+    <dt>Referrer</dt>
+    <dd><code [highlight]>{{requestDetails.referrer}}</code></dd>
+    <dt>Time</dt>
+    <dd><code [highlight]>{{requestDetails.time}}</code></dd>
+    <dt>UID</dt>
+    <dd><code [highlight]>{{requestDetails.uid}}</code></dd>
+    <dt>URL</dt>
+    <dd><code [highlight]>{{requestDetails.url}}</code></dd>
+    <dt>User Agent</dt>
+    <dd><code [highlight]>{{requestDetails.userAgent}}</code></dd>
+    <dt>Body</dt>
+    <dd><code [highlight]>{{requestDetails.body}}</code></dd>
+  </dl>
 
-<div class="container p-3 m-3 detailed-view">
-  <h2>Response details</h2>
-  <p>Client IP</p>
-  <pre><code [highlight]>{{responseDetails.clientIP}}</code></pre>
-  <p>Headers</p>
-  <pre><code [highlight]>{{responseDetails.headers}}</code></pre>
-  <p>Path</p>
-  <pre><code [highlight]>{{responseDetails.path}}</code></pre>
-  <p>Size</p>
-  <pre><code [highlight]>{{responseDetails.size}}</code></pre>
-  <p>Status</p>
-  <pre><code [highlight]>{{responseDetails.status}}</code></pre>
-  <p>Time</p>
-  <pre><code [highlight]>{{responseDetails.time}}</code></pre>
-  <p>RequestUID</p>
-  <pre><code [highlight]>{{responseDetails.requestUID}}</code></pre>
-  <p>UID</p>
-  <pre><code [highlight]>{{responseDetails.uid}}</code></pre>
-  <p>Body</p>
-  <pre><code [highlight]>{{responseDetails.body}}</code></pre>
-</div>
-
+  <h1>Response details</h1>
+  <dl>
+    <dt>Client IP</dt>
+    <dd><code [highlight]>{{responseDetails.clientIP}}</code></dd>
+    <dt>Headers</dt>
+    <dd><code [highlight]>{{responseDetails.headers}}</code></dd>
+    <dt>Path</dt>
+    <dd><code [highlight]>{{responseDetails.path}}</code></dd>
+    <dt>Size</dt>
+    <dd><code [highlight]>{{responseDetails.size}}</code></dd>
+    <dt>Status</dt>
+    <dd><code [highlight]>{{responseDetails.status}}</code></dd>
+    <dt>Time</dt>
+    <dd><code [highlight]>{{responseDetails.time}}</code></dd>
+    <dt>RequestUID</dt>
+    <dd><code [highlight]>{{responseDetails.requestUID}}</code></dd>
+    <dt>UID</dt>
+    <dd><code [highlight]>{{responseDetails.uid}}</code></dd>
+    <dt>Body</dt>
+    <dd><code [highlight]>{{responseDetails.body}}</code></dd>
+  </dl>
+</section>

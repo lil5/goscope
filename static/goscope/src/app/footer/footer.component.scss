@@ -1,17 +1,3 @@
-$main-highlight-color: #7cc3bf;
-
-.navbar-link {
-	text-decoration: none;
-	color: #fff;
-	border: none;
-}
-
-.active-navbar-link {
-	text-decoration: none;
-	color: $main-highlight-color;
-}
-
-.navbar-link:hover {
-	text-decoration: underline;
-	color: $main-highlight-color;
+footer {
+  border-top: 1px dashed white;
 }
