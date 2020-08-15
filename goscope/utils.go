@@ -24,6 +24,8 @@ func CheckExcludedPaths(path string) bool {
 		"/goscope/log-records/:id",
 		"/goscope/logs",
 		"css",
+		"/assets/logo.svg",
+		"/goscope/api/application-name",
 		"/goscope",
 		"/js/*",
 		"/css/*",
