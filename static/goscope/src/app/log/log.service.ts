@@ -15,12 +15,12 @@ export class LogService {
   }
 
   getLogs(offset: number): Observable<LogsEndpointResponse> {
-    const options = {params: new HttpParams().set('offset', String(offset))};
+    const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.get<LogsEndpointResponse>(this.logsUrl, options);
   }
 
   searchLog(offset: number, query: string): Observable<LogsEndpointResponse> {
-    const options = {params: new HttpParams().set('offset', String(offset))};
+    const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.post<LogsEndpointResponse>(this.searchLogsUrl, {query}, options);
   }
 

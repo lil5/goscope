@@ -15,12 +15,12 @@ export class RequestService {
   }
 
   getRequests(offset: number): Observable<RequestsEndpointResponse> {
-    const options = {params: new HttpParams().set('offset', String(offset))};
+    const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.get<RequestsEndpointResponse>(this.requestsUrl, options);
   }
 
   searchRequest(offset: number, query: string): Observable<RequestsEndpointResponse> {
-    const options = {params: new HttpParams().set('offset', String(offset))};
+    const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.post<RequestsEndpointResponse>(this.searchRequestsUrl, {query}, options);
   }
 
