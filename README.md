@@ -87,7 +87,7 @@ Then navigate in terminal to the root of the project and run (following commands
 ### API Documentation
 
 GoScope is in its essence a middleware, a backend in Go and a front-end in Angular, thus you can hook onto the backend with any tool of your choice, being it other kinds of front-ends or monitoring tools like Zabbix. 
-For that purpose please find here the API spec.
+For that purpose please find here the [API spec](SPEC-API.md).
   
 
 
