@@ -22,6 +22,14 @@ func GetStaticFile(c *gin.Context) {
 	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
 }
 
+func GetStaticAsset(c *gin.Context) {
+	pathSplit := strings.Split(c.Request.RequestURI, "/")
+	requestedFile := pathSplit[len(pathSplit)-1]
+	file, _ := Asset(fmt.Sprintf("../static/goscope/dist/goscope/assets/%s", requestedFile))
+	reader := strings.NewReader(string(file))
+	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
+}
+
 // Get the mime type of a file by its name.
 func GetMimeType(filename string) string {
 	var mimeTypes = map[string]string{

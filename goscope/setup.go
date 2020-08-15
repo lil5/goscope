@@ -48,11 +48,14 @@ func Setup(engine *gin.Engine) {
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
+	engine.GET("/assets/logo.svg", GetStaticAsset)
+
 	goscopeGroup := engine.Group("/goscope")
 
 	goscopeGroup.GET("/", ShowDashboard)
 	goscopeGroup.GET("/polyfills.js", GetStaticFile)
 	goscopeGroup.GET("/main.js", GetStaticFile)
+
 	goscopeGroup.GET("/styles.css", GetStaticFile)
 	goscopeGroup.GET("/runtime.js", GetStaticFile)
 	goscopeGroup.GET("/1.js", GetStaticFile)
@@ -60,7 +63,10 @@ func Setup(engine *gin.Engine) {
 	goscopeGroup.GET("/3.js", GetStaticFile)
 	goscopeGroup.GET("/favicon.ico", GetStaticFile)
 	goscopeGroup.GET("/logs", ShowDashboard)
+	goscopeGroup.GET("/logs/:uuid", ShowDashboard)
 	goscopeGroup.GET("/requests", ShowDashboard)
+	goscopeGroup.GET("/requests/:uuid", ShowDashboard)
+	goscopeGroup.GET("/info", ShowDashboard)
 
 	apiGroup := goscopeGroup.Group("/api")
 	apiGroup.GET("/application-name", GetAppName)
