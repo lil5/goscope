@@ -14,12 +14,14 @@ export class LogService {
   constructor(private http: HttpClient) {
   }
 
-  getLogs(offset: number): Observable<LogsEndpointResponse> {
+  getLogs(page: number): Observable<LogsEndpointResponse> {
+    const offset: number = (page - 1) * 50;
     const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.get<LogsEndpointResponse>(this.logsUrl, options);
   }
 
-  searchLog(offset: number, query: string): Observable<LogsEndpointResponse> {
+  searchLog(page: number, query: string): Observable<LogsEndpointResponse> {
+    const offset: number = (page - 1) * 50;
     const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.post<LogsEndpointResponse>(this.searchLogsUrl, {query}, options);
   }

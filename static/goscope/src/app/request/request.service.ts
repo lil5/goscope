@@ -14,12 +14,14 @@ export class RequestService {
   constructor(private http: HttpClient) {
   }
 
-  getRequests(offset: number): Observable<RequestsEndpointResponse> {
+  getRequests(page: number): Observable<RequestsEndpointResponse> {
+    const offset: number = (page - 1) * 50;
     const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.get<RequestsEndpointResponse>(this.requestsUrl, options);
   }
 
-  searchRequest(offset: number, query: string): Observable<RequestsEndpointResponse> {
+  searchRequest(page: number, query: string): Observable<RequestsEndpointResponse> {
+    const offset: number = (page - 1) * 50;
     const options = {params: new HttpParams().set('offset', offset.toString())};
     return this.http.post<RequestsEndpointResponse>(this.searchRequestsUrl, {query}, options);
   }

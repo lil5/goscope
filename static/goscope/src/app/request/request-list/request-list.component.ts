@@ -12,8 +12,8 @@ import {intervalToLevels} from '../../time-utils';
 export class RequestListComponent implements OnInit {
   requests: Requests[];
   now: number;
-  offset = 0;
-  searchOffset = 0;
+  page = 1;
+  searchPage = 1;
   searchModeEnabled = false;
   didGetNewContent = false;
   searchQuery: string;
@@ -34,6 +34,7 @@ export class RequestListComponent implements OnInit {
     if (this.searchQuery !== '' && this.searchQuery){
       this.searchModeEnabled = true;
       document.getElementById('search-cancel-button').style.display = 'flex';
+      this.searchPage = 1;
       this.searchRequests();
     }
   }
@@ -41,21 +42,21 @@ export class RequestListComponent implements OnInit {
   cancelSearchButtonPressed(): void {
     this.searchModeEnabled = false;
     document.getElementById('search-cancel-button').style.display = 'none';
-    this.offset = 0;
-    this.searchOffset = 0;
+    this.page = 1;
+    this.searchPage = 1;
     this.getRequests();
   }
 
 
   searchRequests(): void {
-    this.requestService.searchRequest(this.searchOffset, this.searchQuery).subscribe(requests => {
+    this.requestService.searchRequest(this.searchPage, this.searchQuery).subscribe(requests => {
       this.requests = requests.data;
       this.didGetNewContent = true;
     });
   }
 
   getRequests(): void {
-    this.requestService.getRequests(this.offset).subscribe(requests => {
+    this.requestService.getRequests(this.page).subscribe(requests => {
       if (requests.data !== null && requests.data.length > 0) {
         this.requests = requests.data;
         this.didGetNewContent = true;
@@ -67,36 +68,26 @@ export class RequestListComponent implements OnInit {
 
   previousPage(): void {
     if (!this.searchModeEnabled) {
-      if (this.offset >= 50) {
-        this.offset -= 50;
+      if (this.page > 1) {
+        this.page--;
         this.getRequests();
-        if (!this.didGetNewContent) {
-          this.offset += 50;
-        }
       }
     } else {
-      if (this.searchOffset >= 50) {
-        this.searchOffset -= 50;
+      if (this.searchPage > 1) {
+        this.searchPage--;
         this.searchRequests();
-        if (!this.didGetNewContent) {
-          this.searchOffset += 50;
-        }
       }
     }
   }
 
   nextPage(): void {
-    if (!this.searchModeEnabled) {
-      this.offset += 50;
-      this.getRequests();
-      if (!this.didGetNewContent) {
-        this.offset -= 50;
-      }
-    } else {
-      this.searchOffset += 50;
-      this.searchRequests();
-      if (!this.didGetNewContent) {
-        this.searchOffset -= 50;
+    if (this.didGetNewContent) {
+      if (!this.searchModeEnabled) {
+        this.page++;
+        this.getRequests();
+      } else {
+        this.searchPage++;
+        this.searchRequests();
       }
     }
   }
