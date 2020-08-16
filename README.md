@@ -1,4 +1,4 @@
-# <img src="static/goscope/dist/goscope/assets/logo.svg" alt=" " width="50" height="50"/> GoScope
+# <img src="/static/goscope/dist/goscope/assets/logo.svg" alt=" " width="50" height="50"/> GoScope
 
 [![Build Status](https://travis-ci.com/averageflow/goscope.svg?branch=master)](https://travis-ci.com/averageflow/goscope)
 [![Maintainability](https://api.codeclimate.com/v1/badges/465ff63fcadad83c6aa3/maintainability)](https://codeclimate.com/github/averageflow/goscope/maintainability)
