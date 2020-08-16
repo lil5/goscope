@@ -19,7 +19,9 @@ const (
 
 func GetAppName(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
-	c.JSON(http.StatusOK, gin.H{"applicationName": os.Getenv("APPLICATION_NAME")})
+	c.JSON(http.StatusOK, gin.H{
+		"applicationName": os.Getenv("APPLICATION_NAME"),
+	})
 }
 
 // Show system information of the current host.

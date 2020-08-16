@@ -89,17 +89,20 @@ type SystemInformationResponseCPU struct {
 	CoreCount string `json:"coreCount"`
 	ModelName string `json:"modelName"`
 }
+
 type SystemInformationResponseDisk struct {
 	FreeSpace     string `json:"freeSpace"`
 	MountPath     string `json:"mountPath"`
 	PartitionType string `json:"partitionType"`
 	TotalSpace    string `json:"totalSpace"`
 }
+
 type SystemInformationResponseMemory struct {
 	Available string `json:"availableMemory"`
 	Total     string `json:"totalMemory"`
 	UsedSwap  string `json:"usedSwap"`
 }
+
 type SystemInformationResponseHost struct {
 	HostOS        string `json:"hostOS"`
 	HostPlatform  string `json:"hostPlatform"`
