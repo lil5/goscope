@@ -19,9 +19,9 @@ matrix:
         - 13
       cache:
         directories:
-          - ./static/goscope/node_modules
+          - ./frontend/node_modules
       install:
-        - cd static/goscope && npm install
+        - cd frontend && npm install
       script:
         - ng lint
         - ng build --prod --output-hashing none --base-href /goscope/

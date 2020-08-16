@@ -1,4 +1,4 @@
-package repository
+package database
 
 const (
 	MySQL      = "mysql"

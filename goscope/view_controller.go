@@ -9,7 +9,7 @@ import (
 )
 
 func ShowDashboard(c *gin.Context) {
-	file, _ := Asset("../static/goscope/dist/goscope/index.html")
+	file, _ := Asset("../frontend/dist/goscope/index.html")
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
@@ -17,7 +17,7 @@ func ShowDashboard(c *gin.Context) {
 func GetStaticFile(c *gin.Context) {
 	pathSplit := strings.Split(c.Request.RequestURI, "/")
 	requestedFile := pathSplit[len(pathSplit)-1]
-	file, _ := Asset(fmt.Sprintf("../static/goscope/dist/goscope/%s", requestedFile))
+	file, _ := Asset(fmt.Sprintf("../frontend/dist/goscope/%s", requestedFile))
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
 }
@@ -25,7 +25,7 @@ func GetStaticFile(c *gin.Context) {
 func GetStaticAsset(c *gin.Context) {
 	pathSplit := strings.Split(c.Request.RequestURI, "/")
 	requestedFile := pathSplit[len(pathSplit)-1]
-	file, _ := Asset(fmt.Sprintf("../static/goscope/dist/goscope/assets/%s", requestedFile))
+	file, _ := Asset(fmt.Sprintf("../frontend/dist/goscope/assets/%s", requestedFile))
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
 }

@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/averageflow/goscope/repository"
+	"github.com/averageflow/goscope/database"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
@@ -21,7 +21,7 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 
 	var result DetailedRequest
 
-	row := repository.GetDetailedRequest(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
+	row := database.GetDetailedRequest(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -53,7 +53,7 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 
 	var result DetailedResponse
 
-	row := repository.GetDetailedResponse(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
+	row := database.GetDetailedResponse(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -78,7 +78,7 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 func GetRequests(offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
-	rows := repository.GetRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
+	rows := database.GetRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
 
 	if rows == nil {
 		return result
@@ -164,7 +164,7 @@ func SearchRequests(searchString string, offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := repository.SearchRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
+	rows := database.SearchRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
 
 	defer rows.Close()
 

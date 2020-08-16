@@ -5,11 +5,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/averageflow/goscope/repository"
+	"github.com/averageflow/goscope/database"
 )
 
 func GetDetailedLog(requestUID string) ExceptionRecord {
-	row := repository.GetDetailedLog(
+	row := database.GetDetailedLog(
 		os.Getenv("GOSCOPE_DATABASE_TYPE"),
 		requestUID,
 	)
@@ -33,7 +33,7 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	defer db.Close()
 
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := repository.SearchLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
+	rows := database.SearchLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
 
 	defer rows.Close()
 
@@ -56,7 +56,7 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 func GetLogs(offset int) []ExceptionRecord {
 	var result []ExceptionRecord
 
-	rows := repository.GetLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
+	rows := database.GetLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
 	if rows == nil {
 		return result
 	}
