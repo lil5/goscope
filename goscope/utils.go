@@ -51,6 +51,8 @@ func CheckExcludedPaths(path string) bool {
 		"/goscope/main.js",
 		"/goscope/api/application-name",
 		"/goscope/favicon.ico",
+		"/goscope/requests/:uuid",
+		"/goscope/logs/:uuid",
 	}
 
 	for _, s := range items {
