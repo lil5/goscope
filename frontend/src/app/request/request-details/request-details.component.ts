@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {RequestService} from '../request.service';
 import {DetailedRequest, DetailedResponse} from '../requests';
-import 'highlight.js/styles/dark.css';
+import {HighlightService} from "../../highlight.service";
 
 @Component({
   selector: 'app-request-details',
@@ -17,9 +17,14 @@ export class RequestDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private location: Location
+    private location: Location,
+    private highlightService: HighlightService,
   ) {
 
+  }
+
+  ngAfterViewChecked() {
+    this.highlightService.highlightAll();
   }
 
   ngOnInit(): void {

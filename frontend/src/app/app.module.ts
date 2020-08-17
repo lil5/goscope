@@ -10,6 +10,7 @@ import {LogModule} from './log/log.module';
 import {SysteminfoModule} from './systeminfo/systeminfo.module';
 import { FooterComponent } from './footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {HighlightService} from "./highlight.service";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     LogModule,
   ],
-  providers: [],
+  providers: [
+    HighlightService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

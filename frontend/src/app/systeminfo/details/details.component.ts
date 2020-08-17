@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SysteminfoService} from '../systeminfo.service';
 import {SystemInfoDetailsResponse} from '../systeminfodetails';
 import {Location} from '@angular/common';
-import 'highlight.js/styles/dark.css';
+import {HighlightService} from "../../highlight.service";
 
 @Component({
   selector: 'app-details',
@@ -12,12 +12,16 @@ import 'highlight.js/styles/dark.css';
 export class DetailsComponent implements OnInit {
   systemInformation: SystemInfoDetailsResponse;
 
-  constructor(private systeminfoService: SysteminfoService, private location: Location) {
+  constructor(private systeminfoService: SysteminfoService, private location: Location,  private highlightService: HighlightService) {
 
+  }
+  ngAfterViewChecked() {
+    this.highlightService.highlightAll();
   }
 
   ngOnInit(): void {
     this.getSystemInformation();
+
   }
 
   getSystemInformation(): void {
