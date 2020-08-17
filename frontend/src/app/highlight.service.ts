@@ -24,7 +24,7 @@ export class HighlightService {
   constructor() {
   }
 
-  highlightAll() {
+  highlightAll(): void {
     Prism.highlightAll();
   }
 }

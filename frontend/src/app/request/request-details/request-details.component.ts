@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {RequestService} from '../request.service';
 import {DetailedRequest, DetailedResponse} from '../requests';
-import {HighlightService} from "../../highlight.service";
+import {HighlightService} from '../../highlight.service';
 
 @Component({
   selector: 'app-request-details',
   templateUrl: './request-details.component.html',
   styleUrls: ['./request-details.component.scss']
 })
-export class RequestDetailsComponent implements OnInit {
+export class RequestDetailsComponent implements OnInit, AfterViewChecked {
   requestDetails: DetailedRequest;
   responseDetails: DetailedResponse;
 
@@ -23,7 +23,7 @@ export class RequestDetailsComponent implements OnInit {
 
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     this.highlightService.highlightAll();
   }
 

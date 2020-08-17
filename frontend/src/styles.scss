@@ -1,5 +1,6 @@
 :root {
   --links: #7CC3BF;
+  --code: #ccc;
 }
 @media (prefers-color-scheme: light) {
   :root{
@@ -12,6 +13,10 @@ dt {
 }
 dd {
   margin-bottom: 10px;
+}
+
+.code-block {
+  background: var(--background)
 }
 
 .text-center{
@@ -118,10 +123,7 @@ pre[class*="language-"] {
 	border-radius: 0.3em;
 }
 
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
-	background: #272822;
-}
+
 
 /* Inline code */
 :not(pre) > code[class*="language-"] {
@@ -149,7 +151,7 @@ pre[class*="language-"] {
 .token.constant,
 .token.symbol,
 .token.deleted {
-	color: #f92672;
+	color: #87ff7d;
 }
 
 .token.boolean,
