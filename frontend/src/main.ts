@@ -1,12 +1,22 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import {
+  faSync,
+  faServer,
+  faClipboardList,
+  faEye
+} from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-if (environment.production) {
-  enableProdMode();
-}
+library.add(faSync, faServer, faClipboardList, faEye);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+Vue.config.productionTip = false;
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount("#app");
