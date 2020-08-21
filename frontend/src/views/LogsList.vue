@@ -12,7 +12,11 @@
         <tr :key="index" v-for="(log, index) in logs.data">
           <td>{{ log.error }}</td>
           <td>{{ timeDiffToHuman(now - log.time) }} ago</td>
-          <td><font-awesome-icon icon="eye" /></td>
+          <td>
+            <router-link :to="`/logs/${log.uid}`"
+              ><font-awesome-icon icon="eye"
+            /></router-link>
+          </td>
         </tr>
       </tbody>
     </table>

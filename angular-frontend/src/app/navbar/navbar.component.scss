@@ -37,6 +37,7 @@ header {
       display: inline-block;
       color: var(--form-text);
 
+
       &:not([href="/"]) {
         &:hover {
           background-color: var(--button-hover);

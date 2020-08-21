@@ -8,20 +8,23 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Requests",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/RequestList.vue")
+    component: () => import("../views/RequestList.vue")
   },
   {
     path: "/logs",
     name: "Logs",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/LogsList.vue")
+    component: () => import("../views/LogsList.vue")
+  },
+  {
+    path: "/logs/:id",
+    name: "Log Details",
+    component: () => import("../views/LogDetails.vue"),
+    props: true
+  },
+  {
+    path: "/info",
+    name: "System Information",
+    component: () => import("../views/SystemInfo.vue")
   }
 ];
 
