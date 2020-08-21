@@ -1,5 +1,6 @@
 <template>
   <section>
+    <SearchBar v-on:searchEvent="handleSearch" />
     <table>
       <thead>
         <tr>
@@ -17,7 +18,7 @@
           <td>{{ request.path }}</td>
           <td>{{ timeDiffToHuman(now - request.time) }} ago</td>
           <td>
-            <router-link :to="`/requests/${request.uid}`">
+            <router-link class="eye-link" :to="`/requests/${request.uid}`">
               <font-awesome-icon icon="eye" />
             </router-link>
           </td>
@@ -36,11 +37,16 @@ import { Component, Vue } from "vue-property-decorator";
 import { intervalToLevels } from "@/utils/time";
 import { RequestsEndpointResponse } from "@/interfaces/requests";
 import { RequestService } from "@/api/requests";
-import { LogService } from "@/api/logs";
+import SearchBar from "@/components/SearchBar.vue";
 
-@Component
+@Component({
+  components: { SearchBar }
+})
 export default class RequestList extends Vue {
   private currentPage = 1;
+  private searchModeEnabled = false;
+  private searchQuery = "";
+
   private requests: RequestsEndpointResponse = {
     data: [],
     applicationName: ""
@@ -54,11 +60,23 @@ export default class RequestList extends Vue {
 
   async nextPage(): Promise<void> {
     this.currentPage++;
-    const received = await RequestService.getRequests(this.currentPage);
-    if (received.data !== null) {
-      this.requests = received;
+    if (this.searchModeEnabled) {
+      const received = await RequestService.searchRequests(
+        this.currentPage,
+        this.searchQuery
+      );
+      if (received.data !== null) {
+        this.requests = received;
+      } else {
+        this.currentPage--;
+      }
     } else {
-      this.currentPage--;
+      const received = await RequestService.getRequests(this.currentPage);
+      if (received.data !== null) {
+        this.requests = received;
+      } else {
+        this.currentPage--;
+      }
     }
   }
 
@@ -66,7 +84,24 @@ export default class RequestList extends Vue {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
-    this.requests = await RequestService.getRequests(this.currentPage);
+    if (this.searchModeEnabled) {
+      this.requests = await RequestService.searchRequests(
+        this.currentPage,
+        this.searchQuery
+      );
+    } else {
+      this.requests = await RequestService.getRequests(this.currentPage);
+    }
+  }
+
+  async handleSearch(searchQuery: string): void {
+    this.currentPage = 1;
+    this.searchModeEnabled = true;
+    this.searchQuery = searchQuery;
+    this.requests = await RequestService.searchRequests(
+      this.currentPage,
+      searchQuery
+    );
   }
 
   timeDiffToHuman(value: number): string {

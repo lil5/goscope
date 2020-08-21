@@ -1,5 +1,6 @@
 <template>
   <section>
+    <SearchBar v-on:searchEvent="handleSearch" />
     <table>
       <thead>
         <tr>
@@ -13,7 +14,7 @@
           <td>{{ log.error }}</td>
           <td>{{ timeDiffToHuman(now - log.time) }} ago</td>
           <td>
-            <router-link :to="`/logs/${log.uid}`">
+            <router-link class="eye-link" :to="`/logs/${log.uid}`">
               <font-awesome-icon icon="eye" />
             </router-link>
           </td>
@@ -36,10 +37,15 @@ import { Component, Vue } from "vue-property-decorator";
 import { LogsEndpointResponse } from "@/interfaces/logs";
 import { LogService } from "@/api/logs";
 import { intervalToLevels } from "@/utils/time";
-
-@Component
+import SearchBar from "@/components/SearchBar.vue";
+@Component({
+  components: { SearchBar }
+})
 export default class LogsList extends Vue {
   private currentPage = 1;
+  private searchModeEnabled = false;
+  private searchQuery = "";
+
   private logs: LogsEndpointResponse = {
     data: [],
     applicationName: "",
@@ -58,11 +64,23 @@ export default class LogsList extends Vue {
 
   async nextPage(): Promise<void> {
     this.currentPage++;
-    const received = await LogService.getLogs(this.currentPage);
-    if (received.data !== null) {
-      this.logs = received;
+    if (this.searchModeEnabled) {
+      const received = await LogService.searchLogs(
+        this.currentPage,
+        this.searchQuery
+      );
+      if (received.data !== null) {
+        this.logs = received;
+      } else {
+        this.currentPage--;
+      }
     } else {
-      this.currentPage--;
+      const received = await LogService.getLogs(this.currentPage);
+      if (received.data !== null) {
+        this.logs = received;
+      } else {
+        this.currentPage--;
+      }
     }
   }
 
@@ -70,9 +88,21 @@ export default class LogsList extends Vue {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
-    this.logs = await LogService.getLogs(this.currentPage);
+    if (this.searchModeEnabled) {
+      this.logs = await LogService.searchLogs(
+        this.currentPage,
+        this.searchQuery
+      );
+    } else {
+      this.logs = await LogService.getLogs(this.currentPage);
+    }
+  }
+
+  async handleSearch(searchQuery: string): void {
+    this.currentPage = 1;
+    this.searchModeEnabled = true;
+    this.searchQuery = searchQuery;
+    this.logs = await LogService.searchLogs(this.currentPage, searchQuery);
   }
 }
 </script>
-
-<style scoped></style>

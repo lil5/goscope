@@ -6,12 +6,14 @@ import {
   faSync,
   faServer,
   faClipboardList,
-  faEye
+  faEye,
+  faSearch,
+  faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faSync, faServer, faClipboardList, faEye);
+library.add(faSync, faServer, faClipboardList, faEye, faSearch, faTimes);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;

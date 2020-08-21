@@ -83,3 +83,11 @@ a:hover .svg-icon {
     fill: var(--links) !important;
 }
 
+.eye-link {
+    color: var(--text-main);
+    fill: var(--text-main);
+}
+.eye-link:hover {
+    color: var(--links);
+    fill: var(--links);
+}
