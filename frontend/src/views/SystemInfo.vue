@@ -88,7 +88,6 @@ import { SystemInfoService } from "@/api/system-info";
 
 @Component
 export default class SystemInfo extends Vue {
-  private routerInstance;
   private systemInformation: SystemInfoDetailsResponse = {
     applicationName: "",
     cpu: {

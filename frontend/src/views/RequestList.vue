@@ -98,7 +98,7 @@ export default class RequestList extends Vue {
     }
   }
 
-  async handleSearch(searchQuery: string): void {
+  async handleSearch(searchQuery: string): Promise<void> {
     this.currentPage = 1;
     this.searchModeEnabled = true;
     this.searchQuery = searchQuery;
@@ -108,7 +108,7 @@ export default class RequestList extends Vue {
     );
   }
 
-  async cancelSearch(): void {
+  async cancelSearch(): Promise<void> {
     this.currentPage = 1;
     this.searchModeEnabled = false;
     this.searchQuery = "";

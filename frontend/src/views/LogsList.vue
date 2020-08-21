@@ -102,14 +102,14 @@ export default class LogsList extends Vue {
     }
   }
 
-  async handleSearch(searchQuery: string): void {
+  async handleSearch(searchQuery: string): Promise<void> {
     this.currentPage = 1;
     this.searchModeEnabled = true;
     this.searchQuery = searchQuery;
     this.logs = await LogService.searchLogs(this.currentPage, searchQuery);
   }
 
-  async cancelSearch(): void {
+  async cancelSearch(): Promise<void> {
     this.currentPage = 1;
     this.searchModeEnabled = false;
     this.searchQuery = "";
