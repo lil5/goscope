@@ -48,26 +48,24 @@ func Setup(engine *gin.Engine) {
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
 	// Setup necessary routes
-	engine.GET("/assets/logo.svg", GetStaticAsset)
 
 	goscopeGroup := engine.Group("/goscope")
-
+	// Static content from SPA
 	goscopeGroup.GET("/", ShowDashboard)
-	goscopeGroup.GET("/polyfills.js", GetStaticFile)
-	goscopeGroup.GET("/main.js", GetStaticFile)
-
-	goscopeGroup.GET("/styles.css", GetStaticFile)
-	goscopeGroup.GET("/runtime.js", GetStaticFile)
-	goscopeGroup.GET("/1.js", GetStaticFile)
-	goscopeGroup.GET("/2.js", GetStaticFile)
-	goscopeGroup.GET("/3.js", GetStaticFile)
+	goscopeGroup.GET("/img/logo.svg", GetStaticFile)
+	goscopeGroup.GET("/js/app.js", GetStaticFile)
+	goscopeGroup.GET("/js/app.js.map", GetStaticFile)
+	goscopeGroup.GET("/css/app.css", GetStaticFile)
+	goscopeGroup.GET("/css/dark.css", GetStaticFile)
+	goscopeGroup.GET("/css/styles.css", GetStaticFile)
 	goscopeGroup.GET("/favicon.ico", GetStaticFile)
+	// SPA routes
 	goscopeGroup.GET("/logs", ShowDashboard)
 	goscopeGroup.GET("/logs/:uuid", ShowDashboard)
 	goscopeGroup.GET("/requests", ShowDashboard)
 	goscopeGroup.GET("/requests/:uuid", ShowDashboard)
 	goscopeGroup.GET("/info", ShowDashboard)
-
+	// GoScope API
 	apiGroup := goscopeGroup.Group("/api")
 	apiGroup.GET("/application-name", GetAppName)
 	apiGroup.GET("/logs", LogList)

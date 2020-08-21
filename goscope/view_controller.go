@@ -8,24 +8,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ../frontend/dist/css/app.css
+// ../frontend/dist/css/dark.css
+// ../frontend/dist/css/dark.css.map
+// ../frontend/dist/css/styles.css
+// ../frontend/dist/favicon.ico
+// ../frontend/dist/img/logo.svg
+// ../frontend/dist/index.html
+// ../frontend/dist/js/app.js
+// ../frontend/dist/js/app.js.map
 func ShowDashboard(c *gin.Context) {
-	file, _ := Asset("../frontend/dist/goscope/index.html")
+	file, _ := Asset("../frontend/dist/index.html")
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
 
 func GetStaticFile(c *gin.Context) {
-	pathSplit := strings.Split(c.Request.RequestURI, "/")
-	requestedFile := pathSplit[len(pathSplit)-1]
-	file, _ := Asset(fmt.Sprintf("../frontend/dist/goscope/%s", requestedFile))
-	reader := strings.NewReader(string(file))
-	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
-}
-
-func GetStaticAsset(c *gin.Context) {
-	pathSplit := strings.Split(c.Request.RequestURI, "/")
-	requestedFile := pathSplit[len(pathSplit)-1]
-	file, _ := Asset(fmt.Sprintf("../frontend/dist/goscope/assets/%s", requestedFile))
+	requestedFile := strings.ReplaceAll(c.Request.RequestURI, "/goscope/", "")
+	file, _ := Asset(fmt.Sprintf("../frontend/dist/%s", requestedFile))
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
 }

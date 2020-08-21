@@ -11,6 +11,6 @@ Any change to assets in the `frontend` folder, obviously building the SPA too, w
 For this you will require to have the package installed (via `go get -u github.com/shuLhan/go-bindata/...`).
 
 If you make changes to the Angular app, navigate in terminal to the root of the project and run (following commands all assume your pwd is the root of project): 
-- Build the Angular app run `cd frontend && ng build --prod --output-hashing none --base-href /goscope/`
+- Build the Angular app run `cd frontend && npm run build`
 - To create the bindata file: `cd ../goscope && go-bindata -nomemcopy  ../frontend/dist/...`
 - Edit the `bindata.go` file in `/goscope` so that the package is `goscope` instead of `main`
