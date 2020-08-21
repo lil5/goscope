@@ -70,11 +70,11 @@ For that purpose please find here the [API spec](SPEC-API.md).
 
 In order to understand possible unexpected situations or simply to reassure you that everything is working correctly, GoScope provides more detailed information about request and response, including status codes and request/response bodies, as well as any useful information. Any help with expanding this would be greatly appreciated.
 
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/0.png)
+![GoScope Dashboard](showcase/0.png)
 
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/1.png)
+![GoScope Dashboard](showcase/1.png)
 
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
+![GoScope Dashboard](showcase/2.png)
 
 
 ### Logging
@@ -83,12 +83,12 @@ GoScope hooks into the logging mechanism of your application by using a custom `
 This prints to the console for ease of development and saves the logs into the database, for further displaying in the web environment.
 Thus you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
 
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/3.png)
+![GoScope Dashboard](showcase/3.png)
 
 
 ### System Information
 
 GoScope is constantly improving and currently already can show some system information about the current host. There are plans to expand on this and help is welcome with database info, operating system, etc.
 
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/4.png)
+![GoScope Dashboard](showcase/4.png)
 
