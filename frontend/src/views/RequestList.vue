@@ -1,6 +1,10 @@
 <template>
   <section>
-    <SearchBar v-on:searchEvent="handleSearch" />
+    <SearchBar
+      v-on:searchEvent="handleSearch"
+      v-on:cancelSearchEvent="cancelSearch"
+      :search-enabled="this.searchModeEnabled"
+    />
     <table>
       <thead>
         <tr>
@@ -102,6 +106,13 @@ export default class RequestList extends Vue {
       this.currentPage,
       searchQuery
     );
+  }
+
+  async cancelSearch(): void {
+    this.currentPage = 1;
+    this.searchModeEnabled = false;
+    this.searchQuery = "";
+    this.requests = await RequestService.getRequests(this.currentPage);
   }
 
   timeDiffToHuman(value: number): string {

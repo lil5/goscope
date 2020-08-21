@@ -1,6 +1,10 @@
 <template>
   <section>
-    <SearchBar v-on:searchEvent="handleSearch" />
+    <SearchBar
+      v-on:searchEvent="handleSearch"
+      v-on:cancelSearchEvent="cancelSearch"
+      :search-enabled="this.searchModeEnabled"
+    />
     <table>
       <thead>
         <tr>
@@ -103,6 +107,13 @@ export default class LogsList extends Vue {
     this.searchModeEnabled = true;
     this.searchQuery = searchQuery;
     this.logs = await LogService.searchLogs(this.currentPage, searchQuery);
+  }
+
+  async cancelSearch(): void {
+    this.currentPage = 1;
+    this.searchModeEnabled = false;
+    this.searchQuery = "";
+    this.logs = await LogService.getLogs(this.currentPage);
   }
 }
 </script>

@@ -12,6 +12,15 @@ export const environment = {
   apiApplicationNameUrl: 'http://localhost:7005/goscope/api/application-name'
 };
 
+export const environment = {
+  production: true,
+  apiRequestsUrl: '/goscope/api/requests',
+  apiSearchRequestsUrl: '/goscope/api/search/requests',
+  apiLogsUrl: '/goscope/api/logs',
+  apiSearchLogsUrl: '/goscope/api/search/logs',
+  apiSysInfoUrl: '/goscope/api/info',
+  apiApplicationNameUrl: '/goscope/api/application-name'
+};
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
