@@ -56,22 +56,6 @@ func main(){
 }
 ```
 
-### Request & Response
-
-In order to understand possible unexpected situations or simply to reassure you that everything is working correctly, GoScope provides more detailed information about request and response, including status codes and request/response bodies, as well as any useful information. Any help with expanding this would be greatly appreciated.
-
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/0.png)
-
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/1.png)
-
-### Logging
-
-GoScope hooks into the logging mechanism of your application by using a custom `io.Writer`. 
-This prints to the console for ease of development and saves the logs into the database, for further displaying in the web environment.
-Thus you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
-
-![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
-
 ### Contributing
 
 Your help and ideas are needed to keep this project moving forward to become a more powerful tool commit by commit. Any bug that you may find is something that will make GoScope more robust. Whether you are more front-end or back-end there is work here for you. Take a look at the [contributing guidelines](CONTRIBUTING.md)
@@ -80,6 +64,31 @@ Your help and ideas are needed to keep this project moving forward to become a m
 
 GoScope is in its essence a middleware, a backend in Go and a front-end in Vue.js, thus you can hook onto the backend with any tool of your choice, being it other kinds of front-ends or monitoring tools like Zabbix or others. 
 For that purpose please find here the [API spec](SPEC-API.md).
-  
 
+
+### Request & Response
+
+In order to understand possible unexpected situations or simply to reassure you that everything is working correctly, GoScope provides more detailed information about request and response, including status codes and request/response bodies, as well as any useful information. Any help with expanding this would be greatly appreciated.
+
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/0.png)
+
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/1.png)
+
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/2.png)
+
+
+### Logging
+
+GoScope hooks into the logging mechanism of your application by using a custom `io.Writer`. 
+This prints to the console for ease of development and saves the logs into the database, for further displaying in the web environment.
+Thus you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
+
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/3.png)
+
+
+### System Information
+
+GoScope is constantly improving and currently already can show some system information about the current host. There are plans to expand on this and help is welcome with database info, operating system, etc.
+
+![GoScope Dashboard](https://raw.githubusercontent.com/averageflow/goscope/master/showcase/4.png)
 
