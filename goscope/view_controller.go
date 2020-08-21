@@ -8,15 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ../frontend/dist/css/app.css
-// ../frontend/dist/css/dark.css
-// ../frontend/dist/css/dark.css.map
-// ../frontend/dist/css/styles.css
-// ../frontend/dist/favicon.ico
-// ../frontend/dist/img/logo.svg
-// ../frontend/dist/index.html
-// ../frontend/dist/js/app.js
-// ../frontend/dist/js/app.js.map
 func ShowDashboard(c *gin.Context) {
 	file, _ := Asset("../frontend/dist/index.html")
 	reader := strings.NewReader(string(file))
