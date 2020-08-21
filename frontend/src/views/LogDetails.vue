@@ -18,13 +18,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { DetailedLogsReponse } from "@/interfaces/logs";
 import { LogService } from "@/api/logs";
+import { PropType } from "vue";
 
-@Component
+@Component({
+  props: {
+    logUUID: String as PropType<string>
+  }
+})
 export default class LogDetails extends Vue {
-  @Prop(String) readonly logUUID: string;
   private logDetails: DetailedLogsReponse = {
     data: {
       logDetails: {
@@ -37,7 +41,6 @@ export default class LogDetails extends Vue {
   };
 
   async mounted(): Promise<void> {
-    console.log(this.$route.params.id);
     this.logDetails = await LogService.getLog(this.$route.params.id);
   }
 }

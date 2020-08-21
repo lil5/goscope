@@ -21,6 +21,11 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/LogDetails.vue")
   },
   {
+    path: "/requests/:id",
+    name: "Request Details",
+    component: () => import("../views/RequestDetails.vue")
+  },
+  {
     path: "/info",
     name: "System Information",
     component: () => import("../views/SystemInfo.vue")

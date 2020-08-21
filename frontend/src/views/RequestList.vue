@@ -17,7 +17,9 @@
           <td>{{ request.path }}</td>
           <td>{{ timeDiffToHuman(now - request.time) }} ago</td>
           <td>
-            <font-awesome-icon icon="eye" />
+            <router-link :to="`/requests/${request.uid}`">
+              <font-awesome-icon icon="eye" />
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -34,9 +36,11 @@ import { Component, Vue } from "vue-property-decorator";
 import { intervalToLevels } from "@/utils/time";
 import { RequestsEndpointResponse } from "@/interfaces/requests";
 import { RequestService } from "@/api/requests";
+import { LogService } from "@/api/logs";
 
 @Component
 export default class RequestList extends Vue {
+  private currentPage = 1;
   private requests: RequestsEndpointResponse = {
     data: [],
     applicationName: ""
@@ -45,7 +49,24 @@ export default class RequestList extends Vue {
   private now: number = Math.round(new Date().getTime() / 1000);
 
   async mounted(): Promise<void> {
-    this.requests = await RequestService.getRequests(1);
+    this.requests = await RequestService.getRequests(this.currentPage);
+  }
+
+  async nextPage(): Promise<void> {
+    this.currentPage++;
+    const received = await RequestService.getRequests(this.currentPage);
+    if (received.data !== null) {
+      this.requests = received;
+    } else {
+      this.currentPage--;
+    }
+  }
+
+  async previousPage(): Promise<void> {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+    this.requests = await RequestService.getRequests(this.currentPage);
   }
 
   timeDiffToHuman(value: number): string {

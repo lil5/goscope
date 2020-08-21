@@ -13,9 +13,9 @@
           <td>{{ log.error }}</td>
           <td>{{ timeDiffToHuman(now - log.time) }} ago</td>
           <td>
-            <router-link :to="`/logs/${log.uid}`"
-              ><font-awesome-icon icon="eye"
-            /></router-link>
+            <router-link :to="`/logs/${log.uid}`">
+              <font-awesome-icon icon="eye" />
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -39,6 +39,7 @@ import { intervalToLevels } from "@/utils/time";
 
 @Component
 export default class LogsList extends Vue {
+  private currentPage = 1;
   private logs: LogsEndpointResponse = {
     data: [],
     applicationName: "",
@@ -48,11 +49,28 @@ export default class LogsList extends Vue {
   private now: number = Math.round(new Date().getTime() / 1000);
 
   async mounted(): Promise<void> {
-    this.logs = await LogService.getLogs(1);
+    this.logs = await LogService.getLogs(this.currentPage);
   }
 
   timeDiffToHuman(value: number): string {
     return intervalToLevels(value);
+  }
+
+  async nextPage(): Promise<void> {
+    this.currentPage++;
+    const received = await LogService.getLogs(this.currentPage);
+    if (received.data !== null) {
+      this.logs = received;
+    } else {
+      this.currentPage--;
+    }
+  }
+
+  async previousPage(): Promise<void> {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+    this.logs = await LogService.getLogs(this.currentPage);
   }
 }
 </script>

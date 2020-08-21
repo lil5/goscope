@@ -3,7 +3,7 @@
     <nav role="navigation">
       <router-link to="/">
         <img id="logo" src="@/assets/logo.svg" />
-        {{ applicationName }}
+        {{ this.applicationDetails.applicationName }}
       </router-link>
 
       <router-link to="/">
@@ -22,10 +22,20 @@
   </header>
 </template>
 
-<script>
-export default {
-  name: "Navbar"
-};
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import { ApplicationDetailsResponse } from "@/interfaces/app-details";
+import { ApplicationDetailsService } from "@/api/app-details";
+
+@Component
+export default class Navbar extends Vue {
+  private applicationDetails: ApplicationDetailsResponse = {
+    applicationName: ""
+  };
+  async mounted(): Promise<void> {
+    this.applicationDetails = await ApplicationDetailsService.getApplicationDetails();
+  }
+}
 </script>
 
 <style scoped>

@@ -95,7 +95,47 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { PropType } from "vue";
+import { DetailedRequest, DetailedResponse } from "@/interfaces/requests";
+import { RequestService } from "@/api/requests";
 
-@Component
-export default class RequestDetails extends Vue {}
+@Component({
+  props: {
+    requestUUID: String as PropType<string>
+  }
+})
+export default class RequestDetails extends Vue {
+  private requestDetails: DetailedRequest = {
+    body: "",
+    clientIP: "",
+    headers: "",
+    host: "",
+    method: "",
+    path: "",
+    referrer: "",
+    time: 0,
+    uid: "",
+    url: "",
+    userAgent: ""
+  };
+  private responseDetails: DetailedResponse = {
+    body: "",
+    clientIP: "",
+    headers: "",
+    path: "",
+    size: 0,
+    status: "",
+    time: 0,
+    requestUID: "",
+    uid: ""
+  };
+
+  async mounted(): Promise<void> {
+    const requestedData = await RequestService.getRequest(
+      this.$route.params.id
+    );
+    this.requestDetails = requestedData.data.request;
+    this.responseDetails = requestedData.data.response;
+  }
+}
 </script>
