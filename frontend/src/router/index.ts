@@ -18,8 +18,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/logs/:id",
     name: "Log Details",
-    component: () => import("../views/LogDetails.vue"),
-    props: true
+    component: () => import("../views/LogDetails.vue")
   },
   {
     path: "/info",

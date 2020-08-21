@@ -37,8 +37,8 @@ export default class LogDetails extends Vue {
   };
 
   async mounted(): Promise<void> {
-    console.log(this.$props.logUUID);
-    this.logDetails = await LogService.getLog(this.logUUID);
+    console.log(this.$route.params.id);
+    this.logDetails = await LogService.getLog(this.$route.params.id);
   }
 }
 </script>
