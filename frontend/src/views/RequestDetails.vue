@@ -10,7 +10,7 @@
         </dd>
         <dt>Headers</dt>
         <dd class="code-block">
-          <code class="language-json">{{ this.requestDetails.headers }}</code>
+          <pre><code class="language-json">{{ this.requestDetails.headers }}</code></pre>
         </dd>
         <dt>Host</dt>
         <dd>
@@ -46,7 +46,7 @@
         </dd>
         <dt>Body</dt>
         <dd>
-          <code>{{ this.requestDetails.body }}</code>
+          <pre><code>{{ this.requestDetails.body }}</code></pre>
         </dd>
       </dl>
 
@@ -58,7 +58,7 @@
         </dd>
         <dt>Headers</dt>
         <dd class="code-block">
-          <code class="language-json">{{ this.responseDetails.headers }}</code>
+          <pre><code class="language-json">{{ this.responseDetails.headers }}</code></pre>
         </dd>
         <dt>Path</dt>
         <dd>
@@ -86,7 +86,7 @@
         </dd>
         <dt>Body</dt>
         <dd class="code-block">
-          <code class="language-json">{{ this.responseDetails.body }}</code>
+          <pre><code class="language-json">{{ this.responseDetails.body }}</code></pre>
         </dd>
       </dl>
     </section>

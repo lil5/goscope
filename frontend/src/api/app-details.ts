@@ -5,7 +5,7 @@ export abstract class ApplicationDetailsService {
   private static systemInfoAxios = axios.create();
 
   static async getApplicationDetails(): Promise<ApplicationDetailsResponse> {
-    const url = "http://localhost:7005/goscope/api/application-name";
+    const url = process.env.VUE_APP_API_APP_DETAILS_URL;
     const response = await this.systemInfoAxios.get<ApplicationDetailsResponse>(
       url
     );

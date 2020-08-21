@@ -5,7 +5,7 @@ export abstract class LogService {
   private static logsAxios = axios.create();
 
   static async getLogs(page: number): Promise<LogsEndpointResponse> {
-    const url = "http://localhost:7005/goscope/api/logs";
+    const url = process.env.VUE_APP_API_LOGS_URL;
     const offset: number = (page - 1) * 50;
     const response = await this.logsAxios.get<LogsEndpointResponse>(url, {
       params: {
@@ -19,7 +19,7 @@ export abstract class LogService {
     page: number,
     query: string
   ): Promise<LogsEndpointResponse> {
-    const url = "http://localhost:7005/goscope/api/search/logs";
+    const url = process.env.VUE_APP_API_SEARCH_LOGS_URL;
     const offset: number = (page - 1) * 50;
     const response = await this.logsAxios.post<LogsEndpointResponse>(
       url,
@@ -34,7 +34,7 @@ export abstract class LogService {
   }
 
   static async getLog(uuid: string) {
-    const url = `http://localhost:7005/goscope/api/logs/${uuid}`;
+    const url = `${process.env.VUE_APP_API_LOGS_URL}/${uuid}`;
     const response = await this.logsAxios.get<DetailedLogsReponse>(url);
     return response.data;
   }
