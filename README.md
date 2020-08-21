@@ -78,7 +78,7 @@ Your help and ideas are needed to keep this project moving forward to become a m
 
 ### API Documentation
 
-GoScope is in its essence a middleware, a backend in Go and a front-end in Angular, thus you can hook onto the backend with any tool of your choice, being it other kinds of front-ends or monitoring tools like Zabbix or others. 
+GoScope is in its essence a middleware, a backend in Go and a front-end in Vue.js, thus you can hook onto the backend with any tool of your choice, being it other kinds of front-ends or monitoring tools like Zabbix or others. 
 For that purpose please find here the [API spec](SPEC-API.md).
   
 

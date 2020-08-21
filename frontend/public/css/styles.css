@@ -1,0 +1,93 @@
+:root {
+    --links: #7CC3BF;
+    --code: #ccc;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --links: #6CA8A5;
+    }
+}
+dt {
+    margin-bottom: 6px;
+}
+
+dd {
+    margin-bottom: 10px;
+}
+
+.code-block {
+    background: var(--background);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+code {
+    font-family: "Fira Mono", monospace;
+}
+
+.badge-success {
+    padding: 4px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #1f9d55;
+}
+
+.badge-info {
+    padding: 4px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #1c3d5a;
+}
+
+.badge-turq {
+    padding: 4px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #503194;
+}
+
+.badge-secondary {
+    border-radius: 4px;
+    padding: 4px;
+    color: #fff;
+    background-color: #494444;
+}
+
+.badge-danger {
+    border-radius: 4px;
+    padding: 4px;
+    color: #fff;
+    background-color: #621b18;
+}
+
+.badge-warning {
+    border-radius: 4px;
+    padding: 4px;
+    color: #fff;
+    background-color: #684f1d;
+}
+
+.svg-icon {
+    fill: var(--text-main);
+}
+
+button:hover .svg-icon,
+a:hover .svg-icon {
+    fill: var(--links) !important;
+}
+
+.eye-link {
+    color: var(--text-main);
+    fill: var(--text-main);
+}
+.eye-link:hover {
+    color: var(--links);
+    fill: var(--links);
+}

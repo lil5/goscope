@@ -9,59 +9,32 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"strings"
 )
 
 // Check the wanted path is not in the do not log list.
 func CheckExcludedPaths(path string) bool {
-	result := true
-	items := []string{
+	exactMatches := []string{
 		"",
-		"/goscope/",
-		"/goscope/1.js",
-		"/goscope/2.js",
-		"/goscope/3.js",
-		"/goscope/log-records",
-		"/goscope/log-records/:id",
-		"/goscope/logs",
-		"css",
-		"/assets/logo.svg",
-		"/goscope/api/application-name",
-		"/goscope",
-		"/js/*",
-		"/css/*",
-		"/css/*filepath",
-		"/js/*filepath",
-		"/goscope/requests",
-		"/js",
-		"/goscope/responses",
-		"/goscope/responses/:id",
-		"/goscope/requests/:id",
-		"/goscope/search/requests",
-		"/goscope/search/logs",
-		"/goscope/api/requests",
-		"/goscope/api/requests/:id",
-		"/goscope/api/logs",
-		"/goscope/api/logs/:id",
-		"/goscope/api/info",
-		"/goscope/api/search/logs",
-		"/goscope/api/search/requests",
-		"/goscope/runtime.js",
-		"/goscope/styles.css",
-		"/goscope/polyfills.js",
-		"/goscope/main.js",
-		"/goscope/api/application-name",
-		"/goscope/favicon.ico",
-		"/goscope/requests/:uuid",
-		"/goscope/logs/:uuid",
 	}
 
-	for _, s := range items {
+	for _, s := range exactMatches {
 		if path == s {
-			result = false
+			return false
 		}
 	}
 
-	return result
+	partialMatches := []string{
+		"/goscope",
+	}
+
+	for _, s := range partialMatches {
+		if strings.Contains(path, s) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func prettifyJSON(rawString string) string {
