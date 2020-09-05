@@ -12,9 +12,12 @@
         </div>
         <div v-if="hasContent(this.requestDetails.headers)">
           <dt>Headers</dt>
-          <dd class="code-block">
-            <pre><code class="language-json">{{ this.requestDetails.headers }}</code></pre>
-          </dd>
+          <details>
+            <summary>Click to view headers...</summary>
+            <dd class="code-block">
+              <pre><code class="language-json">{{ this.requestDetails.headers }}</code></pre>
+            </dd>
+          </details>
         </div>
         <div v-if="hasContent(this.requestDetails.host)">
           <dt>Host</dt>
@@ -66,9 +69,12 @@
         </div>
         <div v-if="hasContent(this.requestDetails.body)">
           <dt>Body</dt>
-          <dd>
-            <pre><code>{{ this.requestDetails.body }}</code></pre>
-          </dd>
+          <details>
+            <summary>Click to view body...</summary>
+            <dd>
+              <pre><code>{{ this.requestDetails.body }}</code></pre>
+            </dd>
+          </details>
         </div>
       </dl>
 
@@ -82,9 +88,12 @@
         </div>
         <div v-if="hasContent(this.responseDetails.headers)">
           <dt>Headers</dt>
-          <dd class="code-block">
-            <pre><code class="language-json">{{ this.responseDetails.headers }}</code></pre>
-          </dd>
+          <details>
+            <summary>Click to view headers...</summary>
+            <dd class="code-block">
+              <pre><code class="language-json">{{ this.responseDetails.headers }}</code></pre>
+            </dd>
+          </details>
         </div>
         <div v-if="hasContent(this.responseDetails.path)">
           <dt>Path</dt>
@@ -124,9 +133,12 @@
         </div>
         <div v-if="hasContent(this.responseDetails.body)">
           <dt>Body</dt>
-          <dd class="code-block">
-            <pre><code class="language-json">{{ this.responseDetails.body }}</code></pre>
-          </dd>
+          <details>
+            <summary>Click to view body...</summary>
+            <dd class="code-block">
+              <pre><code class="language-json">{{ this.responseDetails.body }}</code></pre>
+            </dd>
+          </details>
         </div>
       </dl>
     </section>
