@@ -37,83 +37,80 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { LogsEndpointResponse } from "@/interfaces/logs";
-import { LogService } from "@/api/logs";
+import Vue from "vue";
 import { intervalToLevels } from "@/utils/time";
+import { LogService } from "@/api/logs";
+import { LogsEndpointResponse } from "@/interfaces/logs";
 import SearchBar from "@/components/SearchBar.vue";
-@Component({
-  components: { SearchBar }
-})
-export default class LogsList extends Vue {
-  private currentPage = 1;
-  private searchModeEnabled = false;
-  private searchQuery = "";
 
-  private logs: LogsEndpointResponse = {
-    data: [],
-    applicationName: "",
-    entriesPerPage: 50
-  };
-
-  private now: number = Math.round(new Date().getTime() / 1000);
-
-  async mounted(): Promise<void> {
+export default Vue.extend({
+  name: "LogsList",
+  components: { SearchBar },
+  data() {
+    return {
+      currentPage: 1,
+      searchModeEnabled: false,
+      searchQuery: "",
+      logs: {} as LogsEndpointResponse,
+      now: Math.round(new Date().getTime() / 1000)
+    };
+  },
+  methods: {
+    timeDiffToHuman(value: number): string {
+      return intervalToLevels(value);
+    },
+    async nextPage(): Promise<void> {
+      this.$data.currentPage++;
+      if (this.$data.searchModeEnabled) {
+        const received = await LogService.searchLogs(
+          this.$data.currentPage,
+          this.$data.searchQuery
+        );
+        if (received.data && received.data.length > 0) {
+          this.$data.logs = received;
+        } else {
+          this.$data.currentPage--;
+        }
+      } else {
+        const received = await LogService.getLogs(this.$data.currentPage);
+        if (received.data && received.data.length > 0) {
+          this.$data.logs = received;
+        } else {
+          this.$data.currentPage--;
+        }
+      }
+    },
+    async previousPage(): Promise<void> {
+      if (this.$data.currentPage > 1) {
+        this.$data.currentPage--;
+      }
+      if (this.$data.searchModeEnabled) {
+        this.$data.logs = await LogService.searchLogs(
+          this.$data.currentPage,
+          this.$data.searchQuery
+        );
+      } else {
+        this.$data.logs = await LogService.getLogs(this.$data.currentPage);
+      }
+    },
+    async handleSearch(searchQuery: string): Promise<void> {
+      this.$data.currentPage = 1;
+      this.$data.searchModeEnabled = true;
+      this.$data.searchQuery = searchQuery;
+      this.$data.logs = await LogService.searchLogs(
+        this.$data.currentPage,
+        searchQuery
+      );
+    },
+    async cancelSearch(): Promise<void> {
+      this.$data.currentPage = 1;
+      this.$data.searchModeEnabled = false;
+      this.$data.searchQuery = "";
+      this.$data.logs = await LogService.getLogs(this.$data.currentPage);
+    }
+  },
+  async created(): Promise<void> {
     this.logs = await LogService.getLogs(this.currentPage);
   }
-
-  timeDiffToHuman(value: number): string {
-    return intervalToLevels(value);
-  }
-
-  async nextPage(): Promise<void> {
-    this.currentPage++;
-    if (this.searchModeEnabled) {
-      const received = await LogService.searchLogs(
-        this.currentPage,
-        this.searchQuery
-      );
-      if (received.data !== null) {
-        this.logs = received;
-      } else {
-        this.currentPage--;
-      }
-    } else {
-      const received = await LogService.getLogs(this.currentPage);
-      if (received.data !== null) {
-        this.logs = received;
-      } else {
-        this.currentPage--;
-      }
-    }
-  }
-
-  async previousPage(): Promise<void> {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
-    if (this.searchModeEnabled) {
-      this.logs = await LogService.searchLogs(
-        this.currentPage,
-        this.searchQuery
-      );
-    } else {
-      this.logs = await LogService.getLogs(this.currentPage);
-    }
-  }
-
-  async handleSearch(searchQuery: string): Promise<void> {
-    this.currentPage = 1;
-    this.searchModeEnabled = true;
-    this.searchQuery = searchQuery;
-    this.logs = await LogService.searchLogs(this.currentPage, searchQuery);
-  }
-
-  async cancelSearch(): Promise<void> {
-    this.currentPage = 1;
-    this.searchModeEnabled = false;
-    this.searchQuery = "";
-    this.logs = await LogService.getLogs(this.currentPage);
-  }
-}
+});
 </script>

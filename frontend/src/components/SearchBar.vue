@@ -1,6 +1,7 @@
 <template>
   <section>
-    <input
+    <label for="search-input" content="Search"></label
+    ><input
       v-model="searchQuery"
       placeholder="Search ..."
       id="search-input"
@@ -26,25 +27,27 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { PropType } from "vue";
+import Vue, { PropType } from "vue";
 
-@Component({
+export default Vue.extend({
+  name: "SearchBar",
   props: {
     searchEnabled: Boolean as PropType<boolean>
-  }
-})
-export default class SearchBar extends Vue {
-  private searchQuery = "";
-
-  emitSearchEvent() {
-    if (this.searchQuery !== "") {
-      this.$emit("searchEvent", this.searchQuery);
+  },
+  data() {
+    return {
+      searchQuery: ""
+    };
+  },
+  methods: {
+    emitSearchEvent() {
+      if (this.$data.searchQuery !== "") {
+        this.$emit("searchEvent", this.$data.searchQuery);
+      }
+    },
+    emitCancelSearchEvent() {
+      this.$emit("cancelSearchEvent");
     }
   }
-
-  emitCancelSearchEvent() {
-    this.$emit("cancelSearchEvent");
-  }
-}
+});
 </script>
