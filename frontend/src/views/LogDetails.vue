@@ -6,11 +6,11 @@
       <dl>
         <dt>Message</dt>
         <dd>
-          <code>{{ this.logDetails.data.logDetails.error }}</code>
+          <code>{{ computedLogError }}</code>
         </dd>
         <dt>Time</dt>
         <dd>
-          <code>{{ this.logDetails.data.logDetails.time }}</code>
+          <code>{{ computedLogTime }}</code>
         </dd>
       </dl>
     </section>
@@ -18,30 +18,38 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import { DetailedLogsReponse } from "@/interfaces/logs";
 import { LogService } from "@/api/logs";
-import { PropType } from "vue";
+import Vue, { PropType } from "vue";
 
-@Component({
+export default Vue.extend({
+  name: "LogDetails",
   props: {
     logUUID: String as PropType<string>
-  }
-})
-export default class LogDetails extends Vue {
-  private logDetails: DetailedLogsReponse = {
-    data: {
-      logDetails: {
-        error: "",
-        time: 0,
-        uid: ""
+  },
+  computed: {
+    computedLogError(): string {
+      if (!this.$data.logDetails.data) {
+        return "";
       }
+      return this.$data.logDetails.data.logDetails.error;
     },
-    applicationName: ""
-  };
-
-  async mounted(): Promise<void> {
+    computedLogTime(): string {
+      if (!this.$data.logDetails.data) {
+        return "";
+      }
+      return new Date(
+        this.$data.logDetails.data.logDetails.time * 1000
+      ).toLocaleString("nl-NL");
+    }
+  },
+  async created(): Promise<void> {
     this.logDetails = await LogService.getLog(this.$route.params.id);
+  },
+  data() {
+    return {
+      logDetails: {} as DetailedLogsReponse
+    };
   }
-}
+});
 </script>

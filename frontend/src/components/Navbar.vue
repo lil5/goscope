@@ -2,7 +2,7 @@
   <header>
     <nav role="navigation">
       <router-link to="/">
-        <img id="logo" src="@/assets/logo.svg" />
+        <img alt="logo" class="navbar-logo" src="@/assets/logo.svg" />
         {{ this.applicationDetails.applicationName }}
       </router-link>
 
@@ -23,23 +23,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import { ApplicationDetailsResponse } from "@/interfaces/app-details";
 import { ApplicationDetailsService } from "@/api/app-details";
+import Vue from "vue";
 
-@Component
-export default class Navbar extends Vue {
-  private applicationDetails: ApplicationDetailsResponse = {
-    applicationName: ""
-  };
+export default Vue.extend({
+  name: "Navbar",
   async mounted(): Promise<void> {
-    this.applicationDetails = await ApplicationDetailsService.getApplicationDetails();
+    this.$data.applicationDetails = await ApplicationDetailsService.getApplicationDetails();
+  },
+  data() {
+    return {
+      applicationDetails: {} as ApplicationDetailsResponse
+    };
   }
-}
+});
 </script>
 
 <style scoped>
-#logo {
+.navbar-logo {
   height: 1.2em;
   margin-right: 5px;
   transform: scale(2);
@@ -60,10 +62,7 @@ header nav > a {
   border-bottom-style: solid;
   border-bottom-color: transparent;
   border-bottom-width: 2px;
-  padding-bottom: 8px;
-  padding-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 10px 5px 8px;
   display: inline-block;
   color: var(--form-text);
 }

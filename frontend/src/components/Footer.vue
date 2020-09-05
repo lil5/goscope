@@ -3,20 +3,21 @@
     <p>
       Made with ❤️ and hosted on
       <a
-          class="navbar-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/averageflow/goscope"
-      >GitHub</a
+        class="navbar-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://github.com/averageflow/goscope"
+        >GitHub</a
       >
     </p>
   </footer>
 </template>
 
 <script>
-export default {
-name: "Footer"
-}
+import Vue from "vue";
+export default Vue.extend({
+  name: "Footer"
+});
 </script>
 
 <style scoped>

@@ -82,10 +82,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import { SystemInfoDetailsResponse } from "@/interfaces/system-info";
 import { SystemInfoService } from "@/api/system-info";
 
+/*
 @Component
 export default class SystemInfo extends Vue {
   private systemInformation: SystemInfoDetailsResponse = {
@@ -118,7 +118,5 @@ export default class SystemInfo extends Vue {
   async mounted(): Promise<void> {
     this.systemInformation = await SystemInfoService.getSystemInfo();
   }
-}
+}*/
 </script>
-
-<style scoped></style>
