@@ -7,11 +7,11 @@
       <dl>
         <dt>Core Count</dt>
         <dd>
-          <code>{{ this.systemInformation.cpu.coreCount }}</code>
+          <code>{{ this.computedDetails.cpu.coreCount }}</code>
         </dd>
         <dt>Model</dt>
         <dd>
-          <code>{{ this.systemInformation.cpu.modelName }}</code>
+          <code>{{ this.computedDetails.cpu.modelName }}</code>
         </dd>
       </dl>
 
@@ -19,19 +19,19 @@
       <dl>
         <dt>Free space</dt>
         <dd>
-          <code>{{ this.systemInformation.disk.freeSpace }}</code>
+          <code>{{ this.computedDetails.disk.freeSpace }}</code>
         </dd>
         <dt>Partition Type</dt>
         <dd>
-          <code>{{ this.systemInformation.disk.partitionType }}</code>
+          <code>{{ this.computedDetails.disk.partitionType }}</code>
         </dd>
         <dt>Mount Path</dt>
         <dd>
-          <code>{{ this.systemInformation.disk.mountPath }}</code>
+          <code>{{ this.computedDetails.disk.mountPath }}</code>
         </dd>
         <dt>Total Space</dt>
         <dd>
-          <code>{{ this.systemInformation.disk.totalSpace }}</code>
+          <code>{{ this.computedDetails.disk.totalSpace }}</code>
         </dd>
       </dl>
 
@@ -39,27 +39,27 @@
       <dl>
         <dt>Kernel Arch</dt>
         <dd>
-          <code>{{ this.systemInformation.host.kernelArch }}</code>
+          <code>{{ this.computedDetails.host.kernelArch }}</code>
         </dd>
         <dt>Kernel Version</dt>
         <dd>
-          <code>{{ this.systemInformation.host.kernelVersion }}</code>
+          <code>{{ this.computedDetails.host.kernelVersion }}</code>
         </dd>
         <dt>Hostname</dt>
         <dd>
-          <code>{{ this.systemInformation.host.hostname }}</code>
+          <code>{{ this.computedDetails.host.hostname }}</code>
         </dd>
         <dt>Host OS</dt>
         <dd>
-          <code>{{ this.systemInformation.host.hostOS }}</code>
+          <code>{{ this.computedDetails.host.hostOS }}</code>
         </dd>
         <dt>Platform</dt>
         <dd>
-          <code>{{ this.systemInformation.host.hostPlatform }}</code>
+          <code>{{ this.computedDetails.host.hostPlatform }}</code>
         </dd>
         <dt>Uptime</dt>
         <dd>
-          <code>{{ this.systemInformation.host.uptime }}</code>
+          <code>{{ this.computedDetails.host.uptime }}</code>
         </dd>
       </dl>
 
@@ -68,13 +68,13 @@
         <dt>Status</dt>
         <dd>
           <code
-            >{{ this.systemInformation.memory.availableMemory }} available of
-            {{ this.systemInformation.memory.totalMemory }}</code
+            >{{ this.computedDetails.memory.availableMemory }} available of
+            {{ this.computedDetails.memory.totalMemory }}</code
           >
         </dd>
         <dt>Swap usage</dt>
         <dd>
-          <code>{{ this.systemInformation.memory.usedSwap }}</code>
+          <code>{{ this.computedDetails.memory.usedSwap }}</code>
         </dd>
       </dl>
     </section>
@@ -84,39 +84,53 @@
 <script lang="ts">
 import { SystemInfoDetailsResponse } from "@/interfaces/system-info";
 import { SystemInfoService } from "@/api/system-info";
+import Vue from "vue";
 
-/*
-@Component
-export default class SystemInfo extends Vue {
-  private systemInformation: SystemInfoDetailsResponse = {
-    applicationName: "",
-    cpu: {
-      coreCount: "",
-      modelName: ""
-    },
-    disk: {
-      freeSpace: "",
-      partitionType: "",
-      mountPath: "",
-      totalSpace: ""
-    },
-    host: {
-      kernelArch: "",
-      kernelVersion: "",
-      hostname: "",
-      hostOS: "",
-      hostPlatform: "",
-      uptime: ""
-    },
-    memory: {
-      availableMemory: "",
-      totalMemory: "",
-      usedSwap: ""
+export default Vue.extend({
+  name: "SystemInfo",
+  computed: {
+    computedDetails(): SystemInfoDetailsResponse {
+      if (
+        !this.$data.systemInformation ||
+        Object.keys(this.$data.systemInformation).length === 0
+      ) {
+        return {
+          cpu: {
+            coreCount: "",
+            modelName: ""
+          },
+          disk: {
+            freeSpace: "",
+            partitionType: "",
+            mountPath: "",
+            totalSpace: ""
+          },
+          host: {
+            kernelArch: "",
+            kernelVersion: "",
+            hostname: "",
+            hostOS: "",
+            hostPlatform: "",
+            uptime: ""
+          },
+          memory: {
+            availableMemory: "",
+            totalMemory: "",
+            usedSwap: ""
+          }
+        } as SystemInfoDetailsResponse;
+      } else {
+        return this.$data.systemInformation;
+      }
     }
-  };
-
-  async mounted(): Promise<void> {
-    this.systemInformation = await SystemInfoService.getSystemInfo();
+  },
+  data() {
+    return {
+      systemInformation: {} as SystemInfoDetailsResponse
+    };
+  },
+  async created(): Promise<void> {
+    this.$data.systemInformation = await SystemInfoService.getSystemInfo();
   }
-}*/
+});
 </script>

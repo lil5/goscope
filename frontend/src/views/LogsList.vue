@@ -66,14 +66,14 @@ export default Vue.extend({
           this.$data.currentPage,
           this.$data.searchQuery
         );
-        if (!received.data || received.data.length === 0) {
+        if (received.data && received.data.length > 0) {
           this.$data.logs = received;
         } else {
           this.$data.currentPage--;
         }
       } else {
         const received = await LogService.getLogs(this.$data.currentPage);
-        if (received.data !== null) {
+        if (received.data && received.data.length > 0) {
           this.$data.logs = received;
         } else {
           this.$data.currentPage--;

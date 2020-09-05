@@ -21,6 +21,7 @@
 import { DetailedLogsReponse } from "@/interfaces/logs";
 import { LogService } from "@/api/logs";
 import Vue, { PropType } from "vue";
+import { epochToHumanDate } from "@/utils/time";
 
 export default Vue.extend({
   name: "LogDetails",
@@ -38,9 +39,7 @@ export default Vue.extend({
       if (!this.$data.logDetails.data) {
         return "";
       }
-      return new Date(
-        this.$data.logDetails.data.logDetails.time * 1000
-      ).toLocaleString("nl-NL");
+      return epochToHumanDate(this.$data.logDetails.data.logDetails.time);
     }
   },
   async created(): Promise<void> {
