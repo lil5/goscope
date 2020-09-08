@@ -30,8 +30,8 @@
       </tbody>
     </table>
     <nav class="text-center">
-      <button v-on:click="this.previousPage()">← prev</button>
-      <button v-on:click="this.nextPage()">next →</button>
+      <button v-on:click="this.previousPage">← prev</button>
+      <button v-on:click="this.nextPage">next →</button>
     </nav>
   </section>
 </template>

@@ -26,10 +26,10 @@
       </tbody>
     </table>
     <nav class="text-center">
-      <button v-on:click="previousPage()" class="navbar-link cursor-pointer">
+      <button v-on:click="this.previousPage" class="navbar-link cursor-pointer">
         ← prev
       </button>
-      <button v-on:click="nextPage()" class="navbar-link cursor-pointer">
+      <button v-on:click="this.nextPage" class="navbar-link cursor-pointer">
         next →
       </button>
     </nav>
