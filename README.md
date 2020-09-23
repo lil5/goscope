@@ -50,7 +50,7 @@ import (
 func main(){
     router := gin.New()
     _ = godotenv.Load()
-    goscope.Setup(router)
+    goscope.Setup(router, router.Group("/goscope"))
     
     router.GET("/ping")
 }
