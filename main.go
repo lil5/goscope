@@ -18,6 +18,15 @@ func main() {
 	}
 
 	router := gin.New()
-	goscope.Setup(router)
+
+	// Provide a route for the Goscope UI, which
+	// can be customized i.e. to use a Auth middleware:
+	//
+	// ui := router.Group("/goscope").Use(gin.BasicAuth(gin.Accounts{
+	//	"secret_user": "secret_password",
+	// }))
+	// goscope.Setup(router, ui)
+
+	goscope.Setup(router, router.Group("/goscope"))
 	_ = router.Run()
 }

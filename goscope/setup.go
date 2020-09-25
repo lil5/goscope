@@ -35,7 +35,7 @@ func CheckVariablesAreSet() {
 	}
 }
 
-func Setup(engine *gin.Engine) {
+func Setup(engine *gin.Engine, goscopeGroup *gin.RouterGroup) {
 	CheckVariablesAreSet()
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
@@ -47,9 +47,8 @@ func Setup(engine *gin.Engine) {
 	log.SetOutput(logger)
 	// Use the logging middleware
 	engine.Use(ResponseLogger)
-	// Setup necessary routes
 
-	goscopeGroup := engine.Group("/goscope")
+	// Setup necessary routes
 	// Static content from SPA
 	goscopeGroup.GET("/", ShowDashboard)
 	goscopeGroup.GET("/img/logo.svg", GetStaticFile)
