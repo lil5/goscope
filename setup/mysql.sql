@@ -20,7 +20,7 @@ CREATE TABLE `requests` (
   `client_ip` varchar(255) DEFAULT NULL,
   `method` varchar(255) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
+  `url` longtext DEFAULT NULL,
   `host` varchar(255) DEFAULT NULL,
   `headers` text,
   `body` longtext,
