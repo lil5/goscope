@@ -1,17 +1,17 @@
 module github.com/averageflow/goscope
 
-go 1.14
+go 1.15
 
 require (
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/google/go-cmp v0.5.1 // indirect
 	github.com/joho/godotenv v1.3.0
+	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lib/pq v1.7.0
 	github.com/mattn/go-sqlite3 v1.14.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/shirou/gopsutil v2.20.6+incompatible
-	github.com/shuLhan/go-bindata v3.4.0+incompatible // indirect
-	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305 // indirect
-	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f // indirect
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )

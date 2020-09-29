@@ -60,57 +60,55 @@ export default Vue.extend({
       return intervalToLevels(value);
     },
     async nextPage(): Promise<void> {
-      this.$data.currentPage++;
-      if (this.$data.searchModeEnabled) {
+      this.currentPage++;
+      if (this.searchModeEnabled) {
         const received = await LogService.searchLogs(
-          this.$data.currentPage,
-          this.$data.searchQuery
+          this.currentPage,
+          this.searchQuery
         );
         if (received.data && received.data.length > 0) {
-          this.$data.logs = received;
+          this.logs = received;
         } else {
-          this.$data.currentPage--;
+          this.currentPage--;
         }
       } else {
-        const received = await LogService.getLogs(this.$data.currentPage);
+        const received = await LogService.getLogs(this.currentPage);
         if (received.data && received.data.length > 0) {
-          this.$data.logs = received;
+          this.logs = received;
         } else {
-          this.$data.currentPage--;
+          this.currentPage--;
         }
       }
     },
     async previousPage(): Promise<void> {
-      if (this.$data.currentPage > 1) {
-        this.$data.currentPage--;
+      if (this.currentPage > 1) {
+        this.currentPage--;
       }
-      if (this.$data.searchModeEnabled) {
-        this.$data.logs = await LogService.searchLogs(
-          this.$data.currentPage,
-          this.$data.searchQuery
+      if (this.searchModeEnabled) {
+        this.logs = await LogService.searchLogs(
+          this.currentPage,
+          this.searchQuery
         );
       } else {
-        this.$data.logs = await LogService.getLogs(this.$data.currentPage);
+        this.logs = await LogService.getLogs(this.currentPage);
       }
     },
     async handleSearch(searchQuery: string): Promise<void> {
-      this.$data.currentPage = 1;
-      this.$data.searchModeEnabled = true;
-      this.$data.searchQuery = searchQuery;
-      this.$data.logs = await LogService.searchLogs(
-        this.$data.currentPage,
-        searchQuery
-      );
+      this.currentPage = 1;
+      this.searchModeEnabled = true;
+      this.searchQuery = searchQuery;
+      this.logs = await LogService.searchLogs(this.currentPage, searchQuery);
     },
     async cancelSearch(): Promise<void> {
-      this.$data.currentPage = 1;
-      this.$data.searchModeEnabled = false;
-      this.$data.searchQuery = "";
-      this.$data.logs = await LogService.getLogs(this.$data.currentPage);
+      this.currentPage = 1;
+      this.searchModeEnabled = false;
+      this.searchQuery = "";
+      this.logs = await LogService.getLogs(this.currentPage);
     }
   },
   async created(): Promise<void> {
     this.logs = await LogService.getLogs(this.currentPage);
+    document.title = `${this.logs.applicationName} | Logs`;
   }
 });
 </script>

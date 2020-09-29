@@ -181,8 +181,9 @@ export default Vue.extend({
     const requestedData = await RequestService.getRequest(
       this.$route.params.id
     );
-    this.$data.requestDetails = requestedData.data.request;
-    this.$data.responseDetails = requestedData.data.response;
+    this.requestDetails = requestedData.data.request;
+    this.responseDetails = requestedData.data.response;
+    document.title = `${requestedData.applicationName} | Request ${this.$route.params.id}`;
   }
 });
 </script>

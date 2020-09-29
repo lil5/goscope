@@ -91,8 +91,8 @@ export default Vue.extend({
   computed: {
     computedDetails(): SystemInfoDetailsResponse {
       if (
-        !this.$data.systemInformation ||
-        Object.keys(this.$data.systemInformation).length === 0
+        !this.systemInformation ||
+        Object.keys(this.systemInformation).length === 0
       ) {
         return {
           cpu: {
@@ -120,7 +120,7 @@ export default Vue.extend({
           }
         } as SystemInfoDetailsResponse;
       } else {
-        return this.$data.systemInformation;
+        return this.systemInformation;
       }
     }
   },
@@ -130,7 +130,8 @@ export default Vue.extend({
     };
   },
   async created(): Promise<void> {
-    this.$data.systemInformation = await SystemInfoService.getSystemInfo();
+    this.systemInformation = await SystemInfoService.getSystemInfo();
+    document.title = `${this.systemInformation.applicationName} | System Information`;
   }
 });
 </script>

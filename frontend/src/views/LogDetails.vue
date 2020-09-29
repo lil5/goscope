@@ -30,20 +30,21 @@ export default Vue.extend({
   },
   computed: {
     computedLogError(): string {
-      if (!this.$data.logDetails.data) {
+      if (!this.logDetails.data) {
         return "";
       }
-      return this.$data.logDetails.data.logDetails.error;
+      return this.logDetails.data.logDetails.error;
     },
     computedLogTime(): string {
-      if (!this.$data.logDetails.data) {
+      if (!this.logDetails.data) {
         return "";
       }
-      return epochToHumanDate(this.$data.logDetails.data.logDetails.time);
+      return epochToHumanDate(this.logDetails.data.logDetails.time);
     }
   },
   async created(): Promise<void> {
     this.logDetails = await LogService.getLog(this.$route.params.id);
+    document.title = `${this.logDetails.applicationName} | Log ${this.$route.params.id}`;
   },
   data() {
     return {

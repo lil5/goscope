@@ -41,8 +41,8 @@ export default Vue.extend({
   },
   methods: {
     emitSearchEvent() {
-      if (this.$data.searchQuery !== "") {
-        this.$emit("searchEvent", this.$data.searchQuery);
+      if (this.searchQuery !== "") {
+        this.$emit("searchEvent", this.searchQuery);
       }
     },
     emitCancelSearchEvent() {

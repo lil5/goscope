@@ -2,7 +2,6 @@
   <header>
     <nav role="navigation">
       <router-link to="/">
-        <img alt="logo" class="navbar-logo" src="@/assets/logo.svg" />
         {{ this.applicationDetails.applicationName }}
       </router-link>
 

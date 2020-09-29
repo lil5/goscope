@@ -51,7 +51,7 @@ func Setup(engine *gin.Engine, goscopeGroup *gin.RouterGroup) {
 	// Setup necessary routes
 	// Static content from SPA
 	goscopeGroup.GET("/", ShowDashboard)
-	goscopeGroup.GET("/img/logo.svg", GetStaticFile)
+	goscopeGroup.GET("/logo.svg", GetStaticFile)
 	goscopeGroup.GET("/js/app.js", GetStaticFile)
 	goscopeGroup.GET("/js/app.js.map", GetStaticFile)
 	goscopeGroup.GET("/css/app.css", GetStaticFile)

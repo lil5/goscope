@@ -56,65 +56,58 @@ export default Vue.extend({
     };
   },
   async created(): Promise<void> {
-    this.$data.requests = await RequestService.getRequests(
-      this.$data.currentPage
-    );
+    this.requests = await RequestService.getRequests(this.currentPage);
+    document.title = `${this.requests.applicationName} | Requests`;
   },
   methods: {
     async nextPage(): Promise<void> {
-      this.$data.currentPage++;
-      if (this.$data.searchModeEnabled) {
+      this.currentPage++;
+      if (this.searchModeEnabled) {
         const received = await RequestService.searchRequests(
-          this.$data.currentPage,
-          this.$data.searchQuery
+          this.currentPage,
+          this.searchQuery
         );
         if (received.data && received.data.length > 0) {
-          this.$data.requests = received;
+          this.requests = received;
         } else {
-          this.$data.currentPage--;
+          this.currentPage--;
         }
       } else {
-        const received = await RequestService.getRequests(
-          this.$data.currentPage
-        );
+        const received = await RequestService.getRequests(this.currentPage);
         if (received.data && received.data.length > 0) {
-          this.$data.requests = received;
+          this.requests = received;
         } else {
-          this.$data.currentPage--;
+          this.currentPage--;
         }
       }
     },
     async previousPage(): Promise<void> {
-      if (this.$data.currentPage > 1) {
-        this.$data.currentPage--;
+      if (this.currentPage > 1) {
+        this.currentPage--;
       }
-      if (this.$data.searchModeEnabled) {
-        this.$data.requests = await RequestService.searchRequests(
-          this.$data.currentPage,
-          this.$data.searchQuery
+      if (this.searchModeEnabled) {
+        this.requests = await RequestService.searchRequests(
+          this.currentPage,
+          this.searchQuery
         );
       } else {
-        this.$data.requests = await RequestService.getRequests(
-          this.$data.currentPage
-        );
+        this.requests = await RequestService.getRequests(this.currentPage);
       }
     },
     async handleSearch(searchQuery: string): Promise<void> {
-      this.$data.currentPage = 1;
-      this.$data.searchModeEnabled = true;
-      this.$data.searchQuery = searchQuery;
-      this.$data.requests = await RequestService.searchRequests(
-        this.$data.currentPage,
+      this.currentPage = 1;
+      this.searchModeEnabled = true;
+      this.searchQuery = searchQuery;
+      this.requests = await RequestService.searchRequests(
+        this.currentPage,
         searchQuery
       );
     },
     async cancelSearch(): Promise<void> {
-      this.$data.currentPage = 1;
-      this.$data.searchModeEnabled = false;
-      this.$data.searchQuery = "";
-      this.$data.requests = await RequestService.getRequests(
-        this.$data.currentPage
-      );
+      this.currentPage = 1;
+      this.searchModeEnabled = false;
+      this.searchQuery = "";
+      this.requests = await RequestService.getRequests(this.currentPage);
     },
     timeDiffToHuman(value: number): string {
       return intervalToLevels(value);
