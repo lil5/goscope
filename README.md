@@ -9,7 +9,7 @@ The aim of this application is to be a plug and play addition to your applicatio
 
 Once all is set up you can access the web interface by visiting `http://your-app.com/goscope`. 
 
-It is recommended that you will protect this route from external/public access so that you do not leak important application data.
+You should protect this route from external/public access so that you do not leak important application data.
 
 ### Setup
 
@@ -26,6 +26,11 @@ GOSCOPE_DATABASE_TYPE: "mysql"
 # for SQLite
 GOSCOPE_DATABASE_CONNECTION: "file:/Users/joe/workspace/goscope/setup/sqlite.sqlite" 
 GOSCOPE_DATABASE_TYPE: "sqlite3"
+# adjust to preference, if following are not specified, these are the defaults
+GOSCOPE_DATABASE_MAX_OPEN_CONNECTIONS: 10
+GOSCOPE_DATABASE_MAX_IDLE_CONNECTIONS: 5
+GOSCOPE_DATABASE_MAX_CONN_LIFETIME: 10
+
 
 GOSCOPE_ENTRIES_PER_PAGE: 50
 # optional boolean value, will disable the GoScope frontend
@@ -33,7 +38,7 @@ GOSCOPE_DISABLE_FRONTEND: false
 ```
 
 GoScope has been extended to work with a repository pattern, thus has the capability of supporting any database driver/engine that will work with Go and uses the `sql` package (returning `*sql.Rows` or `*sql.Row`). 
-NoSQL databases are currently not supported, although we think that it would be a great addition, so if you have the know-how please don't hesitate to make a Pull Request.
+NoSQL databases are not currently supported, although we think that it would be a great addition, so if you have the know-how please don't hesitate to make a Pull Request.
 In the .env file you can specify either the `mysql` driver, `postgres` driver, or `sqlite3` driver, which will use the `github.com/go-sql-driver/mysql`, `github.com/lib/pq` or `github.com/mattn/go-sqlite3` respectively. Ensure you have the correct connection string in your env file.
 
 The application expects a database with a setup that can be recreated by taking a look at the `setup` folder in the root of this repository.
@@ -52,6 +57,15 @@ import (
 func main(){
     router := gin.New()
     _ = godotenv.Load()
+    
+    // Provide a route for the GoScope UI, which
+	// can be customized i.e. to use a Auth middleware:
+	//
+	// ui := router.Group("/goscope").Use(gin.BasicAuth(gin.Accounts{
+	//	"secret_user": "secret_password",
+	// }))
+	// goscope.Setup(router, ui)
+
     goscope.Setup(router, router.Group("/goscope"))
     
     router.GET("/ping")

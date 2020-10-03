@@ -13,11 +13,8 @@ import (
 )
 
 func GetDetailedLog(requestUID string) ExceptionRecord {
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
 	row := database.GetDetailedLog(
-		db,
+		utils.DB,
 		utils.Config.GoScopeDatabaseType,
 		requestUID,
 	)
@@ -36,11 +33,8 @@ func GetDetailedLog(requestUID string) ExceptionRecord {
 func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	var result []ExceptionRecord
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := database.SearchLogs(db, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
+	rows := database.SearchLogs(utils.DB, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
 
 	defer rows.Close()
 
@@ -63,10 +57,7 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 func GetLogs(offset int) []ExceptionRecord {
 	var result []ExceptionRecord
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
-	rows := database.GetLogs(db, utils.Config.GoScopeDatabaseType, offset)
+	rows := database.GetLogs(utils.DB, utils.Config.GoScopeDatabaseType, offset)
 	if rows == nil {
 		return result
 	}

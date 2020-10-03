@@ -5,7 +5,6 @@ package goscope
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/json"
 	"log"
 	"strings"
@@ -50,21 +49,4 @@ func prettifyJSON(rawString string) string {
 	}
 
 	return prettyJSON.String()
-}
-
-func GetDB(databaseType, databaseConnection string) *sql.DB {
-	db, err := sql.Open(databaseType, databaseConnection)
-	if err != nil {
-		log.Println(err.Error())
-		panic(err.Error())
-	}
-
-	err = db.Ping()
-
-	if err != nil {
-		log.Println(err.Error())
-		panic(err.Error())
-	}
-
-	return db
 }

@@ -25,10 +25,7 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 
 	var result DetailedRequest
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
-	row := database.GetDetailedRequest(db, utils.Config.GoScopeDatabaseType, requestUID)
+	row := database.GetDetailedRequest(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -60,10 +57,7 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 
 	var result DetailedResponse
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
-	row := database.GetDetailedResponse(db, utils.Config.GoScopeDatabaseType, requestUID)
+	row := database.GetDetailedResponse(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -88,10 +82,7 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 func GetRequests(offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
-	rows := database.GetRequests(db, utils.Config.GoScopeDatabaseType, offset)
+	rows := database.GetRequests(utils.DB, utils.Config.GoScopeDatabaseType, offset)
 
 	if rows == nil {
 		return result
@@ -120,16 +111,13 @@ func GetRequests(offset int) []SummarizedRequest {
 }
 
 func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
 	now := time.Now().Unix()
 	requestUID, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
 	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
 		"headers, body, referrer, url, user_agent) VALUES " +
 		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	_, err := db.Exec(
+	_, err := utils.DB.Exec(
 		query,
 		requestUID.String(),
 		utils.Config.ApplicationID,
@@ -154,7 +142,7 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
 		"body, path, headers, size) VALUES " +
 		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	_, err = db.Exec(
+	_, err = utils.DB.Exec(
 		query,
 		responseUID.String(),
 		requestUID.String(),
@@ -176,11 +164,8 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 func SearchRequests(searchString string, offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-	defer db.Close()
-
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := database.SearchRequests(db, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
+	rows := database.SearchRequests(utils.DB, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
 
 	defer rows.Close()
 

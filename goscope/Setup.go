@@ -19,6 +19,13 @@ import (
 
 func Setup(engine *gin.Engine, goScopeGroup *gin.RouterGroup) {
 	utils.ConfigSetup()
+	utils.DatabaseSetup(utils.DatabaseInformation{
+		Type:                  utils.Config.GoScopeDatabaseType,
+		Connection:            utils.Config.GoScopeDatabaseConnection,
+		MaxOpenConnections:    utils.Config.GoScopeDatabaseMaxOpenConnections,
+		MaxIdleConnections:    utils.Config.GoScopeDatabaseMaxIdleConnections,
+		MaxConnectionLifetime: utils.Config.GoScopeDatabaseMaxConnLifetime,
+	})
 
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())

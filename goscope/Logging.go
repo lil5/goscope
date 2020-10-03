@@ -59,15 +59,11 @@ func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 func writeLogs(message string) {
 	fmt.Printf("%v", message)
 
-	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
-
-	defer db.Close()
-
 	uid, _ := uuid.NewV4()
 	query := "INSERT INTO logs (uid, application, error, time) VALUES " +
 		"(?, ?, ?, ?)"
 
-	_, err := db.Exec(
+	_, err := utils.DB.Exec(
 		query,
 		uid.String(),
 		utils.Config.ApplicationID,
