@@ -1,15 +1,16 @@
+// License: MIT
+// Authors:
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package database
 
 import (
 	"database/sql"
 	"log"
-	"os"
+
+	"github.com/averageflow/goscope/utils"
 )
 
-func GetDetailedRequest(connection, requestUID string) *sql.Row {
-	db := GetDB()
-	defer db.Close()
-
+func GetDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
 	var query string
 	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `client_ip`, `method`, `path`, `url`, " +
@@ -24,10 +25,7 @@ func GetDetailedRequest(connection, requestUID string) *sql.Row {
 	return row
 }
 
-func GetRequests(connection string, offset int) *sql.Rows {
-	db := GetDB()
-	defer db.Close()
-
+func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
 	var query string
 	if connection == MySQL || connection == SQLite {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
@@ -43,8 +41,8 @@ func GetRequests(connection string, offset int) *sql.Rows {
 
 	rows, err := db.Query(
 		query,
-		os.Getenv("APPLICATION_ID"),
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		utils.Config.ApplicationID,
+		utils.Config.GoScopeEntriesPerPage,
 		offset,
 	)
 
@@ -57,11 +55,7 @@ func GetRequests(connection string, offset int) *sql.Rows {
 	return rows
 }
 
-func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
-	db := GetDB()
-
-	defer db.Close()
-
+func SearchRequests(db *sql.DB, connection, searchWildcard string, offset int) *sql.Rows {
 	var query string
 
 	if connection == MySQL || connection == SQLite {
@@ -102,14 +96,14 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 
 	rows, err := db.Query(
 		query,
-		os.Getenv("APPLICATION_ID"),
+		utils.Config.ApplicationID,
 		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
 		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
 		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
 		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
 		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
 		searchWildcard,
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		utils.Config.GoScopeEntriesPerPage,
 		offset,
 	)
 
@@ -121,10 +115,7 @@ func SearchRequests(connection, searchWildcard string, offset int) *sql.Rows {
 	return rows
 }
 
-func GetDetailedResponse(connection, requestUID string) *sql.Row {
-	db := GetDB()
-	defer db.Close()
-
+func GetDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
 	var query string
 
 	if connection == MySQL || connection == SQLite {

@@ -1,6 +1,6 @@
 // License: MIT
 // Authors:
-// 		- Josep Bigorra (averageflow)
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package goscope
 
 import (
@@ -8,7 +8,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
-	"os"
 	"strings"
 )
 
@@ -53,8 +52,8 @@ func prettifyJSON(rawString string) string {
 	return prettyJSON.String()
 }
 
-func GetDB() *sql.DB {
-	db, err := sql.Open(os.Getenv("GOSCOPE_DATABASE_TYPE"), os.Getenv("GOSCOPE_DATABASE_CONNECTION"))
+func GetDB(databaseType, databaseConnection string) *sql.DB {
+	db, err := sql.Open(databaseType, databaseConnection)
 	if err != nil {
 		log.Println(err.Error())
 		panic(err.Error())

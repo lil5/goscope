@@ -1,6 +1,6 @@
 // License: MIT
 // Authors:
-// 		- Josep Bigorra (averageflow)
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package goscope
 
 import (

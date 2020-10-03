@@ -1,6 +1,6 @@
 // License: MIT
 // Authors:
-// 		- Josep Bigorra (averageflow)
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package goscope
 
 import (
@@ -9,8 +9,9 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"os"
 	"time"
+
+	"github.com/averageflow/goscope/utils"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
@@ -58,7 +59,7 @@ func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 func writeLogs(message string) {
 	fmt.Printf("%v", message)
 
-	db := GetDB()
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
 
 	defer db.Close()
 
@@ -69,7 +70,7 @@ func writeLogs(message string) {
 	_, err := db.Exec(
 		query,
 		uid.String(),
-		os.Getenv("APPLICATION_ID"),
+		utils.Config.ApplicationID,
 		message,
 		time.Now().Unix(),
 	)

@@ -1,15 +1,16 @@
+// License: MIT
+// Authors:
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package database
 
 import (
 	"database/sql"
 	"log"
-	"os"
+
+	"github.com/averageflow/goscope/utils"
 )
 
-func GetDetailedLog(connection, requestUID string) *sql.Row {
-	db := GetDB()
-	defer db.Close()
-
+func GetDetailedLog(db *sql.DB, connection, requestUID string) *sql.Row {
 	var query string
 	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `error`, `time` FROM `logs` WHERE `uid` = ?;"
@@ -22,10 +23,7 @@ func GetDetailedLog(connection, requestUID string) *sql.Row {
 	return row
 }
 
-func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
-	db := GetDB()
-	defer db.Close()
-
+func SearchLogs(db *sql.DB, connection, searchWildcard string, offset int) *sql.Rows {
 	var query string
 	if connection == MySQL {
 		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') " +
@@ -49,9 +47,9 @@ func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
 
 	rows, err := db.Query(
 		query,
-		os.Getenv("APPLICATION_ID"),
+		utils.Config.ApplicationID,
 		searchWildcard, searchWildcard, searchWildcard, searchWildcard,
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		utils.Config.GoScopeEntriesPerPage,
 		offset,
 	)
 
@@ -63,11 +61,9 @@ func SearchLogs(connection, searchWildcard string, offset int) *sql.Rows {
 	return rows
 }
 
-func GetLogs(connection string, offset int) *sql.Rows {
-	db := GetDB()
-	defer db.Close()
-
+func GetLogs(db *sql.DB, connection string, offset int) *sql.Rows {
 	var query string
+
 	if connection == MySQL {
 		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') " +
 			"ELSE `error` END AS `error`, `time` FROM `logs` WHERE `application` = ? " +
@@ -84,8 +80,8 @@ func GetLogs(connection string, offset int) *sql.Rows {
 
 	rows, err := db.Query(
 		query,
-		os.Getenv("APPLICATION_ID"),
-		os.Getenv("GOSCOPE_ENTRIES_PER_PAGE"),
+		utils.Config.ApplicationID,
+		utils.Config.GoScopeEntriesPerPage,
 		offset,
 	)
 

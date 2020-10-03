@@ -1,16 +1,24 @@
+// License: MIT
+// Authors:
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package goscope
 
 import (
 	"fmt"
 	"log"
-	"os"
+
+	"github.com/averageflow/goscope/utils"
 
 	"github.com/averageflow/goscope/database"
 )
 
 func GetDetailedLog(requestUID string) ExceptionRecord {
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
+	defer db.Close()
+
 	row := database.GetDetailedLog(
-		os.Getenv("GOSCOPE_DATABASE_TYPE"),
+		db,
+		utils.Config.GoScopeDatabaseType,
 		requestUID,
 	)
 
@@ -28,12 +36,11 @@ func GetDetailedLog(requestUID string) ExceptionRecord {
 func SearchLogs(searchString string, offset int) []ExceptionRecord {
 	var result []ExceptionRecord
 
-	db := GetDB()
-
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
 	defer db.Close()
 
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := database.SearchLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
+	rows := database.SearchLogs(db, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
 
 	defer rows.Close()
 
@@ -56,7 +63,10 @@ func SearchLogs(searchString string, offset int) []ExceptionRecord {
 func GetLogs(offset int) []ExceptionRecord {
 	var result []ExceptionRecord
 
-	rows := database.GetLogs(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
+	defer db.Close()
+
+	rows := database.GetLogs(db, utils.Config.GoScopeDatabaseType, offset)
 	if rows == nil {
 		return result
 	}

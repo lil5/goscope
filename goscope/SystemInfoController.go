@@ -1,10 +1,13 @@
+// License: MIT
+// Authors:
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package goscope
 
 import (
 	"fmt"
 	"net/http"
-	"os"
 
+	"github.com/averageflow/goscope/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
@@ -20,7 +23,7 @@ const (
 func GetAppName(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.JSON(http.StatusOK, gin.H{
-		"applicationName": os.Getenv("APPLICATION_NAME"),
+		"applicationName": utils.Config.ApplicationName,
 	})
 }
 
@@ -34,7 +37,7 @@ func ShowSystemInfo(c *gin.Context) {
 	diskStatus, _ := disk.Usage("/")
 
 	responseBody := SystemInformationResponse{
-		ApplicationName: os.Getenv("APPLICATION_NAME"),
+		ApplicationName: utils.Config.ApplicationName,
 		CPU: SystemInformationResponseCPU{
 			CoreCount: fmt.Sprintf("%d Cores", firstCPU.Cores),
 			ModelName: firstCPU.ModelName,

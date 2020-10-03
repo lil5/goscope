@@ -1,6 +1,6 @@
 // License: MIT
 // Authors:
-// 		- Josep Bigorra (averageflow)
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package main
 
 import (
@@ -28,5 +28,5 @@ func main() {
 	// goscope.Setup(router, ui)
 
 	goscope.Setup(router, router.Group("/goscope"))
-	_ = router.Run()
+	_ = router.Run(":7011")
 }

@@ -1,11 +1,15 @@
+// License: MIT
+// Authors:
+// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package goscope
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"time"
+
+	"github.com/averageflow/goscope/utils"
 
 	"github.com/averageflow/goscope/database"
 
@@ -21,7 +25,10 @@ func GetDetailedRequest(requestUID string) DetailedRequest {
 
 	var result DetailedRequest
 
-	row := database.GetDetailedRequest(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
+	defer db.Close()
+
+	row := database.GetDetailedRequest(db, utils.Config.GoScopeDatabaseType, requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -53,7 +60,10 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 
 	var result DetailedResponse
 
-	row := database.GetDetailedResponse(os.Getenv("GOSCOPE_DATABASE_TYPE"), requestUID)
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
+	defer db.Close()
+
+	row := database.GetDetailedResponse(db, utils.Config.GoScopeDatabaseType, requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -78,7 +88,10 @@ func GetDetailedResponse(requestUID string) DetailedResponse {
 func GetRequests(offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
-	rows := database.GetRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), offset)
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
+	defer db.Close()
+
+	rows := database.GetRequests(db, utils.Config.GoScopeDatabaseType, offset)
 
 	if rows == nil {
 		return result
@@ -107,7 +120,7 @@ func GetRequests(offset int) []SummarizedRequest {
 }
 
 func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
-	db := GetDB()
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
 	defer db.Close()
 
 	now := time.Now().Unix()
@@ -119,7 +132,7 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 	_, err := db.Exec(
 		query,
 		requestUID.String(),
-		os.Getenv("APPLICATION_ID"),
+		utils.Config.ApplicationID,
 		c.ClientIP(),
 		c.Request.Method,
 		c.FullPath(),
@@ -145,7 +158,7 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 		query,
 		responseUID.String(),
 		requestUID.String(),
-		os.Getenv("APPLICATION_ID"),
+		utils.Config.ApplicationID,
 		c.ClientIP(),
 		blw.Status(),
 		now,
@@ -163,8 +176,11 @@ func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
 func SearchRequests(searchString string, offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
+	db := GetDB(utils.Config.GoScopeDatabaseType, utils.Config.GoScopeDatabaseConnection)
+	defer db.Close()
+
 	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := database.SearchRequests(os.Getenv("GOSCOPE_DATABASE_TYPE"), searchWildcard, offset)
+	rows := database.SearchRequests(db, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
 
 	defer rows.Close()
 
