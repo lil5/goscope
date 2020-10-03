@@ -28,6 +28,8 @@ GOSCOPE_DATABASE_CONNECTION: "file:/Users/joe/workspace/goscope/setup/sqlite.sql
 GOSCOPE_DATABASE_TYPE: "sqlite3"
 
 GOSCOPE_ENTRIES_PER_PAGE: 50
+# optional boolean value, will disable the GoScope frontend
+GOSCOPE_DISABLE_FRONTEND: false
 ```
 
 GoScope has been extended to work with a repository pattern, thus has the capability of supporting any database driver/engine that will work with Go and uses the `sql` package (returning `*sql.Rows` or `*sql.Row`). 
@@ -72,7 +74,6 @@ In order to understand possible unexpected situations or simply to reassure you 
 
 ![GoScope Dashboard](showcase/0.png)
 
-![GoScope Dashboard](showcase/1.png)
 
 ![GoScope Dashboard](showcase/2.png)
 

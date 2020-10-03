@@ -32,20 +32,22 @@ func Setup(engine *gin.Engine, goScopeGroup *gin.RouterGroup) {
 	engine.Use(ResponseLogger)
 
 	// SPA routes
-	// Static content from SPA
-	goScopeGroup.GET("/", ShowDashboard)
-	goScopeGroup.GET("/logo.svg", GetStaticFile)
-	goScopeGroup.GET("/js/app.js", GetStaticFile)
-	goScopeGroup.GET("/js/app.js.map", GetStaticFile)
-	goScopeGroup.GET("/css/app.css", GetStaticFile)
-	goScopeGroup.GET("/css/dark.css", GetStaticFile)
-	goScopeGroup.GET("/css/styles.css", GetStaticFile)
-	goScopeGroup.GET("/favicon.ico", GetStaticFile)
-	goScopeGroup.GET("/logs", ShowDashboard)
-	goScopeGroup.GET("/logs/:uuid", ShowDashboard)
-	goScopeGroup.GET("/requests", ShowDashboard)
-	goScopeGroup.GET("/requests/:uuid", ShowDashboard)
-	goScopeGroup.GET("/info", ShowDashboard)
+	if !utils.Config.HasFrontendDisabled {
+		goScopeGroup.GET("/", ShowDashboard)
+		goScopeGroup.GET("/logo.svg", GetStaticFile)
+		goScopeGroup.GET("/js/app.js", GetStaticFile)
+		goScopeGroup.GET("/js/app.js.map", GetStaticFile)
+		goScopeGroup.GET("/css/app.css", GetStaticFile)
+		goScopeGroup.GET("/css/dark.css", GetStaticFile)
+		goScopeGroup.GET("/css/styles.css", GetStaticFile)
+		goScopeGroup.GET("/favicon.ico", GetStaticFile)
+		goScopeGroup.GET("/logs", ShowDashboard)
+		goScopeGroup.GET("/logs/:uuid", ShowDashboard)
+		goScopeGroup.GET("/requests", ShowDashboard)
+		goScopeGroup.GET("/requests/:uuid", ShowDashboard)
+		goScopeGroup.GET("/info", ShowDashboard)
+	}
+
 	// GoScope API
 	apiGroup := goScopeGroup.Group("/api")
 	apiGroup.GET("/application-name", GetAppName)

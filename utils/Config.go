@@ -17,6 +17,7 @@ type ApplicationEnvironment struct {
 	GoScopeDatabaseConnection string
 	GoScopeDatabaseType       string
 	GoScopeEntriesPerPage     int
+	HasFrontendDisabled       bool
 }
 
 // Config is the global instance of the application's configuration.
@@ -31,6 +32,7 @@ func ConfigSetup() {
 		GoScopeDatabaseConnection: getString("GOSCOPE_DATABASE_CONNECTION"),
 		GoScopeDatabaseType:       getString("GOSCOPE_DATABASE_TYPE"),
 		GoScopeEntriesPerPage:     getInteger("GOSCOPE_ENTRIES_PER_PAGE"),
+		HasFrontendDisabled:       getOptionalBool("GOSCOPE_DISABLE_FRONTEND"),
 	}
 }
 
@@ -54,4 +56,14 @@ func getInteger(key string) int {
 	integer, _ := strconv.ParseInt(os.Getenv(key), 10, 32)
 
 	return int(integer)
+}
+
+func getOptionalBool(key string) bool {
+	_, exists := os.LookupEnv(key)
+	if !exists {
+		return false
+	}
+
+	b, _ := strconv.ParseBool(os.Getenv(key))
+	return b
 }
