@@ -4,17 +4,12 @@
 package goscope
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/averageflow/goscope/utils"
 
 	"github.com/averageflow/goscope/database"
-
-	"github.com/gin-gonic/gin"
-	uuid "github.com/nu7hatch/gouuid"
 )
 
 // Get all details from a request via its UID.
@@ -108,57 +103,6 @@ func GetRequests(offset int) []SummarizedRequest {
 	}
 
 	return result
-}
-
-func DumpResponse(c *gin.Context, blw *BodyLogWriter, body string) {
-	now := time.Now().Unix()
-	requestUID, _ := uuid.NewV4()
-	headers, _ := json.Marshal(c.Request.Header)
-	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
-		"headers, body, referrer, url, user_agent) VALUES " +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	_, err := utils.DB.Exec(
-		query,
-		requestUID.String(),
-		utils.Config.ApplicationID,
-		c.ClientIP(),
-		c.Request.Method,
-		c.FullPath(),
-		c.Request.Host,
-		now,
-		string(headers),
-		body,
-		c.Request.Referer(),
-		c.Request.RequestURI,
-		c.Request.UserAgent(),
-	)
-
-	if err != nil {
-		log.Println(err.Error())
-	}
-
-	responseUID, _ := uuid.NewV4()
-	headers, _ = json.Marshal(blw.Header())
-	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
-		"body, path, headers, size) VALUES " +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	_, err = utils.DB.Exec(
-		query,
-		responseUID.String(),
-		requestUID.String(),
-		utils.Config.ApplicationID,
-		c.ClientIP(),
-		blw.Status(),
-		now,
-		blw.body.String(),
-		c.FullPath(),
-		string(headers),
-		blw.body.Len(),
-	)
-
-	if err != nil {
-		log.Println(err.Error())
-	}
 }
 
 func SearchRequests(searchString string, offset int) []SummarizedRequest {

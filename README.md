@@ -20,6 +20,7 @@ The application requires that your `.env` file contains the following variables:
 APPLICATION_ID: "application-id"
 APPLICATION_NAME: "Your Application Name"
 APPLICATION_TIMEZONE: "Europe/Amsterdam"
+GOSCOPE_ENTRIES_PER_PAGE: 100
 # for MySQL
 GOSCOPE_DATABASE_CONNECTION: "root:root@tcp(127.0.0.1:3306)/go_scope"  
 GOSCOPE_DATABASE_TYPE: "mysql"
@@ -30,9 +31,6 @@ GOSCOPE_DATABASE_TYPE: "sqlite3"
 GOSCOPE_DATABASE_MAX_OPEN_CONNECTIONS: 10
 GOSCOPE_DATABASE_MAX_IDLE_CONNECTIONS: 5
 GOSCOPE_DATABASE_MAX_CONN_LIFETIME: 10
-
-
-GOSCOPE_ENTRIES_PER_PAGE: 50
 # optional boolean value, will disable the GoScope frontend
 GOSCOPE_DISABLE_FRONTEND: false
 ```

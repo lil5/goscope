@@ -5,33 +5,51 @@ package goscope
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
-	"time"
+
+	"github.com/averageflow/goscope/database"
 
 	"github.com/averageflow/goscope/utils"
 
 	"github.com/gin-gonic/gin"
-	uuid "github.com/nu7hatch/gouuid"
 )
 
 // Log an HTTP response to the DB and print to Stdout.
 func ResponseLogger(c *gin.Context) {
 	if CheckExcludedPaths(c.FullPath()) {
-		blw := &BodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
-		c.Writer = blw
-		buf, _ := ioutil.ReadAll(c.Request.Body)
-		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
-		// We have to create a new Buffer, because rdr1 will be read and consumed.
-		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
-		c.Request.Body = rdr2
-
-		go DumpResponse(c, blw, readBody(rdr1))
+		err := LogWantedResponse(c)
+		if err != nil {
+			log.Printf(err.Error()) //nolint:staticcheck
+			return
+		}
 	}
 
 	c.Next()
+}
+
+func LogWantedResponse(c *gin.Context) error {
+	blw := &BodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+	c.Writer = blw
+
+	buf, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		return err
+	}
+
+	rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
+	// We have to create a new Buffer, because rdr1 will be read and consumed.
+	rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
+	c.Request.Body = rdr2
+
+	go database.DumpResponse(c, utils.DumpResponsePayload{
+		Headers: blw.Header(),
+		Body:    blw.body,
+		Status:  blw.Status(),
+	}, readBody(rdr1))
+
+	return nil
 }
 
 func readBody(reader io.Reader) string {
@@ -52,25 +70,6 @@ type LoggerGoScope struct {
 }
 
 func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
-	go writeLogs(string(p))
+	go database.WriteLogs(string(p))
 	return len(p), nil
-}
-
-func writeLogs(message string) {
-	fmt.Printf("%v", message)
-
-	uid, _ := uuid.NewV4()
-	query := "INSERT INTO logs (uid, application, error, time) VALUES " +
-		"(?, ?, ?, ?)"
-
-	_, err := utils.DB.Exec(
-		query,
-		uid.String(),
-		utils.Config.ApplicationID,
-		message,
-		time.Now().Unix(),
-	)
-	if err != nil {
-		log.Println(err.Error())
-	}
 }

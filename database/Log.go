@@ -5,7 +5,11 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"time"
+
+	uuid "github.com/nu7hatch/gouuid"
 
 	"github.com/averageflow/goscope/utils"
 )
@@ -92,4 +96,23 @@ func GetLogs(db *sql.DB, connection string, offset int) *sql.Rows {
 	}
 
 	return rows
+}
+
+func WriteLogs(message string) {
+	fmt.Printf("%v", message)
+
+	uid, _ := uuid.NewV4()
+	query := "INSERT INTO logs (uid, application, error, time) VALUES " +
+		"(?, ?, ?, ?)"
+
+	_, err := utils.DB.Exec(
+		query,
+		uid.String(),
+		utils.Config.ApplicationID,
+		message,
+		time.Now().Unix(),
+	)
+	if err != nil {
+		log.Println(err.Error())
+	}
 }

@@ -5,6 +5,7 @@ package goscope
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/averageflow/goscope/utils"
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func Setup(engine *gin.Engine, goScopeGroup *gin.RouterGroup) {
+func Setup(router *gin.Engine, goScopeGroup *gin.RouterGroup) {
 	utils.ConfigSetup()
 	utils.DatabaseSetup(utils.DatabaseInformation{
 		Type:                  utils.Config.GoScopeDatabaseType,
@@ -27,8 +28,8 @@ func Setup(engine *gin.Engine, goScopeGroup *gin.RouterGroup) {
 		MaxConnectionLifetime: utils.Config.GoScopeDatabaseMaxConnLifetime,
 	})
 
-	engine.Use(gin.Logger())
-	engine.Use(gin.Recovery())
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
 
 	logger := &LoggerGoScope{}
 	gin.DefaultErrorWriter = logger
@@ -36,7 +37,21 @@ func Setup(engine *gin.Engine, goScopeGroup *gin.RouterGroup) {
 	log.SetFlags(log.Lshortfile)
 	log.SetOutput(logger)
 	// Use the logging middleware
-	engine.Use(ResponseLogger)
+	router.Use(ResponseLogger)
+
+	// Catch 404s
+	router.NoRoute(func(c *gin.Context) {
+		err := LogWantedResponse(c)
+		if err != nil {
+			log.Printf(err.Error()) //nolint:staticcheck
+			c.Next()
+		}
+
+		c.JSON(http.StatusNotFound, gin.H{
+			"code":    http.StatusNotFound,
+			"message": "The requested resource could not be found!",
+		})
+	})
 
 	// SPA routes
 	if !utils.Config.HasFrontendDisabled {
@@ -48,6 +63,8 @@ func Setup(engine *gin.Engine, goScopeGroup *gin.RouterGroup) {
 		goScopeGroup.GET("/css/dark.css", GetStaticFile)
 		goScopeGroup.GET("/css/styles.css", GetStaticFile)
 		goScopeGroup.GET("/favicon.ico", GetStaticFile)
+		goScopeGroup.GET("/favicon-32x32.png", GetStaticFile)
+		goScopeGroup.GET("/favicon-16x16.png", GetStaticFile)
 		goScopeGroup.GET("/logs", ShowDashboard)
 		goScopeGroup.GET("/logs/:uuid", ShowDashboard)
 		goScopeGroup.GET("/requests", ShowDashboard)

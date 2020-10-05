@@ -5,7 +5,12 @@ package database
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	uuid "github.com/nu7hatch/gouuid"
 
 	"github.com/averageflow/goscope/utils"
 )
@@ -131,4 +136,61 @@ func GetDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
 	row := db.QueryRow(query, requestUID)
 
 	return row
+}
+
+func DumpResponse(c *gin.Context, responsePayload utils.DumpResponsePayload, body string) {
+	now := time.Now().Unix()
+	requestUID, _ := uuid.NewV4()
+	headers, _ := json.Marshal(c.Request.Header)
+	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
+		"headers, body, referrer, url, user_agent) VALUES " +
+		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+
+	requestPath := c.FullPath()
+	if requestPath == "" {
+		requestPath = c.Request.URL.String()
+	}
+
+	_, err := utils.DB.Exec(
+		query,
+		requestUID.String(),
+		utils.Config.ApplicationID,
+		c.ClientIP(),
+		c.Request.Method,
+		requestPath,
+		c.Request.Host,
+		now,
+		string(headers),
+		body,
+		c.Request.Referer(),
+		c.Request.RequestURI,
+		c.Request.UserAgent(),
+	)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	responseUID, _ := uuid.NewV4()
+	headers, _ = json.Marshal(responsePayload.Headers)
+	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
+		"body, path, headers, size) VALUES " +
+		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	_, err = utils.DB.Exec(
+		query,
+		responseUID.String(),
+		requestUID.String(),
+		utils.Config.ApplicationID,
+		c.ClientIP(),
+		responsePayload.Status,
+		now,
+		responsePayload.Body.String(),
+		c.FullPath(),
+		string(headers),
+		responsePayload.Body.Len(),
+	)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
 }
