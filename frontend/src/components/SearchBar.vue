@@ -23,6 +23,20 @@
     >
       <font-awesome-icon icon="times" />
     </button>
+
+    <button style="border: none; float: right;" v-on:click="toggleFilterOpen">
+      <font-awesome-icon icon="filter" />
+      Filter
+      <font-awesome-icon icon="angle-left" v-show="isFilterOpen" />
+      <font-awesome-icon icon="angle-right" v-show="!isFilterOpen" />
+    </button>
+    <aside class="filter-bar" :class="{ 'filter-bar--open': isFilterOpen }">
+      <button v-on:click="toggleFilterOpen" class="filter-bar__close">
+        <font-awesome-icon icon="angle-right" />
+      </button>
+      <h2>Filter</h2>
+      <!-- filter inputs -->
+    </aside>
   </section>
 </template>
 
@@ -36,10 +50,14 @@ export default Vue.extend({
   },
   data() {
     return {
-      searchQuery: ""
+      searchQuery: "" as string,
+      isFilterOpen: false as boolean
     };
   },
   methods: {
+    toggleFilterOpen(): void {
+      this.isFilterOpen = !this.isFilterOpen;
+    },
     emitSearchEvent() {
       if (this.searchQuery !== "") {
         this.$emit("searchEvent", this.searchQuery);

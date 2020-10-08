@@ -91,3 +91,27 @@ a:hover .svg-icon {
     color: var(--links);
     fill: var(--links);
 }
+
+.filter-bar{
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+
+  width: calc(50vw - 447px);
+  min-width: 260px;
+  max-width: 440px;
+
+  border-left: 1px dashed var(--text-main);
+  padding: 0 15px;
+  background-color: var(--background-body);
+}
+.filter-bar--open {
+  visibility: visible;
+}
+.filter-bar__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
