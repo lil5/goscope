@@ -106,9 +106,16 @@ a:hover .svg-icon {
   border-left: 1px dashed var(--text-main);
   padding: 0 15px;
   background-color: var(--background-body);
+
+  transform: translateX(100%);
+
+  transition-property: transform, visibility;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
 }
 .filter-bar--open {
   visibility: visible;
+  transform: translateX(0%);
 }
 .filter-bar__close {
   position: absolute;
