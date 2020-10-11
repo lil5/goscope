@@ -4,12 +4,19 @@
       v-on:searchEvent="this.handleSearch"
       v-on:cancelSearchEvent="this.cancelSearch"
       :search-enabled="this.searchModeEnabled"
-    />
+      :has-filter="true"
+    >
+      <template v-slot:filter>
+        <form>
+          <FilterMethod />
+        </form>
+      </template>
+    </SearchBar>
     <table>
       <thead>
         <tr>
           <th>Status</th>
-          <th>Verb</th>
+          <th>Method</th>
           <th>Path</th>
           <th>Happened</th>
           <th></th>
@@ -42,10 +49,11 @@ import SearchBar from "@/components/SearchBar.vue";
 import { RequestService } from "@/api/requests";
 import { RequestsEndpointResponse } from "@/interfaces/requests";
 import { intervalToLevels } from "@/utils/time";
+import FilterMethod from "@/components/filter/FilterMethod.vue";
 
 export default Vue.extend({
   name: "RequestList",
-  components: { SearchBar },
+  components: { SearchBar, FilterMethod },
   data() {
     return {
       requests: {} as RequestsEndpointResponse,

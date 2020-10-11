@@ -24,18 +24,26 @@
       <font-awesome-icon icon="times" />
     </button>
 
-    <button style="border: none; float: right;" v-on:click="toggleFilterOpen">
+    <button
+      style="border: none; float: right;"
+      v-if="hasFilter"
+      v-on:click="toggleFilterOpen"
+    >
       <font-awesome-icon icon="filter" />
       Filter
       <font-awesome-icon icon="angle-left" v-show="isFilterOpen" />
       <font-awesome-icon icon="angle-right" v-show="!isFilterOpen" />
     </button>
-    <aside class="filter-bar" :class="{ 'filter-bar--open': isFilterOpen }">
+    <aside
+      class="filter-bar"
+      v-if="hasFilter"
+      :class="{ 'filter-bar--open': isFilterOpen }"
+    >
       <button v-on:click="toggleFilterOpen" class="filter-bar__close">
         <font-awesome-icon icon="angle-right" />
       </button>
       <h2>Filter</h2>
-      <!-- filter inputs -->
+      <slot name="filter"></slot>
     </aside>
   </section>
 </template>
@@ -46,7 +54,11 @@ import Vue, { PropType } from "vue";
 export default Vue.extend({
   name: "SearchBar",
   props: {
-    searchEnabled: Boolean as PropType<boolean>
+    searchEnabled: Boolean as PropType<boolean>,
+    hasFilter: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

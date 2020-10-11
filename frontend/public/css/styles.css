@@ -98,10 +98,10 @@ a:hover .svg-icon {
   top: 0;
   bottom: 0;
   right: 0;
-
-  width: calc(50vw - 447px);
+  
   min-width: 260px;
-  max-width: 440px;
+  max-width: 340px;
+  width: calc(50vw - 447px);
 
   border-left: 1px dashed var(--text-main);
   padding: 0 15px;
