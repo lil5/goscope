@@ -6,11 +6,6 @@
       :search-enabled="this.searchModeEnabled"
       :has-filter="true"
     >
-      <template v-slot:filter>
-        <form>
-          <FilterMethod />
-        </form>
-      </template>
     </SearchBar>
     <table>
       <thead>
@@ -49,11 +44,10 @@ import SearchBar from "@/components/SearchBar.vue";
 import { RequestService } from "@/api/requests";
 import { RequestsEndpointResponse } from "@/interfaces/requests";
 import { intervalToLevels } from "@/utils/time";
-import FilterMethod from "@/components/filter/FilterMethod.vue";
 
 export default Vue.extend({
   name: "RequestList",
-  components: { SearchBar, FilterMethod },
+  components: { SearchBar },
   data() {
     return {
       requests: {} as RequestsEndpointResponse,

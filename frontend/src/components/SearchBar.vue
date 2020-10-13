@@ -24,35 +24,76 @@
       <font-awesome-icon icon="times" />
     </button>
 
-    <button
-      style="border: none; float: right;"
-      v-if="hasFilter"
-      v-on:click="toggleFilterOpen"
-    >
-      <font-awesome-icon icon="filter" />
-      Filter
-      <font-awesome-icon icon="angle-left" v-show="isFilterOpen" />
-      <font-awesome-icon icon="angle-right" v-show="!isFilterOpen" />
-    </button>
-    <aside
-      class="filter-bar"
-      v-if="hasFilter"
-      :class="{ 'filter-bar--open': isFilterOpen }"
-    >
-      <button v-on:click="toggleFilterOpen" class="filter-bar__close">
-        <font-awesome-icon icon="angle-right" />
-      </button>
-      <h2>Filter</h2>
-      <slot name="filter"></slot>
-    </aside>
+    <TagsInput element-id="tags"
+    v-model="selectedTags"
+    placeholder="Search ..."
+    id-field="id"
+    text-field="name"
+    :existing-tags="existingTags"
+    :typeahead='true'
+  />
   </section>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
+import { Method } from "@/interfaces/filter";
+import {EnumReflection} from '@/utils/enum-reflection';
+import VoerroTagsInput from '@voerro/vue-tagsinput';
+
+interface SelectedTag {
+  key: string
+  value: string
+}
+interface ExistingTag {
+  id: number
+  name: string
+}
+
+function generateExistingTags(): ExistingTag[] {
+  const existingTags: ExistingTag[] = [];
+    let existingTagIndex = 0;
+
+    const methods: string[] = [
+  "GET",
+  "HEAD",
+  "POST",
+  "PUT",
+  "DELETE",
+  "CONNECT",
+  "OPTIONS",
+  "TRACE",
+  "PATCH"
+]
+    methods.forEach(m=> {
+      existingTags.push({
+        id: existingTagIndex,
+        name: m
+      });
+
+      existingTagIndex++;
+    })
+  
+    const statuses = [
+  '1xx', '2xx', '3xx', '4xx', '5xx'
+]
+    statuses.forEach((s) => {
+      existingTags.push({
+        id: existingTagIndex,
+        name: s
+      })
+
+      existingTagIndex++
+    })
+
+    console.log(existingTags)
+
+    return existingTags
+}
 
 export default Vue.extend({
   name: "SearchBar",
+  components: { TagsInput: VoerroTagsInput },
   props: {
     searchEnabled: Boolean as PropType<boolean>,
     hasFilter: {
@@ -63,13 +104,11 @@ export default Vue.extend({
   data() {
     return {
       searchQuery: "" as string,
-      isFilterOpen: false as boolean
+      selectedTags: [] as SelectedTag[],
+      existingTags: generateExistingTags(),
     };
   },
   methods: {
-    toggleFilterOpen(): void {
-      this.isFilterOpen = !this.isFilterOpen;
-    },
     emitSearchEvent() {
       if (this.searchQuery !== "") {
         this.$emit("searchEvent", this.searchQuery);
