@@ -92,33 +92,51 @@ a:hover .svg-icon {
     fill: var(--links);
 }
 
-.filter-bar{
-  visibility: hidden;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  
-  min-width: 260px;
-  max-width: 340px;
-  width: calc(50vw - 447px);
-
-  border-left: 1px dashed var(--text-main);
-  padding: 0 15px;
-  background-color: var(--background-body);
-
-  transform: translateX(100%);
-
-  transition-property: transform, visibility;
-  transition-duration: 0.3s;
-  transition-timing-function: linear;
+.search-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-.filter-bar--open {
-  visibility: visible;
-  transform: translateX(0%);
+.search-bar > .vue-tags-input {
+  flex-grow: 1;
 }
-.filter-bar__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+
+.vue-tags-input {
+  margin-right: 6px;
+  margin-bottom: 6px;
+  min-width: 220px;
+  background-color: var(--background) !important;
+}
+.vue-tags-input,
+.vue-tags-input * {
+border-radius: 6px;
+}
+.vue-tags-input.ti-focus {
+  box-shadow: 0 0 0 2px var(--focus);
+}
+.vue-tags-input .ti-input {
+  padding: 0 !important;
+  border: none !important;
+  background-color: var(--background) !important;
+}
+.vue-tags-input .ti-new-tag-input-wrapper {
+  padding: 0 !important;
+  font-size: inherit !important;
+}
+.vue-tags-input .ti-new-tag-input {
+  padding: 10px !important;
+}
+.vue-tags-input .ti-new-tag-input:focus {
+  box-shadow: none !important;
+}
+
+.vue-tags-input .ti-autocomplete {
+  border-radius: 0 0 6px 6px !important;
+  border: 2px solid var(--focus) !important;
+  border-top: none !important;
+  background-color: var(--background-body) !important;
+}
+
+.vue-tags-input .ti-autocomplete .ti-item.ti-selected-item {
+  background-color: var(--focus) !important;
 }

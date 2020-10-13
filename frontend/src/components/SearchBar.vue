@@ -1,13 +1,14 @@
 <template>
-  <section>
-    <label for="search-input" content="Search"></label
-    ><input
-      v-model="searchQuery"
+  <section class="search-bar">
+    <TagsInput
+      v-model="searchTag"
       placeholder="Search ..."
-      id="search-input"
-      style="float: left"
-      type="search"
+      :autocomplete-items="filteredAutocomplete"
+      add-only-from-autocomplete
+      :tags="selectedTags"
+      @tags-changed="editSelectedTags"
     />
+
     <button
       v-on:click="emitSearchEvent"
       id="search-button"
@@ -23,77 +24,51 @@
     >
       <font-awesome-icon icon="times" />
     </button>
-
-    <TagsInput element-id="tags"
-    v-model="selectedTags"
-    placeholder="Search ..."
-    id-field="id"
-    text-field="name"
-    :existing-tags="existingTags"
-    :typeahead='true'
-  />
   </section>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { Method } from "@/interfaces/filter";
-import {EnumReflection} from '@/utils/enum-reflection';
-import VoerroTagsInput from '@voerro/vue-tagsinput';
+import { Tag } from "@/interfaces/filter";
+import VueTagsInput from "@johmun/vue-tags-input";
 
-interface SelectedTag {
-  key: string
-  value: string
-}
-interface ExistingTag {
-  id: number
-  name: string
-}
+function generateAutocomplete(): Tag[] {
+  const autocomplete: Tag[] = [];
 
-function generateExistingTags(): ExistingTag[] {
-  const existingTags: ExistingTag[] = [];
-    let existingTagIndex = 0;
+  const methods: string[] = [
+    "GET",
+    "HEAD",
+    "POST",
+    "PUT",
+    "DELETE",
+    "CONNECT",
+    "OPTIONS",
+    "TRACE",
+    "PATCH"
+  ];
+  methods.forEach(m => {
+    autocomplete.push({
+      text: "method:" + m.toLowerCase(),
+      group: "method",
+      value: m
+    });
+  });
 
-    const methods: string[] = [
-  "GET",
-  "HEAD",
-  "POST",
-  "PUT",
-  "DELETE",
-  "CONNECT",
-  "OPTIONS",
-  "TRACE",
-  "PATCH"
-]
-    methods.forEach(m=> {
-      existingTags.push({
-        id: existingTagIndex,
-        name: m
-      });
+  const statuses = ["1xx", "2xx", "3xx", "4xx", "5xx"];
+  statuses.forEach(s => {
+    autocomplete.push({
+      text: "status:" + s,
+      group: "status",
+      value: s
+    });
+  });
 
-      existingTagIndex++;
-    })
-  
-    const statuses = [
-  '1xx', '2xx', '3xx', '4xx', '5xx'
-]
-    statuses.forEach((s) => {
-      existingTags.push({
-        id: existingTagIndex,
-        name: s
-      })
-
-      existingTagIndex++
-    })
-
-    console.log(existingTags)
-
-    return existingTags
+  return autocomplete;
 }
 
 export default Vue.extend({
   name: "SearchBar",
-  components: { TagsInput: VoerroTagsInput },
+  components: { TagsInput: VueTagsInput },
   props: {
     searchEnabled: Boolean as PropType<boolean>,
     hasFilter: {
@@ -103,15 +78,27 @@ export default Vue.extend({
   },
   data() {
     return {
-      searchQuery: "" as string,
-      selectedTags: [] as SelectedTag[],
-      existingTags: generateExistingTags(),
+      searchTag: "" as string,
+      selectedTags: [] as Tag[],
+      autocomplete: generateAutocomplete()
     };
   },
+  computed: {
+    filteredAutocomplete(): Tag[] {
+      return this.autocomplete.filter(i => {
+        return (
+          i.text.toLowerCase().indexOf(this.searchTag.toLowerCase()) !== -1
+        );
+      });
+    }
+  },
   methods: {
+    editSelectedTags(newSelectedTags: Tag[]) {
+      this.selectedTags = newSelectedTags;
+    },
     emitSearchEvent() {
-      if (this.searchQuery !== "") {
-        this.$emit("searchEvent", this.searchQuery);
+      if (this.searchTag !== "") {
+        this.$emit("searchEvent", this.searchTag, this.selectedTags);
       }
     },
     emitCancelSearchEvent() {
