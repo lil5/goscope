@@ -4,7 +4,7 @@
       v-on:searchEvent="this.handleSearch"
       v-on:cancelSearchEvent="this.cancelSearch"
       :search-enabled="this.searchModeEnabled"
-      :has-filter="true"
+      :autocomplete="autocomplete"
     >
     </SearchBar>
     <table>
@@ -42,8 +42,38 @@
 import Vue from "vue";
 import SearchBar from "@/components/SearchBar.vue";
 import { RequestService } from "@/api/requests";
-import { RequestsEndpointResponse } from "@/interfaces/requests";
+import {
+  RequestsEndpointResponse,
+  Method,
+  Status
+} from "@/interfaces/requests";
+import { Tag } from "@/interfaces/filter";
+import { EnumReflection } from "@/utils/enum-reflection";
 import { intervalToLevels } from "@/utils/time";
+
+function generateAutocomplete(): Tag[] {
+  const autocomplete: Tag[] = [];
+
+  const methods = EnumReflection.getNames<Method>(Method);
+  methods.forEach(m => {
+    autocomplete.push({
+      text: "method:" + m.toLowerCase(),
+      group: "method",
+      value: m
+    });
+  });
+
+  const statuses = EnumReflection.getNames<Status>(Status);
+  statuses.forEach(s => {
+    autocomplete.push({
+      text: `status:${Status[s]}xx`,
+      group: "status",
+      value: s
+    });
+  });
+
+  return autocomplete;
+}
 
 export default Vue.extend({
   name: "RequestList",
@@ -54,6 +84,8 @@ export default Vue.extend({
       currentPage: 1,
       searchModeEnabled: false,
       searchQuery: "",
+      searchTags: [] as Tag[],
+      autocomplete: generateAutocomplete(),
       now: Math.round(new Date().getTime() / 1000)
     };
   },
@@ -67,7 +99,8 @@ export default Vue.extend({
       if (this.searchModeEnabled) {
         const received = await RequestService.searchRequests(
           this.currentPage,
-          this.searchQuery
+          this.searchQuery,
+          this.searchTags
         );
         if (received.data && received.data.length > 0) {
           this.requests = received;
@@ -90,25 +123,29 @@ export default Vue.extend({
       if (this.searchModeEnabled) {
         this.requests = await RequestService.searchRequests(
           this.currentPage,
-          this.searchQuery
+          this.searchQuery,
+          this.searchTags
         );
       } else {
         this.requests = await RequestService.getRequests(this.currentPage);
       }
     },
-    async handleSearch(searchQuery: string): Promise<void> {
+    async handleSearch(searchQuery: string, searchTags: Tag[]): Promise<void> {
       this.currentPage = 1;
       this.searchModeEnabled = true;
       this.searchQuery = searchQuery;
+      this.searchTags = searchTags;
       this.requests = await RequestService.searchRequests(
         this.currentPage,
-        searchQuery
+        searchQuery,
+        searchTags
       );
     },
     async cancelSearch(): Promise<void> {
       this.currentPage = 1;
       this.searchModeEnabled = false;
       this.searchQuery = "";
+      this.searchTags = [];
       this.requests = await RequestService.getRequests(this.currentPage);
     },
     timeDiffToHuman(value: number): string {

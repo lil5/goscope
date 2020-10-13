@@ -6,6 +6,8 @@ package goscope
 import (
 	"bytes"
 
+	"github.com/averageflow/goscope/database"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -74,7 +76,8 @@ func (w BodyLogWriter) Write(b []byte) (int, error) {
 }
 
 type SearchRequestPayload struct {
-	Query string `json:"query"`
+	Query  string                 `json:"query"`
+	Filter database.RequestFilter `json:"filter"`
 }
 
 type SystemInformationResponse struct {

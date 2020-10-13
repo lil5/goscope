@@ -7,6 +7,8 @@
       add-only-from-autocomplete
       :tags="selectedTags"
       @tags-changed="editSelectedTags"
+      :autocomplete-min-length="0"
+      @before-adding-tag="beforeAddingTag"
     />
 
     <button
@@ -17,7 +19,7 @@
       <font-awesome-icon icon="search" />
     </button>
     <button
-      v-if="this.searchEnabled"
+      v-show="this.showDisabled"
       v-on:click="emitCancelSearchEvent"
       id="search-cancel-button"
       style="border: none; float:left;"
@@ -29,58 +31,24 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { Tag } from "@/interfaces/filter";
+import { Tag, Status, Method } from "@/interfaces/filter";
+import { EnumReflection } from "@/utils/enum-reflection";
 import VueTagsInput from "@johmun/vue-tags-input";
-
-function generateAutocomplete(): Tag[] {
-  const autocomplete: Tag[] = [];
-
-  const methods: string[] = [
-    "GET",
-    "HEAD",
-    "POST",
-    "PUT",
-    "DELETE",
-    "CONNECT",
-    "OPTIONS",
-    "TRACE",
-    "PATCH"
-  ];
-  methods.forEach(m => {
-    autocomplete.push({
-      text: "method:" + m.toLowerCase(),
-      group: "method",
-      value: m
-    });
-  });
-
-  const statuses = ["1xx", "2xx", "3xx", "4xx", "5xx"];
-  statuses.forEach(s => {
-    autocomplete.push({
-      text: "status:" + s,
-      group: "status",
-      value: s
-    });
-  });
-
-  return autocomplete;
-}
 
 export default Vue.extend({
   name: "SearchBar",
   components: { TagsInput: VueTagsInput },
   props: {
     searchEnabled: Boolean as PropType<boolean>,
-    hasFilter: {
-      type: Boolean,
-      default: false
+    autocomplete: {
+      type: Array as PropType<Tag[]>,
+      default: []
     }
   },
   data() {
     return {
       searchTag: "" as string,
-      selectedTags: [] as Tag[],
-      autocomplete: generateAutocomplete()
+      selectedTags: [] as Tag[]
     };
   },
   computed: {
@@ -93,15 +61,24 @@ export default Vue.extend({
     }
   },
   methods: {
+    beforeAddingTag({ tag, addTag }) {
+      addTag();
+
+      if (tag.text === this.searchTag) {
+        this.emitSearchEvent();
+      }
+    },
     editSelectedTags(newSelectedTags: Tag[]) {
       this.selectedTags = newSelectedTags;
     },
     emitSearchEvent() {
-      if (this.searchTag !== "") {
-        this.$emit("searchEvent", this.searchTag, this.selectedTags);
-      }
+      if (this.searchTag === "" && this.selectedTags.length === 0) return;
+
+      this.$emit("searchEvent", this.searchTag, this.selectedTags);
     },
     emitCancelSearchEvent() {
+      this.searchTag = "";
+      this.selectedTags = [];
       this.$emit("cancelSearchEvent");
     }
   }

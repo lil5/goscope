@@ -4,6 +4,7 @@
       v-on:searchEvent="handleSearch"
       v-on:cancelSearchEvent="cancelSearch"
       :search-enabled="this.searchModeEnabled"
+      :autocomplete="[]"
     />
     <table>
       <thead>

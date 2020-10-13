@@ -44,3 +44,23 @@ export interface DetailedRequestResponse {
     request: DetailedRequest;
   };
 }
+
+export enum Method {
+  GET = "GET",
+  HEAD = "HEAD",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
+  CONNECT = "CONNECT",
+  OPTIONS = "OPTIONS",
+  TRACE = "TRACE",
+  PATCH = "PATCH"
+}
+
+export enum Status {
+  INFORMATIONAL = 1,
+  SUCCESS = 2,
+  REDIRECTION = 3,
+  CLIENT_ERROR = 4,
+  SERVER_ERROR = 5
+}

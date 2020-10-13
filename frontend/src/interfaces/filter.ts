@@ -2,8 +2,6 @@ export interface Tag {
   text: string;
   style?: string;
   classes?: string;
-  group: Group;
+  group: string;
   value: string;
 }
-
-export type Group = "method" | "status";
