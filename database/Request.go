@@ -77,9 +77,34 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 
 	hasSearch := search != ""
 
+	var searchQueryCols [][2]string
 	var searchWildcard string
 	if hasSearch {
 		searchWildcard = fmt.Sprintf("%%%s%%", search)
+
+		searchQueryCols = [][2]string{
+			{"requests", "uid"},
+			{"requests", "application"},
+			{"requests", "client_ip"},
+			{"requests", "method"},
+			{"requests", "path"},
+			{"requests", "url"},
+			{"requests", "host"},
+			{"requests", "body"},
+			{"requests", "referrer"},
+			{"requests", "user_agent"},
+			{"requests", "time"},
+			{"responses", "uid"},
+			{"responses", "request_uid"},
+			{"responses", "application"},
+			{"responses", "client_ip"},
+			{"responses", "status"},
+			{"responses", "body"},
+			{"responses", "path"},
+			{"responses", "headers"},
+			{"responses", "size"},
+			{"responses", "time"},
+		}
 	}
 
 	if connection == MySQL || connection == SQLite {
@@ -98,27 +123,14 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 		}
 
 		if hasSearch {
-			searchQuery = "AND (`requests`.`uid` LIKE ? " +
-				"OR `requests`.`application` LIKE ? " +
-				"OR `requests`.`client_ip` LIKE ? " +
-				"OR `requests`.`method` LIKE ? " +
-				"OR `requests`.`path` LIKE ? " +
-				"OR `requests`.`url` LIKE ? " +
-				"OR `requests`.`host` LIKE ? " +
-				"OR `requests`.`body` LIKE ? " +
-				"OR `requests`.`referrer` LIKE ? " +
-				"OR `requests`.`user_agent` LIKE ? " +
-				"OR `requests`.`time` LIKE ? " +
-				"OR `responses`.`uid` LIKE ? " +
-				"OR `responses`.`request_uid` LIKE ? " +
-				"OR `responses`.`application` LIKE ? " +
-				"OR `responses`.`client_ip` LIKE ? " +
-				"OR `responses`.`status` LIKE ? " +
-				"OR `responses`.`body` LIKE ? " +
-				"OR `responses`.`path` LIKE ? " +
-				"OR `responses`.`headers` LIKE ? " +
-				"OR `responses`.`size` LIKE ? " +
-				"OR `responses`.`time` LIKE ?) "
+			searchQuery += "AND ("
+			for i, col := range searchQueryCols{
+				if i != 0 {
+					searchQuery += "OR "
+				}
+				searchQuery += fmt.Sprintf(	"`%s`.`%s` LIKE ? ", col[0], col[1])
+			}
+			searchQuery += ") "
 		}
 
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
@@ -142,30 +154,16 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 		}
 
 		if hasSearch {
-			searchQuery = `
-			AND ("requests"."uid" LIKE ?
-			OR "requests"."application" LIKE ?
-			OR "requests"."client_ip" LIKE ?
-			OR "requests"."method" LIKE ?
-			OR "requests"."path" LIKE ?
-			OR "requests"."url" LIKE ?
-			OR "requests"."host" LIKE ?
-			OR "requests"."body" LIKE ?
-			OR "requests"."referrer" LIKE ?
-			OR "requests"."user_agent" LIKE ?
-			OR "requests"."time" LIKE ?
-			OR "responses"."uid" LIKE ?
-			OR "responses"."request_uid" LIKE ?
-			OR "responses"."application" LIKE ?
-			OR "responses"."client_ip" LIKE ?
-			OR "responses"."status" LIKE ?
-			OR "responses"."body" LIKE ?
-			OR "responses"."path" LIKE ?
-			OR "responses"."headers" LIKE ?
-			OR "responses"."size" LIKE ?
-			OR "responses"."time" LIKE ?)
-			`
+			searchQuery += "AND ("
+			for i, col := range searchQueryCols{
+				if i != 0 {
+					searchQuery += "OR "
+				}
+				searchQuery += fmt.Sprintf(	`"%s"."%s" LIKE ? `, col[0], col[1])
+			}
+			searchQuery += ") "
 		}
+
 		query = `SELECT "requests"."uid", "requests"."method", "requests"."path",
 			"requests"."time", "responses"."status" FROM "requests"
 			INNER JOIN "responses" ON "requests"."uid" = "responses"."request_uid"
