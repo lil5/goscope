@@ -10,6 +10,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/doug-martin/goqu/v9"
+
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
 
@@ -17,16 +19,14 @@ import (
 )
 
 func GetDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
-	var query string
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `uid`, `client_ip`, `method`, `path`, `url`, " +
-			"`host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = ? LIMIT 1;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "uid", "client_ip", "method", "path", "url",
-			"host", "time", "headers", "body", "referrer", "user_agent" FROM "requests" WHERE "uid" = ? LIMIT 1;`
-	}
+	qu := GetGoquDialect(connection)
 
-	row := db.QueryRow(query, requestUID)
+	ds := qu.Select("uid", "client_ip", "method", "path", "url",
+		"host", "time", "headers", "body", "referrer", "user_agent").From("requests").Where(goqu.C("uid").Eq(requestUID)).Limit(1)
+
+	qsql, args, _ := ds.Prepared(true).ToSQL()
+
+	row := db.QueryRow(qsql, args...)
 
 	return row
 }
@@ -124,11 +124,11 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 
 		if hasSearch {
 			searchQuery += "AND ("
-			for i, col := range searchQueryCols{
+			for i, col := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR "
 				}
-				searchQuery += fmt.Sprintf(	"`%s`.`%s` LIKE ? ", col[0], col[1])
+				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", col[0], col[1])
 			}
 			searchQuery += ") "
 		}
@@ -155,11 +155,11 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 
 		if hasSearch {
 			searchQuery += "AND ("
-			for i, col := range searchQueryCols{
+			for i, col := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR "
 				}
-				searchQuery += fmt.Sprintf(	`"%s"."%s" LIKE ? `, col[0], col[1])
+				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, col[0], col[1])
 			}
 			searchQuery += ") "
 		}
