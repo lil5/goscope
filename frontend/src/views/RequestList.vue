@@ -40,21 +40,22 @@
 
 <script lang="ts">
 import Vue from "vue";
-import SearchBar from "@/components/SearchBar.vue";
-import { RequestService } from "@/api/requests";
+import SearchBar from "../components/SearchBar.vue";
+import { RequestService } from "../api/requests";
 import {
   RequestsEndpointResponse,
   Method,
-  Status
-} from "@/interfaces/requests";
-import { Tag } from "@/interfaces/filter";
-import { EnumReflection } from "@/utils/enum-reflection";
-import { intervalToLevels } from "@/utils/time";
+  Status,
+  FilterRequest
+} from "../interfaces/requests";
+import { Tag } from "../interfaces/filter";
+import { EnumReflection } from "../utils/enum-reflection";
+import { intervalToLevels } from "../utils/time";
 
 function generateAutocomplete(): Tag[] {
   const autocomplete: Tag[] = [];
 
-  const methods = EnumReflection.getNames<Method>(Method);
+  const methods = EnumReflection.getNames(Method);
   methods.forEach(m => {
     autocomplete.push({
       text: "method:" + m.toLowerCase(),
@@ -63,14 +64,15 @@ function generateAutocomplete(): Tag[] {
     });
   });
 
-  const statuses = EnumReflection.getNames<Status>(Status);
-  statuses.forEach(s => {
-    autocomplete.push({
-      text: `status:${Status[s]}xx`,
-      group: "status",
-      value: s
-    });
-  });
+  // TODO: add status filter
+  // const statuses = EnumReflection.getNames(Status);
+  // statuses.forEach(s => {
+  //   autocomplete.push({
+  //     text: `status:${Status[s]}xx`,
+  //     group: "status",
+  //     value: s
+  //   });
+  // });
 
   return autocomplete;
 }
@@ -97,10 +99,11 @@ export default Vue.extend({
     async nextPage(): Promise<void> {
       this.currentPage++;
       if (this.searchModeEnabled) {
+        const filter = this.getFilter();
         const received = await RequestService.searchRequests(
           this.currentPage,
           this.searchQuery,
-          this.searchTags
+          filter
         );
         if (received.data && received.data.length > 0) {
           this.requests = received;
@@ -121,10 +124,11 @@ export default Vue.extend({
         this.currentPage--;
       }
       if (this.searchModeEnabled) {
+        const filter = this.getFilter();
         this.requests = await RequestService.searchRequests(
           this.currentPage,
           this.searchQuery,
-          this.searchTags
+          filter
         );
       } else {
         this.requests = await RequestService.getRequests(this.currentPage);
@@ -135,10 +139,12 @@ export default Vue.extend({
       this.searchModeEnabled = true;
       this.searchQuery = searchQuery;
       this.searchTags = searchTags;
+
+      const filter = this.getFilter();
       this.requests = await RequestService.searchRequests(
         this.currentPage,
         searchQuery,
-        searchTags
+        filter
       );
     },
     async cancelSearch(): Promise<void> {
@@ -150,6 +156,28 @@ export default Vue.extend({
     },
     timeDiffToHuman(value: number): string {
       return intervalToLevels(value);
+    },
+    getFilter(): FilterRequest {
+      const status: Status[] = [];
+      const method: Method[] = [];
+
+      this.searchTags.forEach((tag: Tag) => {
+        switch (tag.group) {
+          case "method":
+            //@ts-ignore
+            method.push(tag.value);
+            break;
+          case "status":
+            //@ts-ignore
+            status.push(tag.value);
+            break;
+        }
+      });
+
+      return {
+        status,
+        method
+      };
     },
     applyMethodColor(method: string): string {
       if (method === "GET") {

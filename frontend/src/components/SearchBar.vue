@@ -19,7 +19,7 @@
       <font-awesome-icon icon="search" />
     </button>
     <button
-      v-show="this.showDisabled"
+      v-show="showDisabled"
       v-on:click="emitCancelSearchEvent"
       id="search-cancel-button"
       style="border: none; float:left;"
@@ -31,8 +31,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { Tag, Status, Method } from "@/interfaces/filter";
-import { EnumReflection } from "@/utils/enum-reflection";
+import { Tag } from "../interfaces/filter";
+//@ts-ignore
 import VueTagsInput from "@johmun/vue-tags-input";
 
 export default Vue.extend({
@@ -47,6 +47,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      showDisabled: false as boolean,
       searchTag: "" as string,
       selectedTags: [] as Tag[]
     };
@@ -61,10 +62,20 @@ export default Vue.extend({
     }
   },
   methods: {
-    beforeAddingTag({ tag, addTag }) {
-      addTag();
+    checkShowDisabled(): void {
+      const emptySearch = this.searchTag.length === 0;
+      const emptyTags = this.selectedTags.length === 0;
 
-      if (tag.text === this.searchTag) {
+      if (emptySearch && emptyTags) {
+        this.showDisabled = false;
+      }
+
+      this.showDisabled = true;
+    },
+    beforeAddingTag(o: { tag: Tag; addTag: Function }) {
+      o.addTag();
+
+      if (o.tag.text === this.searchTag) {
         this.emitSearchEvent();
       }
     },
@@ -74,11 +85,13 @@ export default Vue.extend({
     emitSearchEvent() {
       if (this.searchTag === "" && this.selectedTags.length === 0) return;
 
+      this.checkShowDisabled();
       this.$emit("searchEvent", this.searchTag, this.selectedTags);
     },
     emitCancelSearchEvent() {
       this.searchTag = "";
       this.selectedTags = [];
+      this.checkShowDisabled();
       this.$emit("cancelSearchEvent");
     }
   }

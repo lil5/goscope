@@ -45,6 +45,11 @@ export interface DetailedRequestResponse {
   };
 }
 
+export interface FilterRequest {
+  method: Method[];
+  status: Status[];
+}
+
 export enum Method {
   GET = "GET",
   HEAD = "HEAD",

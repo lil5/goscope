@@ -1,27 +1,22 @@
+type EnumName<T> = Extract<keyof T, string>;
+type EnumValue<T> = T[EnumName<T>];
+
 export class EnumReflection {
-  private static REGEXP = /^[0-9]+$/g;
-
-  private static isString<T>(name: string): boolean {
-    if (name.match(this.REGEXP)) return false;
-
-    return true;
-  }
-
-  public static getNames<T>(object: T): Array<string> {
-    const result = new Array<string>();
+  public static getNames<T>(object: T): EnumName<T>[] {
+    const result: EnumName<T>[] = [];
 
     for (const name in object) {
-      if (this.isString(name)) result.push(name);
+      if (typeof name === "string") result.push(name);
     }
 
     return result;
   }
 
-  public static getValues<T>(object: T): Array<string | number> {
-    const result = new Array<string | number>();
+  public static getValues<T>(object: T): EnumValue<T>[] {
+    const result: EnumValue<T>[] = [];
 
     for (const name in object) {
-      if (this.isString(name)) result.push(object[name] as any);
+      if (typeof name === "string") result.push(object[name]);
     }
 
     return result;
