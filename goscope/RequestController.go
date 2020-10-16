@@ -61,7 +61,7 @@ func SearchRequest(c *gin.Context) {
 
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	result := SearchRequests(request.Query, int(offset))
+	result := SearchRequests(request.Query, &request.Filter, int(offset))
 
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,

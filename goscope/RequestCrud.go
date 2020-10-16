@@ -4,7 +4,6 @@
 package goscope
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/averageflow/goscope/utils"
@@ -105,12 +104,15 @@ func GetRequests(offset int) []SummarizedRequest {
 	return result
 }
 
-func SearchRequests(searchString string, offset int) []SummarizedRequest {
+func SearchRequests(search string, filter *database.RequestFilter, offset int) []SummarizedRequest {
 	var result []SummarizedRequest
 
-	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
-	rows := database.SearchRequests(utils.DB, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
+	rows, err := database.SearchRequests(utils.DB, utils.Config.GoScopeDatabaseType, search, filter, offset)
 
+	if err != nil {
+		log.Println(err.Error())
+		return nil
+	}
 	defer rows.Close()
 
 	for rows.Next() {

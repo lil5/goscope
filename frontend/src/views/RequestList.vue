@@ -4,12 +4,14 @@
       v-on:searchEvent="this.handleSearch"
       v-on:cancelSearchEvent="this.cancelSearch"
       :search-enabled="this.searchModeEnabled"
-    />
+      :autocomplete="autocomplete"
+    >
+    </SearchBar>
     <table>
       <thead>
         <tr>
           <th>Status</th>
-          <th>Verb</th>
+          <th>Method</th>
           <th>Path</th>
           <th>Happened</th>
           <th></th>
@@ -38,10 +40,42 @@
 
 <script lang="ts">
 import Vue from "vue";
-import SearchBar from "@/components/SearchBar.vue";
-import { RequestService } from "@/api/requests";
-import { RequestsEndpointResponse } from "@/interfaces/requests";
-import { intervalToLevels } from "@/utils/time";
+import SearchBar from "../components/SearchBar.vue";
+import { RequestService } from "../api/requests";
+import {
+  RequestsEndpointResponse,
+  Method,
+  Status,
+  FilterRequest
+} from "../interfaces/requests";
+import { Tag } from "../interfaces/filter";
+import { EnumReflection } from "../utils/enum-reflection";
+import { intervalToLevels } from "../utils/time";
+
+function generateAutocomplete(): Tag[] {
+  const autocomplete: Tag[] = [];
+
+  const methods = EnumReflection.getNames(Method);
+  methods.forEach(m => {
+    autocomplete.push({
+      text: "method:" + m.toLowerCase(),
+      group: "method",
+      value: m
+    });
+  });
+
+  // TODO: add status filter
+  // const statuses = EnumReflection.getNames(Status);
+  // statuses.forEach(s => {
+  //   autocomplete.push({
+  //     text: `status:${Status[s]}xx`,
+  //     group: "status",
+  //     value: s
+  //   });
+  // });
+
+  return autocomplete;
+}
 
 export default Vue.extend({
   name: "RequestList",
@@ -52,6 +86,8 @@ export default Vue.extend({
       currentPage: 1,
       searchModeEnabled: false,
       searchQuery: "",
+      searchTags: [] as Tag[],
+      autocomplete: generateAutocomplete(),
       now: Math.round(new Date().getTime() / 1000)
     };
   },
@@ -63,9 +99,11 @@ export default Vue.extend({
     async nextPage(): Promise<void> {
       this.currentPage++;
       if (this.searchModeEnabled) {
+        const filter = this.getFilter();
         const received = await RequestService.searchRequests(
           this.currentPage,
-          this.searchQuery
+          this.searchQuery,
+          filter
         );
         if (received.data && received.data.length > 0) {
           this.requests = received;
@@ -86,31 +124,60 @@ export default Vue.extend({
         this.currentPage--;
       }
       if (this.searchModeEnabled) {
+        const filter = this.getFilter();
         this.requests = await RequestService.searchRequests(
           this.currentPage,
-          this.searchQuery
+          this.searchQuery,
+          filter
         );
       } else {
         this.requests = await RequestService.getRequests(this.currentPage);
       }
     },
-    async handleSearch(searchQuery: string): Promise<void> {
+    async handleSearch(searchQuery: string, searchTags: Tag[]): Promise<void> {
       this.currentPage = 1;
       this.searchModeEnabled = true;
       this.searchQuery = searchQuery;
+      this.searchTags = searchTags;
+
+      const filter = this.getFilter();
       this.requests = await RequestService.searchRequests(
         this.currentPage,
-        searchQuery
+        searchQuery,
+        filter
       );
     },
     async cancelSearch(): Promise<void> {
       this.currentPage = 1;
       this.searchModeEnabled = false;
       this.searchQuery = "";
+      this.searchTags = [];
       this.requests = await RequestService.getRequests(this.currentPage);
     },
     timeDiffToHuman(value: number): string {
       return intervalToLevels(value);
+    },
+    getFilter(): FilterRequest {
+      const status: Status[] = [];
+      const method: Method[] = [];
+
+      this.searchTags.forEach((tag: Tag) => {
+        switch (tag.group) {
+          case "method":
+            //@ts-ignore
+            method.push(tag.value);
+            break;
+          case "status":
+            //@ts-ignore
+            status.push(tag.value);
+            break;
+        }
+      });
+
+      return {
+        status,
+        method
+      };
     },
     applyMethodColor(method: string): string {
       if (method === "GET") {

@@ -1,13 +1,16 @@
 <template>
-  <section>
-    <label for="search-input" content="Search"></label
-    ><input
-      v-model="searchQuery"
+  <section class="search-bar">
+    <TagsInput
+      v-model="searchTag"
       placeholder="Search ..."
-      id="search-input"
-      style="float: left"
-      type="search"
+      :autocomplete-items="filteredAutocomplete"
+      add-only-from-autocomplete
+      :tags="selectedTags"
+      @tags-changed="editSelectedTags"
+      :autocomplete-min-length="0"
+      @before-adding-tag="beforeAddingTag"
     />
+
     <button
       v-on:click="emitSearchEvent"
       id="search-button"
@@ -16,7 +19,7 @@
       <font-awesome-icon icon="search" />
     </button>
     <button
-      v-if="this.searchEnabled"
+      v-show="showDisabled"
       v-on:click="emitCancelSearchEvent"
       id="search-cancel-button"
       style="border: none; float:left;"
@@ -28,24 +31,67 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
+import { Tag } from "../interfaces/filter";
+//@ts-ignore
+import VueTagsInput from "@johmun/vue-tags-input";
 
 export default Vue.extend({
   name: "SearchBar",
+  components: { TagsInput: VueTagsInput },
   props: {
-    searchEnabled: Boolean as PropType<boolean>
+    searchEnabled: Boolean as PropType<boolean>,
+    autocomplete: {
+      type: Array as PropType<Tag[]>,
+      default: []
+    }
   },
   data() {
     return {
-      searchQuery: ""
+      showDisabled: false as boolean,
+      searchTag: "" as string,
+      selectedTags: [] as Tag[]
     };
   },
+  computed: {
+    filteredAutocomplete(): Tag[] {
+      return this.autocomplete.filter(i => {
+        return (
+          i.text.toLowerCase().indexOf(this.searchTag.toLowerCase()) !== -1
+        );
+      });
+    }
+  },
   methods: {
-    emitSearchEvent() {
-      if (this.searchQuery !== "") {
-        this.$emit("searchEvent", this.searchQuery);
+    checkShowDisabled(): void {
+      const emptySearch = this.searchTag.length === 0;
+      const emptyTags = this.selectedTags.length === 0;
+
+      if (emptySearch && emptyTags) {
+        this.showDisabled = false;
+      }
+
+      this.showDisabled = true;
+    },
+    beforeAddingTag(o: { tag: Tag; addTag: Function }) {
+      o.addTag();
+
+      if (o.tag.text === this.searchTag) {
+        this.emitSearchEvent();
       }
     },
+    editSelectedTags(newSelectedTags: Tag[]) {
+      this.selectedTags = newSelectedTags;
+    },
+    emitSearchEvent() {
+      if (this.searchTag === "" && this.selectedTags.length === 0) return;
+
+      this.checkShowDisabled();
+      this.$emit("searchEvent", this.searchTag, this.selectedTags);
+    },
     emitCancelSearchEvent() {
+      this.searchTag = "";
+      this.selectedTags = [];
+      this.checkShowDisabled();
       this.$emit("cancelSearchEvent");
     }
   }

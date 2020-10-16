@@ -1,8 +1,9 @@
 import axios from "axios";
 import {
   DetailedRequestResponse,
+  FilterRequest,
   RequestsEndpointResponse
-} from "@/interfaces/requests";
+} from "../interfaces/requests";
 
 export abstract class RequestService {
   private static requestAxios = axios.create();
@@ -23,13 +24,17 @@ export abstract class RequestService {
 
   static async searchRequests(
     page: number,
-    query: string
+    query: string,
+    filter: FilterRequest
   ): Promise<RequestsEndpointResponse> {
     const url = process.env.VUE_APP_API_SEARCH_REQUESTS_URL;
     const offset: number = (page - 1) * 50;
     const response = await this.requestAxios.post<RequestsEndpointResponse>(
       url,
-      { query },
+      {
+        query,
+        filter
+      },
       {
         params: {
           offset: offset.toString()
