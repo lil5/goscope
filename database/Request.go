@@ -62,14 +62,6 @@ func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
 }
 
 func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter, offset int) (*sql.Rows, error) {
-	var query string
-
-	var methodQuery string
-
-	var searchQuery string
-
-	var methodSQL []string
-
 	hasMethodFilter := false
 	if filter != nil {
 		hasMethodFilter = len(filter.Method) != 0
@@ -77,143 +69,77 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 
 	hasSearch := search != ""
 
-	var searchQueryCols [][2]string
-	var searchWildcard string
-	if hasSearch {
-		searchWildcard = fmt.Sprintf("%%%s%%", search)
+	qu := GetGoquDialect(connection)
 
-		searchQueryCols = [][2]string{
-			{"requests", "uid"},
-			{"requests", "application"},
-			{"requests", "client_ip"},
-			{"requests", "method"},
-			{"requests", "path"},
-			{"requests", "url"},
-			{"requests", "host"},
-			{"requests", "body"},
-			{"requests", "referrer"},
-			{"requests", "user_agent"},
-			{"requests", "time"},
-			{"responses", "uid"},
-			{"responses", "request_uid"},
-			{"responses", "application"},
-			{"responses", "client_ip"},
-			{"responses", "status"},
-			{"responses", "body"},
-			{"responses", "path"},
-			{"responses", "headers"},
-			{"responses", "size"},
-			{"responses", "time"},
-		}
-	}
-
-	if connection == MySQL || connection == SQLite {
-		if hasMethodFilter && filter != nil {
-			for i, m := range filter.Method {
-				if i == 0 {
-					methodQuery += "AND (`requests`.`method` = ? "
-				} else {
-					methodQuery += "OR `requests`.`method` = ? "
-				}
-
-				methodSQL = append(methodSQL, m)
-			}
-
-			methodQuery += ") "
-		}
-
-		if hasSearch {
-			searchQuery += "AND ("
-			for i, col := range searchQueryCols {
-				if i != 0 {
-					searchQuery += "OR "
-				}
-				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", col[0], col[1])
-			}
-			searchQuery += ") "
-		}
-
-		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
-			"`responses`.`status` FROM `requests` " +
-			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
-			"WHERE `requests`.`application` = ? " +
-			methodQuery +
-			searchQuery +
-			"ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
-	} else if connection == PostgreSQL {
-		if hasMethodFilter && filter != nil {
-			for i, m := range filter.Method {
-				if i == 0 {
-					methodQuery += `AND ("requests"."method" = ? `
-				} else {
-					methodQuery += `OR "requests"."method" = ? `
-				}
-				methodSQL = append(methodSQL, m)
-			}
-			methodQuery += `) `
-		}
-
-		if hasSearch {
-			searchQuery += "AND ("
-			for i, col := range searchQueryCols {
-				if i != 0 {
-					searchQuery += "OR "
-				}
-				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, col[0], col[1])
-			}
-			searchQuery += ") "
-		}
-
-		query = `SELECT "requests"."uid", "requests"."method", "requests"."path",
-			"requests"."time", "responses"."status" FROM "requests"
-			INNER JOIN "responses" ON "requests"."uid" = "responses"."request_uid"
-			WHERE "requests"."application" = ?
-			` + methodQuery + searchQuery + `
-			ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
-	}
-
-	var args []interface{}
-	args = append(args, utils.Config.ApplicationID)
+	ds := qu.Select(
+		"requests.uid",
+		"requests.method",
+		"requests.path",
+		"requests.time",
+		"responses.status",
+	).
+		From("requests").
+		InnerJoin(
+			goqu.T("responses"),
+			goqu.On(goqu.I("requests.uid").Eq(
+				goqu.I("responses.request_uid"),
+			)),
+		).
+		Where(
+			goqu.I("requests.application").Eq(utils.Config.ApplicationID),
+		)
 
 	if hasMethodFilter && filter != nil {
-		for _, ms := range methodSQL {
-			args = append(args, ms)
+		mLength := len(filter.Method)
+
+		if mLength != 0 {
+			mList := make([]interface{}, mLength)
+
+			for i, v := range filter.Method {
+				mList[i] = v
+			}
+
+			ds = ds.Where(
+				goqu.I("requests.method").In(mList...),
+			)
 		}
 	}
 
 	if hasSearch {
-		args = append(args,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-			searchWildcard,
-		)
+		searchWildcard := fmt.Sprintf("%%%s%%", search)
+
+		ds = ds.Where(goqu.Or(
+			goqu.I("requests.uid").Like(searchWildcard),
+			goqu.I("requests.application").Like(searchWildcard),
+			goqu.I("requests.client_ip").Like(searchWildcard),
+			goqu.I("requests.method").Like(searchWildcard),
+			goqu.I("requests.path").Like(searchWildcard),
+			goqu.I("requests.url").Like(searchWildcard),
+			goqu.I("requests.host").Like(searchWildcard),
+			goqu.I("requests.body").Like(searchWildcard),
+			goqu.I("requests.referrer").Like(searchWildcard),
+			goqu.I("requests.user_agent").Like(searchWildcard),
+			goqu.I("requests.time").Like(searchWildcard),
+			goqu.I("responses.uid").Like(searchWildcard),
+			goqu.I("responses.request_uid").Like(searchWildcard),
+			goqu.I("responses.application").Like(searchWildcard),
+			goqu.I("responses.client_ip").Like(searchWildcard),
+			goqu.I("responses.status").Like(searchWildcard),
+			goqu.I("responses.body").Like(searchWildcard),
+			goqu.I("responses.path").Like(searchWildcard),
+			goqu.I("responses.headers").Like(searchWildcard),
+			goqu.I("responses.size").Like(searchWildcard),
+			goqu.I("responses.time").Like(searchWildcard),
+		))
 	}
 
-	args = append(
-		args,
-		utils.Config.GoScopeEntriesPerPage,
-		offset)
+	ds = ds.Order(
+		goqu.I("requests.time").Desc(),
+	).Limit(uint(offset))
 
-	log.Println("args:", args, query)
-	rows, err := db.Query(query, args...)
+	qsql, args, _ := ds.Prepared(true).ToSQL()
+
+	rows, err := db.Query(qsql, args...)
 
 	if err != nil {
 		return nil, err
