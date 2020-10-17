@@ -61,6 +61,8 @@ func Setup(router *gin.Engine, goScopeGroup *gin.RouterGroup) {
 		goScopeGroup.GET("/js/app.js.map", GetStaticFile)
 		goScopeGroup.GET("/css/app.css", GetStaticFile)
 		goScopeGroup.GET("/css/dark.css", GetStaticFile)
+		goScopeGroup.GET("/css/light.css", GetStaticFile)
+		goScopeGroup.GET("/css/code-blocks.css", GetStaticFile)
 		goScopeGroup.GET("/css/styles.css", GetStaticFile)
 		goScopeGroup.GET("/favicon.ico", GetStaticFile)
 		goScopeGroup.GET("/favicon-32x32.png", GetStaticFile)
