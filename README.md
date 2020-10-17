@@ -5,6 +5,8 @@
 
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
+![GoScope Dashboard](showcase/0.png)
+
 The aim of this application is to be a plug and play addition to your application, not a hurdle, thus to setup, you only require a one-liner in your main function.
 
 Once all is set up you can access the web interface by visiting `http://your-app.com/goscope`. 
@@ -82,8 +84,6 @@ For that purpose please find here the [API spec](SPEC-API.md).
 ### Request & Response
 
 In order to understand possible unexpected situations or simply to reassure you that everything is working correctly, GoScope provides more detailed information about request and response, including status codes and request/response bodies, as well as any useful information. Any help with expanding this would be greatly appreciated.
-
-![GoScope Dashboard](showcase/0.png)
 
 ### Logging
 
