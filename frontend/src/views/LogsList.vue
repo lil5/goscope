@@ -9,8 +9,8 @@
     <table>
       <thead>
         <tr>
-          <th>Message</th>
-          <th>Time</th>
+          <th style="width: 70%">Message</th>
+          <th style="width: 25%">Time</th>
           <th></th>
         </tr>
       </thead>

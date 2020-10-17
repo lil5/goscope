@@ -28,6 +28,7 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "Navbar",
+
   async mounted(): Promise<void> {
     this.$data.applicationDetails = await ApplicationDetailsService.getApplicationDetails();
   },

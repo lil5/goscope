@@ -10,11 +10,11 @@
     <table>
       <thead>
         <tr>
-          <th>Status</th>
-          <th>Method</th>
-          <th>Path</th>
-          <th>Happened</th>
-          <th></th>
+          <th style="width: 10%">Status</th>
+          <th style="width: 15%">Method</th>
+          <th style="width: 55%">Path</th>
+          <th style="width: 15%">Happened</th>
+          <th style="width: 5%;"></th>
         </tr>
       </thead>
       <tbody>
