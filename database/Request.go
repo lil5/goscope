@@ -61,7 +61,8 @@ func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
 	return rows
 }
 
-func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen
+func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,funlen,gocyclo
+	filter *RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen,gocyclo
 	var query string
 
 	var methodQuery string
@@ -109,7 +110,7 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 		}
 	}
 
-	if connection == MySQL || connection == SQLite {
+	if connection == MySQL || connection == SQLite { //nolint:nestif
 		if hasMethodFilter && filter != nil {
 			for i, m := range filter.Method {
 				if i == 0 {
@@ -121,16 +122,17 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 				methodSQL = append(methodSQL, m)
 			}
 
-			methodQuery += ") "
+			methodQuery += ") " //nolint:goconst
 		}
 
 		if hasSearch {
-			searchQuery += "AND ("
+			searchQuery += "AND (" //nolint:goconst
 
 			for i, col := range searchQueryCols {
 				if i != 0 {
-					searchQuery += "OR "
+					searchQuery += "OR " //nolint:goconst
 				}
+
 				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", col[0], col[1])
 			}
 
