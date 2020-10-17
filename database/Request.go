@@ -61,7 +61,7 @@ func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
 	return rows
 }
 
-func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter, offset int) (*sql.Rows, error) {
+func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen
 	var query string
 
 	var methodQuery string
@@ -78,7 +78,9 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 	hasSearch := search != ""
 
 	var searchQueryCols [][2]string
+
 	var searchWildcard string
+
 	if hasSearch {
 		searchWildcard = fmt.Sprintf("%%%s%%", search)
 
@@ -124,12 +126,14 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 
 		if hasSearch {
 			searchQuery += "AND ("
-			for i, col := range searchQueryCols{
+
+			for i, col := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR "
 				}
-				searchQuery += fmt.Sprintf(	"`%s`.`%s` LIKE ? ", col[0], col[1])
+				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", col[0], col[1])
 			}
+
 			searchQuery += ") "
 		}
 
@@ -155,11 +159,11 @@ func SearchRequests(db *sql.DB, connection, search string, filter *RequestFilter
 
 		if hasSearch {
 			searchQuery += "AND ("
-			for i, col := range searchQueryCols{
+			for i, col := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR "
 				}
-				searchQuery += fmt.Sprintf(	`"%s"."%s" LIKE ? `, col[0], col[1])
+				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, col[0], col[1])
 			}
 			searchQuery += ") "
 		}

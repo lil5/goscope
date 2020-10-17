@@ -22,7 +22,9 @@
           <td v-html="applyStatusColor(request.responseStatus)"></td>
           <td v-html="applyMethodColor(request.method)"></td>
           <td>{{ request.path }}</td>
-          <td>{{ timeDiffToHuman(now - request.time) }} ago</td>
+          <td>
+            <small>{{ timeDiffToHuman(now - request.time) }} ago</small>
+          </td>
           <td>
             <router-link class="eye-link" :to="`/requests/${request.uid}`">
               <font-awesome-icon icon="eye" />

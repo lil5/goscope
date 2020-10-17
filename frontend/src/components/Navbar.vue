@@ -2,7 +2,7 @@
   <header>
     <nav role="navigation">
       <router-link to="/">
-        {{ this.applicationDetails.applicationName }}
+        <strong>{{ this.applicationDetails.applicationName }}</strong>
       </router-link>
 
       <router-link to="/">

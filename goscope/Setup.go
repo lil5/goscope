@@ -64,6 +64,8 @@ func Setup(router *gin.Engine, goScopeGroup *gin.RouterGroup) {
 		goScopeGroup.GET("/css/styles.css", GetStaticFile)
 		goScopeGroup.GET("/favicon.ico", GetStaticFile)
 		goScopeGroup.GET("/favicon-32x32.png", GetStaticFile)
+		goScopeGroup.GET("/apple-touch-icon-precomposed.png", GetStaticFile)
+		goScopeGroup.GET("/apple-touch-icon.png", GetStaticFile)
 		goScopeGroup.GET("/favicon-16x16.png", GetStaticFile)
 		goScopeGroup.GET("/logs", ShowDashboard)
 		goScopeGroup.GET("/logs/:uuid", ShowDashboard)
