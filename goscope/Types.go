@@ -5,11 +5,17 @@ package goscope
 
 import (
 	"bytes"
+	"io"
 
 	"github.com/averageflow/goscope/database"
 
 	"github.com/gin-gonic/gin"
 )
+
+type BodyLogWriterResponse struct {
+	Blw *BodyLogWriter
+	Rdr io.ReadCloser
+}
 
 type ExceptionRecord struct {
 	Error string `json:"error"`

@@ -5,7 +5,6 @@ package goscope
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/averageflow/goscope/utils"
 	"github.com/gin-gonic/gin"
@@ -40,18 +39,7 @@ func Setup(router *gin.Engine, goScopeGroup *gin.RouterGroup) {
 	router.Use(ResponseLogger)
 
 	// Catch 404s
-	router.NoRoute(func(c *gin.Context) {
-		err := LogWantedResponse(c)
-		if err != nil {
-			log.Printf(err.Error()) //nolint:staticcheck
-			c.Next()
-		}
-
-		c.JSON(http.StatusNotFound, gin.H{
-			"code":    http.StatusNotFound,
-			"message": "The requested resource could not be found!",
-		})
-	})
+	router.NoRoute(NoRouteResponseLogger)
 
 	// SPA routes
 	if !utils.Config.HasFrontendDisabled {

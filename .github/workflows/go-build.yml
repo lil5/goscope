@@ -1,0 +1,17 @@
+name: gobuild
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+      - main
+  pull_request:
+jobs:
+  gobuild:
+    name: gobuild
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: gobuild
+      - run: go build

@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 
 	"github.com/averageflow/goscope/database"
 
@@ -18,24 +19,46 @@ import (
 
 // Log an HTTP response to the DB and print to Stdout.
 func ResponseLogger(c *gin.Context) {
-	if CheckExcludedPaths(c.FullPath()) {
-		err := LogWantedResponse(c)
-		if err != nil {
-			log.Printf(err.Error()) //nolint:staticcheck
-			return
-		}
-	}
+	details := ObtainBodyLogWriter(c)
 
 	c.Next()
+
+	dumpPayload := utils.DumpResponsePayload{
+		Headers: details.Blw.Header(),
+		Body:    details.Blw.body,
+		Status:  c.Writer.Status(),
+	}
+
+	if CheckExcludedPaths(c.FullPath()) {
+		go database.DumpResponse(c, dumpPayload, readBody(details.Rdr))
+	}
 }
 
-func LogWantedResponse(c *gin.Context) error {
+func NoRouteResponseLogger(c *gin.Context) {
+	details := ObtainBodyLogWriter(c)
+
+	dumpPayload := utils.DumpResponsePayload{
+		Headers: details.Blw.Header(),
+		Body:    details.Blw.body,
+		Status:  http.StatusNotFound,
+	}
+
+	go database.DumpResponse(c, dumpPayload, readBody(details.Rdr))
+
+	c.JSON(http.StatusNotFound, gin.H{
+		"code":    http.StatusNotFound,
+		"message": "The requested resource could not be found!",
+	})
+}
+
+func ObtainBodyLogWriter(c *gin.Context) BodyLogWriterResponse {
 	blw := &BodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+
 	c.Writer = blw
 
 	buf, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		return err
+		log.Println(err.Error())
 	}
 
 	rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
@@ -43,13 +66,10 @@ func LogWantedResponse(c *gin.Context) error {
 	rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 	c.Request.Body = rdr2
 
-	go database.DumpResponse(c, utils.DumpResponsePayload{
-		Headers: blw.Header(),
-		Body:    blw.body,
-		Status:  blw.Status(),
-	}, readBody(rdr1))
-
-	return nil
+	return BodyLogWriterResponse{
+		Blw: blw,
+		Rdr: rdr1,
+	}
 }
 
 func readBody(reader io.Reader) string {
@@ -63,13 +83,4 @@ func readBody(reader io.Reader) string {
 	s := buf.String()
 
 	return s
-}
-
-type LoggerGoScope struct {
-	RoutingEngine *gin.Engine
-}
-
-func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
-	go database.WriteLogs(string(p))
-	return len(p), nil
 }

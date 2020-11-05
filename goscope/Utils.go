@@ -16,8 +16,8 @@ func CheckExcludedPaths(path string) bool {
 		"",
 	}
 
-	for _, s := range exactMatches {
-		if path == s {
+	for i := range exactMatches {
+		if path == exactMatches[i] {
 			return false
 		}
 	}
@@ -26,8 +26,8 @@ func CheckExcludedPaths(path string) bool {
 		"/goscope",
 	}
 
-	for _, s := range partialMatches {
-		if strings.Contains(path, s) {
+	for i := range partialMatches {
+		if strings.Contains(path, partialMatches[i]) {
 			return false
 		}
 	}
