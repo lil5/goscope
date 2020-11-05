@@ -218,7 +218,6 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 		utils.Config.GoScopeEntriesPerPage,
 		offset)
 
-	log.Println("args:", args, query)
 	rows, err := db.Query(query, args...)
 
 	if err != nil {

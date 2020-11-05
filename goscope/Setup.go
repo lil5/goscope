@@ -1,6 +1,7 @@
 // License: MIT
 // Authors:
 // 		- Josep Jesus Bigorra Algaba (@averageflow)
+
 package goscope
 
 import (
@@ -35,6 +36,7 @@ func Setup(router *gin.Engine, goScopeGroup *gin.RouterGroup) {
 
 	log.SetFlags(log.Lshortfile)
 	log.SetOutput(logger)
+
 	// Use the logging middleware
 	router.Use(ResponseLogger)
 
