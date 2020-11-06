@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.com/averageflow/goscope.svg?branch=master)](https://travis-ci.com/averageflow/goscope)
 [![Maintainability](https://api.codeclimate.com/v1/badges/465ff63fcadad83c6aa3/maintainability)](https://codeclimate.com/github/averageflow/goscope/maintainability)
+[![Issues](https://img.shields.io/github/issues/averageflow/goscope)](#)
+[![License](https://img.shields.io/github/license/averageflow/goscope.svg)](https://github.com/averageflow/goscope/blob/master/LICENSE.md)
+[![Go Report Card](https://goreportcard.com/badge/github.com/averageflow/goscope)](https://goreportcard.com/report/github.com/averageflow/goscope)
+
 
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
