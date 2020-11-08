@@ -1,12 +1,15 @@
 <template>
   <section>
     <SearchBar
-      v-on:searchEvent="this.handleSearch"
-      v-on:cancelSearchEvent="this.cancelSearch"
-      :search-enabled="this.searchModeEnabled"
+      v-on:searchEvent="handleSearch"
+      v-on:cancelSearchEvent="cancelSearch"
+      :search-enabled="searchModeEnabled"
       :autocomplete="autocomplete"
     >
     </SearchBar>
+    <button :class="autoRefreshButtonClass" @click="autoRefresh = !autoRefresh">
+      <font-awesome-icon icon="sync" />&nbsp;Auto-Refresh
+    </button>
     <table>
       <thead>
         <tr>
@@ -34,8 +37,8 @@
       </tbody>
     </table>
     <nav class="text-center">
-      <button v-on:click="this.previousPage">← prev</button>
-      <button v-on:click="this.nextPage">next →</button>
+      <button v-on:click="previousPage">← prev</button>
+      <button v-on:click="nextPage">next →</button>
     </nav>
   </section>
 </template>
@@ -86,6 +89,8 @@ export default Vue.extend({
     return {
       requests: {} as RequestsEndpointResponse,
       currentPage: 1,
+      autoRefresh: false,
+      timer: 0,
       searchModeEnabled: false,
       searchQuery: "",
       searchTags: [] as Tag[],
@@ -96,6 +101,19 @@ export default Vue.extend({
   async created(): Promise<void> {
     this.requests = await RequestService.getRequests(this.currentPage);
     document.title = `${this.requests.applicationName} | Requests`;
+    this.timer = setInterval(async () => {
+      if (this.autoRefresh) {
+        await RequestService.getRequests(this.currentPage);
+      }
+    }, 5000);
+  },
+  computed: {
+    autoRefreshButtonClass(): string {
+      if (!this.autoRefresh) {
+        return "";
+      }
+      return "active-auto-refresh";
+    }
   },
   methods: {
     async nextPage(): Promise<void> {

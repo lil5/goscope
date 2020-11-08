@@ -6,6 +6,9 @@
       :search-enabled="this.searchModeEnabled"
       :autocomplete="[]"
     />
+    <button :class="autoRefreshButtonClass" @click="autoRefresh = !autoRefresh">
+      <font-awesome-icon icon="sync" />&nbsp;Auto-Refresh
+    </button>
     <table>
       <thead>
         <tr>
@@ -43,6 +46,7 @@ import { intervalToLevels } from "@/utils/time";
 import { LogService } from "@/api/logs";
 import { LogsEndpointResponse } from "@/interfaces/logs";
 import SearchBar from "@/components/SearchBar.vue";
+import { RequestService } from "@/api/requests";
 
 export default Vue.extend({
   name: "LogsList",
@@ -50,11 +54,21 @@ export default Vue.extend({
   data() {
     return {
       currentPage: 1,
+      autoRefresh: false,
+      timer: 0,
       searchModeEnabled: false,
       searchQuery: "",
       logs: {} as LogsEndpointResponse,
       now: Math.round(new Date().getTime() / 1000)
     };
+  },
+  computed: {
+    autoRefreshButtonClass(): string {
+      if (!this.autoRefresh) {
+        return "";
+      }
+      return "active-auto-refresh";
+    }
   },
   methods: {
     timeDiffToHuman(value: number): string {
@@ -110,6 +124,11 @@ export default Vue.extend({
   async created(): Promise<void> {
     this.logs = await LogService.getLogs(this.currentPage);
     document.title = `${this.logs.applicationName} | Logs`;
+    this.timer = setInterval(async () => {
+      if (this.autoRefresh) {
+        await LogService.getLogs(this.currentPage);
+      }
+    }, 5000);
   }
 });
 </script>
