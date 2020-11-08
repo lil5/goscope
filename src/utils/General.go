@@ -1,8 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package utils
 
 import (
 	"bytes"
@@ -36,7 +32,7 @@ func CheckExcludedPaths(path string) bool {
 	return true
 }
 
-func prettifyJSON(rawString string) string {
+func PrettifyJSON(rawString string) string {
 	if rawString == "" {
 		return ""
 	}

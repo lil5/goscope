@@ -1,8 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package controllers
 
 import (
 	"bytes"
@@ -11,12 +7,23 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/averageflow/goscope/database"
+	"github.com/averageflow/goscope/src/types"
 
-	"github.com/averageflow/goscope/utils"
+	"github.com/averageflow/goscope/src/repository"
+
+	"github.com/averageflow/goscope/src/utils"
 
 	"github.com/gin-gonic/gin"
 )
+
+type LoggerGoScope struct {
+	RoutingEngine *gin.Engine
+}
+
+func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
+	go repository.WriteLogs(string(p))
+	return len(p), nil
+}
 
 // Log an HTTP response to the DB and print to Stdout.
 func ResponseLogger(c *gin.Context) {
@@ -24,27 +31,27 @@ func ResponseLogger(c *gin.Context) {
 
 	c.Next()
 
-	dumpPayload := utils.DumpResponsePayload{
+	dumpPayload := types.DumpResponsePayload{
 		Headers: details.Blw.Header(),
-		Body:    details.Blw.body,
+		Body:    details.Blw.Body,
 		Status:  c.Writer.Status(),
 	}
 
-	if CheckExcludedPaths(c.FullPath()) {
-		go database.DumpResponse(c, dumpPayload, readBody(details.Rdr))
+	if utils.CheckExcludedPaths(c.FullPath()) {
+		go repository.DumpResponse(c, dumpPayload, readBody(details.Rdr))
 	}
 }
 
 func NoRouteResponseLogger(c *gin.Context) {
 	details := ObtainBodyLogWriter(c)
 
-	dumpPayload := utils.DumpResponsePayload{
+	dumpPayload := types.DumpResponsePayload{
 		Headers: details.Blw.Header(),
-		Body:    details.Blw.body,
+		Body:    details.Blw.Body,
 		Status:  http.StatusNotFound,
 	}
 
-	go database.DumpResponse(c, dumpPayload, readBody(details.Rdr))
+	go repository.DumpResponse(c, dumpPayload, readBody(details.Rdr))
 
 	c.JSON(http.StatusNotFound, gin.H{
 		"code":    http.StatusNotFound,
@@ -52,8 +59,8 @@ func NoRouteResponseLogger(c *gin.Context) {
 	})
 }
 
-func ObtainBodyLogWriter(c *gin.Context) BodyLogWriterResponse {
-	blw := &BodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+func ObtainBodyLogWriter(c *gin.Context) types.BodyLogWriterResponse {
+	blw := &types.BodyLogWriter{Body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 
 	c.Writer = blw
 
@@ -67,7 +74,7 @@ func ObtainBodyLogWriter(c *gin.Context) BodyLogWriterResponse {
 	rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 	c.Request.Body = rdr2
 
-	return BodyLogWriterResponse{
+	return types.BodyLogWriterResponse{
 		Blw: blw,
 		Rdr: rdr1,
 	}

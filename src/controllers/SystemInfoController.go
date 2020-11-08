@@ -1,8 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package controllers
 
 import (
 	"fmt"
@@ -10,7 +6,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/averageflow/goscope/utils"
+	"github.com/averageflow/goscope/src/types"
+
+	"github.com/averageflow/goscope/src/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
@@ -47,18 +45,18 @@ func ShowSystemInfo(c *gin.Context) {
 		environment[variable[0]] = variable[1]
 	}
 
-	responseBody := SystemInformationResponse{
+	responseBody := types.SystemInformationResponse{
 		ApplicationName: utils.Config.ApplicationName,
-		CPU: SystemInformationResponseCPU{
+		CPU: types.SystemInformationResponseCPU{
 			CoreCount: fmt.Sprintf("%d Cores", firstCPU.Cores),
 			ModelName: firstCPU.ModelName,
 		},
-		Memory: SystemInformationResponseMemory{
+		Memory: types.SystemInformationResponseMemory{
 			Available: fmt.Sprintf("%.2f GB", float64(memoryStatus.Available)/BytesInOneGigabyte),
 			Total:     fmt.Sprintf("%.2f GB", float64(memoryStatus.Total)/BytesInOneGigabyte),
 			UsedSwap:  fmt.Sprintf("%.2f%%", swapStatus.UsedPercent),
 		},
-		Host: SystemInformationResponseHost{
+		Host: types.SystemInformationResponseHost{
 			HostOS:        hostStatus.OS,
 			HostPlatform:  hostStatus.Platform,
 			Hostname:      hostStatus.Hostname,
@@ -66,7 +64,7 @@ func ShowSystemInfo(c *gin.Context) {
 			KernelVersion: hostStatus.KernelVersion,
 			Uptime:        fmt.Sprintf("%.2f hours", float64(hostStatus.Uptime)/SecondsInOneMinute/SecondsInOneMinute),
 		},
-		Disk: SystemInformationResponseDisk{
+		Disk: types.SystemInformationResponseDisk{
 			FreeSpace:     fmt.Sprintf("%.2f GB", float64(diskStatus.Free)/BytesInOneGigabyte),
 			MountPath:     diskStatus.Path,
 			PartitionType: diskStatus.Fstype,

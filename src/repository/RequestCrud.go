@@ -1,7 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-package database
+package repository
 
 import (
 	"database/sql"
@@ -10,28 +7,163 @@ import (
 	"log"
 	"time"
 
+	"github.com/averageflow/goscope/src/types"
+
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
 
-	"github.com/averageflow/goscope/utils"
+	"github.com/averageflow/goscope/src/utils"
 )
 
-func GetDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
-	var query string
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `uid`, `client_ip`, `method`, `path`, `url`, " +
-			"`host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = ? LIMIT 1;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "uid", "client_ip", "method", "path", "url",
-			"host", "time", "headers", "body", "referrer", "user_agent" FROM "requests" WHERE "uid" = ? LIMIT 1;`
+// Get all details from a request via its UID.
+func GetDetailedRequest(requestUID string) types.DetailedRequest {
+	var body string
+
+	var headers string
+
+	var result types.DetailedRequest
+
+	row := QueryDetailedRequest(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
+
+	err := row.Scan(
+		&result.UID,
+		&result.ClientIP,
+		&result.Method,
+		&result.Path,
+		&result.URL,
+		&result.Host,
+		&result.Time,
+		&headers,
+		&body,
+		&result.Referrer,
+		&result.UserAgent,
+	)
+	if err != nil {
+		log.Println(err.Error())
 	}
+
+	result.Body = utils.PrettifyJSON(body)
+	result.Headers = utils.PrettifyJSON(headers)
+
+	return result
+}
+
+func GetDetailedResponse(requestUID string) types.DetailedResponse {
+	var body string
+
+	var headers string
+
+	var result types.DetailedResponse
+
+	row := QueryDetailedResponse(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
+
+	err := row.Scan(
+		&result.UID,
+		&result.ClientIP,
+		&result.Status,
+		&result.Time,
+		&body,
+		&result.Path,
+		&headers,
+		&result.Size,
+	)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	result.Body = utils.PrettifyJSON(body)
+	result.Headers = utils.PrettifyJSON(headers)
+
+	return result
+}
+
+func GetRequests(offset int) []types.SummarizedRequest {
+	var result []types.SummarizedRequest
+
+	rows := QueryGetRequests(utils.DB, utils.Config.GoScopeDatabaseType, offset)
+
+	if rows == nil {
+		return result
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var request types.SummarizedRequest
+
+		err := rows.Scan(
+			&request.UID,
+			&request.Method,
+			&request.Path,
+			&request.Time,
+			&request.ResponseStatus,
+		)
+		if err != nil {
+			log.Println(err.Error())
+			return result
+		}
+
+		result = append(result, request)
+	}
+
+	return result
+}
+
+func SearchRequests(search string, filter *types.RequestFilter, offset int) []types.SummarizedRequest {
+	var result []types.SummarizedRequest
+
+	rows, err := QuerySearchRequests(utils.DB, utils.Config.GoScopeDatabaseType, search, filter, offset)
+
+	if err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var request types.SummarizedRequest
+
+		err := rows.Scan(
+			&request.UID,
+			&request.Method,
+			&request.Path,
+			&request.Time,
+			&request.ResponseStatus,
+		)
+
+		if err != nil {
+			log.Println(err.Error())
+		}
+
+		result = append(result, request)
+	}
+
+	return result
+}
+
+func QueryDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
+	query := `
+		SELECT uid,
+		   client_ip,
+		   method,
+		   path,
+		   url,
+		   host,
+		   time,
+		   headers,
+		   body,
+		   referrer,
+		   user_agent
+		FROM requests
+		WHERE uid = ?
+		LIMIT 1;
+	`
 
 	row := db.QueryRow(query, requestUID)
 
 	return row
 }
 
-func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
+func QueryGetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
 	var query string
 	if connection == MySQL || connection == SQLite {
 		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
@@ -61,8 +193,8 @@ func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
 	return rows
 }
 
-func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,funlen,gocyclo
-	filter *RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen,gocyclo
+func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,funlen,gocyclo
+	filter *types.RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen,gocyclo
 	var query string
 
 	var methodQuery string
@@ -227,7 +359,7 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 	return rows, nil
 }
 
-func GetDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
+func QueryDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
 	var query string
 
 	if connection == MySQL || connection == SQLite {
@@ -245,7 +377,7 @@ func GetDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
 	return row
 }
 
-func DumpResponse(c *gin.Context, responsePayload utils.DumpResponsePayload, body string) {
+func DumpResponse(c *gin.Context, responsePayload types.DumpResponsePayload, body string) {
 	now := time.Now().Unix()
 	requestUID, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)

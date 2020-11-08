@@ -1,7 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-package database
+package repository
 
 import (
 	"database/sql"
@@ -9,12 +6,82 @@ import (
 	"log"
 	"time"
 
+	"github.com/averageflow/goscope/src/types"
+
 	uuid "github.com/nu7hatch/gouuid"
 
-	"github.com/averageflow/goscope/utils"
+	"github.com/averageflow/goscope/src/utils"
 )
 
-func GetDetailedLog(db *sql.DB, connection, requestUID string) *sql.Row {
+func FetchDetailedLog(requestUID string) types.ExceptionRecord {
+	row := QueryDetailedLog(
+		utils.DB,
+		utils.Config.GoScopeDatabaseType,
+		requestUID,
+	)
+
+	var request types.ExceptionRecord
+
+	err := row.Scan(&request.UID, &request.Error, &request.Time)
+	if err != nil {
+		log.Println(err.Error())
+		return request
+	}
+
+	return request
+}
+
+func FetchSearchLogs(searchString string, offset int) []types.ExceptionRecord {
+	var result []types.ExceptionRecord
+
+	searchWildcard := fmt.Sprintf("%%%s%%", searchString)
+	rows := QuerySearchLogs(utils.DB, utils.Config.GoScopeDatabaseType, searchWildcard, offset)
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var request types.ExceptionRecord
+
+		err := rows.Scan(&request.UID, &request.Error, &request.Time)
+		if err != nil {
+			log.Println(err.Error())
+			return result
+		}
+
+		result = append(result, request)
+	}
+
+	return result
+}
+
+// Get a summarized list of application logs from the DB.
+func FetchLogs(offset int) []types.ExceptionRecord {
+	var result []types.ExceptionRecord
+
+	rows := QueryGetLogs(utils.DB, utils.Config.GoScopeDatabaseType, offset)
+	if rows == nil {
+		return result
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var request types.ExceptionRecord
+
+		err := rows.Scan(&request.UID, &request.Error, &request.Time)
+		if err != nil {
+			log.Println(err.Error())
+
+			return result
+		}
+
+		result = append(result, request)
+	}
+
+	return result
+}
+
+func QueryDetailedLog(db *sql.DB, connection, requestUID string) *sql.Row {
 	var query string
 	if connection == MySQL || connection == SQLite {
 		query = "SELECT `uid`, `error`, `time` FROM `logs` WHERE `uid` = ?;"
@@ -27,7 +94,7 @@ func GetDetailedLog(db *sql.DB, connection, requestUID string) *sql.Row {
 	return row
 }
 
-func SearchLogs(db *sql.DB, connection, searchWildcard string, offset int) *sql.Rows {
+func QuerySearchLogs(db *sql.DB, connection, searchWildcard string, offset int) *sql.Rows {
 	var query string
 	if connection == MySQL {
 		query = "SELECT `uid`, CASE WHEN LENGTH(`error`) > 80 THEN CONCAT(SUBSTRING(`error`, 1, 80), '...') " +
@@ -65,7 +132,7 @@ func SearchLogs(db *sql.DB, connection, searchWildcard string, offset int) *sql.
 	return rows
 }
 
-func GetLogs(db *sql.DB, connection string, offset int) *sql.Rows {
+func QueryGetLogs(db *sql.DB, connection string, offset int) *sql.Rows {
 	var query string
 
 	if connection == MySQL {

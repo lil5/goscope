@@ -1,14 +1,8 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package types
 
 import (
 	"bytes"
 	"io"
-
-	"github.com/averageflow/goscope/database"
 
 	"github.com/gin-gonic/gin"
 )
@@ -73,18 +67,18 @@ type DetailedRequest struct {
 
 type BodyLogWriter struct {
 	gin.ResponseWriter
-	body *bytes.Buffer
+	Body *bytes.Buffer
 }
 
 // HTTP request body object.
 func (w BodyLogWriter) Write(b []byte) (int, error) {
-	w.body.Write(b)
+	w.Body.Write(b)
 	return w.ResponseWriter.Write(b)
 }
 
 type SearchRequestPayload struct {
-	Query  string                 `json:"query"`
-	Filter database.RequestFilter `json:"filter"`
+	Query  string        `json:"query"`
+	Filter RequestFilter `json:"filter"`
 }
 
 type SystemInformationResponse struct {

@@ -1,26 +1,23 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package controllers
 
 import (
 	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/averageflow/goscope/src/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func ShowDashboard(c *gin.Context) {
-	file, _ := Asset("../frontend/dist/index.html")
+	file, _ := utils.Asset("../../frontend/dist/index.html")
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), "text/html", reader, nil)
 }
 
 func GetStaticFile(c *gin.Context) {
 	requestedFile := strings.ReplaceAll(c.Request.RequestURI, "/goscope/", "")
-	file, _ := Asset(fmt.Sprintf("../frontend/dist/%s", requestedFile))
+	file, _ := utils.Asset(fmt.Sprintf("../../frontend/dist/%s", requestedFile))
 	reader := strings.NewReader(string(file))
 	c.DataFromReader(http.StatusOK, reader.Size(), GetMimeType(requestedFile), reader, nil)
 }

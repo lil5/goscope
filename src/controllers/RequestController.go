@@ -1,15 +1,14 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package controllers
 
 import (
 	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/averageflow/goscope/utils"
+	"github.com/averageflow/goscope/src/types"
+
+	"github.com/averageflow/goscope/src/repository"
+	"github.com/averageflow/goscope/src/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -22,7 +21,7 @@ func RequestList(c *gin.Context) {
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,
 		"entriesPerPage":  utils.Config.GoScopeEntriesPerPage,
-		"data":            GetRequests(int(offset)),
+		"data":            repository.GetRequests(int(offset)),
 	}
 
 	c.Header("Access-Control-Allow-Origin", "*")
@@ -30,15 +29,15 @@ func RequestList(c *gin.Context) {
 }
 
 func ShowRequest(c *gin.Context) {
-	var request RecordByURI
+	var request types.RecordByURI
 
 	err := c.ShouldBindUri(&request)
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	requestDetails := GetDetailedRequest(request.UID)
-	responseDetails := GetDetailedResponse(request.UID)
+	requestDetails := repository.GetDetailedRequest(request.UID)
+	responseDetails := repository.GetDetailedResponse(request.UID)
 
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,
@@ -53,7 +52,7 @@ func ShowRequest(c *gin.Context) {
 }
 
 func SearchRequest(c *gin.Context) {
-	var request SearchRequestPayload
+	var request types.SearchRequestPayload
 	err := c.ShouldBindBodyWith(&request, binding.JSON)
 
 	if err != nil {
@@ -62,7 +61,7 @@ func SearchRequest(c *gin.Context) {
 
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	result := SearchRequests(request.Query, &request.Filter, int(offset))
+	result := repository.SearchRequests(request.Query, &request.Filter, int(offset))
 
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,
