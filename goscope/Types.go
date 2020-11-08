@@ -93,6 +93,7 @@ type SystemInformationResponse struct {
 	Disk            SystemInformationResponseDisk   `json:"disk"`
 	Host            SystemInformationResponseHost   `json:"host"`
 	Memory          SystemInformationResponseMemory `json:"memory"`
+	Environment     map[string]string               `json:"environment"`
 }
 
 type SystemInformationResponseCPU struct {

@@ -7,6 +7,8 @@ package goscope
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/averageflow/goscope/utils"
 	"github.com/gin-gonic/gin"
@@ -37,6 +39,14 @@ func ShowSystemInfo(c *gin.Context) {
 	hostStatus, _ := host.Info()
 	diskStatus, _ := disk.Usage("/")
 
+	environment := make(map[string]string)
+
+	env := os.Environ()
+	for i := range env {
+		variable := strings.SplitN(env[i], "=", 2)
+		environment[variable[0]] = variable[1]
+	}
+
 	responseBody := SystemInformationResponse{
 		ApplicationName: utils.Config.ApplicationName,
 		CPU: SystemInformationResponseCPU{
@@ -62,6 +72,7 @@ func ShowSystemInfo(c *gin.Context) {
 			PartitionType: diskStatus.Fstype,
 			TotalSpace:    fmt.Sprintf("%.2f GB", float64(diskStatus.Total)/BytesInOneGigabyte),
 		},
+		Environment: environment,
 	}
 
 	c.Header("Access-Control-Allow-Origin", "*")

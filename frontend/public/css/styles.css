@@ -3,7 +3,6 @@
 
 :root {
   --links: #7cc3bf;
-  #--code: #ccc;
 }
 
 body {
@@ -23,6 +22,11 @@ dt {
 dd {
   margin-bottom: 10px;
 }
+
+tbody tr:nth-child(odd) {
+  background: var(--background);
+}
+
 
 .code-block {
   background: var(--background);
