@@ -126,7 +126,7 @@ export default Vue.extend({
     document.title = `${this.logs.applicationName} | Logs`;
     this.timer = setInterval(async () => {
       if (this.autoRefresh) {
-        await LogService.getLogs(this.currentPage);
+        this.logs = await LogService.getLogs(this.currentPage);
       }
     }, 5000);
   }

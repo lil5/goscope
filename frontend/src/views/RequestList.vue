@@ -103,7 +103,7 @@ export default Vue.extend({
     document.title = `${this.requests.applicationName} | Requests`;
     this.timer = setInterval(async () => {
       if (this.autoRefresh) {
-        await RequestService.getRequests(this.currentPage);
+        this.requests = await RequestService.getRequests(this.currentPage);
       }
     }, 5000);
   },
