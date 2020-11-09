@@ -5,11 +5,11 @@ import (
 	"log"
 	"time"
 
-	// Import MySQL driver
+	// Import MySQL driver.
 	_ "github.com/go-sql-driver/mysql"
-	// Import SQLite driver
+	// Import SQLite driver.
 	_ "github.com/mattn/go-sqlite3"
-	// Import PostgreSQL driver
+	// Import PostgreSQL driver.
 	_ "github.com/lib/pq"
 )
 
