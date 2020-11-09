@@ -7,7 +7,7 @@
 [![Issues](https://img.shields.io/github/issues/averageflow/goscope)](#)
 [![License](https://img.shields.io/github/license/averageflow/goscope.svg)](https://github.com/averageflow/goscope/blob/master/LICENSE.md)
 [![Go Report Card](https://goreportcard.com/badge/github.com/averageflow/goscope)](https://goreportcard.com/report/github.com/averageflow/goscope)
-[![PkgGoDev](https://pkg.go.dev/badge/mod/github.com/averageflow/goscope@v1.7.2)](https://pkg.go.dev/mod/github.com/averageflow/goscope@v1.7.2)
+[![PkgGoDev](https://pkg.go.dev/badge/mod/github.com/averageflow/goscope)](https://pkg.go.dev/github.com/averageflow/goscope?tab=overview)
 
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
 
