@@ -4,6 +4,13 @@ import (
 	"database/sql"
 	"log"
 	"time"
+
+	// Import MySQL driver
+	_ "github.com/go-sql-driver/mysql"
+	// Import SQLite driver
+	_ "github.com/mattn/go-sqlite3"
+	// Import PostgreSQL driver
+	_ "github.com/lib/pq"
 )
 
 var DB *sql.DB //nolint:gochecknoglobals
