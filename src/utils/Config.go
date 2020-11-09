@@ -1,10 +1,8 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package utils
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 )
@@ -59,7 +57,10 @@ func getInteger(key string) int {
 		panic(fmt.Sprintf("Error! Could not find %s environment variable!", key))
 	}
 
-	integer, _ := strconv.ParseInt(os.Getenv(key), 10, 32)
+	integer, err := strconv.ParseInt(os.Getenv(key), 10, 32)
+	if err != nil {
+		panic(fmt.Sprintf("Environment variable %s was not a valid integer!", key))
+	}
 
 	return int(integer)
 }
@@ -71,7 +72,11 @@ func getOptionalInteger(key string, defaultValue int) int {
 		return defaultValue
 	}
 
-	integer, _ := strconv.ParseInt(os.Getenv(key), 10, 32)
+	integer, err := strconv.ParseInt(os.Getenv(key), 10, 32)
+	if err != nil {
+		log.Printf("Error while reading integer %s from environment!", key)
+		return defaultValue
+	}
 
 	return int(integer)
 }
@@ -82,7 +87,11 @@ func getOptionalBool(key string, defaultValue bool) bool {
 		return defaultValue
 	}
 
-	b, _ := strconv.ParseBool(os.Getenv(key))
+	b, err := strconv.ParseBool(os.Getenv(key))
+	if err != nil {
+		log.Printf("Error while reading boolean %s from environment!", key)
+		return defaultValue
+	}
 
 	return b
 }

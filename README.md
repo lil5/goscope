@@ -57,7 +57,7 @@ package main
 import (
     "github.com/gin-gonic/gin"
     "github.com/joho/godotenv"
-    "github.com/averageflow/goscope/goscope"
+    "github.com/averageflow/goscope/src/goscope"
 )
 
 func main(){

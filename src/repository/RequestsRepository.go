@@ -1,7 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-package database
+package repository
 
 import (
 	"database/sql"
@@ -10,59 +7,61 @@ import (
 	"log"
 	"time"
 
+	"github.com/averageflow/goscope/src/types"
+
 	"github.com/gin-gonic/gin"
 	uuid "github.com/nu7hatch/gouuid"
 
-	"github.com/averageflow/goscope/utils"
+	"github.com/averageflow/goscope/src/utils"
 )
 
-func GetDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
-	var query string
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `uid`, `client_ip`, `method`, `path`, `url`, " +
-			"`host`, `time`, `headers`, `body`, `referrer`, `user_agent` FROM `requests` WHERE `uid` = ? LIMIT 1;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "uid", "client_ip", "method", "path", "url",
-			"host", "time", "headers", "body", "referrer", "user_agent" FROM "requests" WHERE "uid" = ? LIMIT 1;`
-	}
+func QueryDetailedRequest(db *sql.DB, requestUID string) *sql.Row {
+	query := `
+		SELECT uid,
+		   client_ip,
+		   method,
+		   path,
+		   url,
+		   host,
+		   time,
+		   headers,
+		   body,
+		   referrer,
+		   user_agent
+		FROM requests
+		WHERE uid = ?
+		LIMIT 1;
+	`
 
 	row := db.QueryRow(query, requestUID)
 
 	return row
 }
 
-func GetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
-	var query string
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
-			"`responses`.`status` FROM `requests` " +
-			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
-			"WHERE `requests`.`application` = ? ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "requests"."uid", "requests"."method", "requests"."path", "requests"."time",
-			"responses"."status" FROM "requests"
-			INNER JOIN "responses" ON "requests"."uid" = "responses"."request_uid"
-			WHERE "requests"."application" = ? ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
-	}
+func QueryGetRequests(db *sql.DB, offset int) (*sql.Rows, error) {
+	query := `
+		SELECT requests.uid,
+		   requests.method,
+		   requests.path,
+		   requests.time,
+		   responses.status
+		FROM requests
+				 INNER JOIN responses ON requests.uid = responses.request_uid
+		WHERE requests.application = ?
+		ORDER BY requests.time DESC
+		LIMIT ? OFFSET ?;
+	`
 
-	rows, err := db.Query(
+	return db.Query(
 		query,
 		utils.Config.ApplicationID,
 		utils.Config.GoScopeEntriesPerPage,
 		offset,
 	)
-
-	if err != nil {
-		log.Println(err.Error())
-
-		return nil
-	}
-
-	return rows
 }
 
-func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,funlen,gocyclo
-	filter *RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen,gocyclo
+func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,funlen,gocyclo
+	filter *types.RequestFilter, offset int) (*sql.Rows, error) { //nolint:gocognit,funlen,gocyclo
 	var query string
 
 	var methodQuery string
@@ -112,14 +111,14 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 
 	if connection == MySQL || connection == SQLite { //nolint:nestif
 		if hasMethodFilter && filter != nil {
-			for i, m := range filter.Method {
+			for i := range filter.Method {
 				if i == 0 {
 					methodQuery += "AND (`requests`.`method` = ? "
 				} else {
 					methodQuery += "OR `requests`.`method` = ? "
 				}
 
-				methodSQL = append(methodSQL, m)
+				methodSQL = append(methodSQL, filter.Method[i])
 			}
 
 			methodQuery += ") " //nolint:goconst
@@ -128,12 +127,12 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 		if hasSearch {
 			searchQuery += "AND (" //nolint:goconst
 
-			for i, col := range searchQueryCols {
+			for i := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR " //nolint:goconst
 				}
 
-				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", col[0], col[1])
+				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", searchQueryCols[i][0], searchQueryCols[i][1])
 			}
 
 			searchQuery += ") "
@@ -148,24 +147,24 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 			"ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
 	} else if connection == PostgreSQL {
 		if hasMethodFilter && filter != nil {
-			for i, m := range filter.Method {
+			for i := range filter.Method {
 				if i == 0 {
 					methodQuery += `AND ("requests"."method" = ? `
 				} else {
 					methodQuery += `OR "requests"."method" = ? `
 				}
-				methodSQL = append(methodSQL, m)
+				methodSQL = append(methodSQL, filter.Method[i])
 			}
 			methodQuery += `) `
 		}
 
 		if hasSearch {
 			searchQuery += "AND ("
-			for i, col := range searchQueryCols {
+			for i := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR "
 				}
-				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, col[0], col[1])
+				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, searchQueryCols[i][0], searchQueryCols[i][1])
 			}
 			searchQuery += ") "
 		}
@@ -182,8 +181,8 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 	args = append(args, utils.Config.ApplicationID)
 
 	if hasMethodFilter && filter != nil {
-		for _, ms := range methodSQL {
-			args = append(args, ms)
+		for i := range methodSQL {
+			args = append(args, methodSQL[i])
 		}
 	}
 
@@ -227,34 +226,39 @@ func SearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,fun
 	return rows, nil
 }
 
-func GetDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
-	var query string
-
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `uid`, `client_ip`, `status`, `time`, " +
-			"`body`, `path`, `headers`, `size` FROM `responses` " +
-			"WHERE `request_uid` = ? LIMIT 1;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "uid", "client_ip", "status", "time",
-			"body", "path", "headers", "size" FROM "responses"
-			WHERE "request_uid" = ? LIMIT 1;`
-	}
+func QueryDetailedResponse(db *sql.DB, requestUID string) *sql.Row {
+	query := `
+		SELECT uid,
+		   client_ip,
+		   status,
+		   time,
+		   body,
+		   path,
+		   headers,
+		   size
+		FROM responses
+		WHERE request_uid = ?
+		LIMIT 1;
+	`
 
 	row := db.QueryRow(query, requestUID)
 
 	return row
 }
 
-func DumpResponse(c *gin.Context, responsePayload utils.DumpResponsePayload, body string) {
+func DumpRequestResponse(c *gin.Context, responsePayload types.DumpResponsePayload, body string) {
 	now := time.Now().Unix()
 	requestUID, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
-	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
-		"headers, body, referrer, url, user_agent) VALUES " +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	query := `
+		INSERT INTO requests (uid, application, client_ip, method, path, host, time,
+                      headers, body, referrer, url, user_agent)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	`
 
 	requestPath := c.FullPath()
 	if requestPath == "" {
+		// Use URL as fallback when path is not recognized as route
 		requestPath = c.Request.URL.String()
 	}
 
@@ -280,9 +284,11 @@ func DumpResponse(c *gin.Context, responsePayload utils.DumpResponsePayload, bod
 
 	responseUID, _ := uuid.NewV4()
 	headers, _ = json.Marshal(responsePayload.Headers)
-	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
-		"body, path, headers, size) VALUES " +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	query = `
+		INSERT INTO responses (uid, request_uid, application, client_ip, status, time,
+                       body, path, headers, size)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	`
 	_, err = utils.DB.Exec(
 		query,
 		responseUID.String(),

@@ -1,12 +1,9 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
 package main
 
 import (
 	"log"
 
-	"github.com/averageflow/goscope/goscope"
+	"github.com/averageflow/goscope/src/goscope"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

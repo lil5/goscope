@@ -1,8 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-
-package goscope
+package utils
 
 import (
 	"bytes"
@@ -15,6 +11,10 @@ import (
 func CheckExcludedPaths(path string) bool {
 	exactMatches := []string{
 		"",
+		"/apple-touch-icon-precomposed.png",
+		"/apple-touch-icon.png",
+		"/goscope/css/light.css.map",
+		"/goscope/css/dark.css.map",
 	}
 
 	for i := range exactMatches {
@@ -36,7 +36,7 @@ func CheckExcludedPaths(path string) bool {
 	return true
 }
 
-func prettifyJSON(rawString string) string {
+func PrettifyJSON(rawString string) string {
 	if rawString == "" {
 		return ""
 	}
