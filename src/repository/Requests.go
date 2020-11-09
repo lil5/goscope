@@ -7,7 +7,7 @@ import (
 	"github.com/averageflow/goscope/src/utils"
 )
 
-// Get all details from a request via its UID.
+// FetchDetailedRequest fetches all details from a request via its UUID.
 func FetchDetailedRequest(requestUID string) types.DetailedRequest {
 	var body string
 
@@ -15,7 +15,7 @@ func FetchDetailedRequest(requestUID string) types.DetailedRequest {
 
 	var result types.DetailedRequest
 
-	row := QueryDetailedRequest(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
+	row := QueryDetailedRequest(utils.DB, requestUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -40,6 +40,7 @@ func FetchDetailedRequest(requestUID string) types.DetailedRequest {
 	return result
 }
 
+// FetchDetailedResponse fetches all details of a response via its UUID.
 func FetchDetailedResponse(responseUUID string) types.DetailedResponse {
 	var body string
 
@@ -47,7 +48,7 @@ func FetchDetailedResponse(responseUUID string) types.DetailedResponse {
 
 	var result types.DetailedResponse
 
-	row := QueryDetailedResponse(utils.DB, utils.Config.GoScopeDatabaseType, responseUUID)
+	row := QueryDetailedResponse(utils.DB, responseUUID)
 
 	err := row.Scan(
 		&result.UID,
@@ -69,10 +70,11 @@ func FetchDetailedResponse(responseUUID string) types.DetailedResponse {
 	return result
 }
 
+// FetchRequestList fetches a list of summarized requests.
 func FetchRequestList(offset int) []types.SummarizedRequest {
 	var result []types.SummarizedRequest
 
-	rows, err := QueryGetRequests(utils.DB, utils.Config.GoScopeDatabaseType, offset)
+	rows, err := QueryGetRequests(utils.DB, offset)
 	if err != nil {
 		log.Println(err.Error())
 
@@ -108,6 +110,7 @@ func FetchRequestList(offset int) []types.SummarizedRequest {
 	return result
 }
 
+// FetchSearchRequests fetches a list of summarized requests that match the input parameters of search.
 func FetchSearchRequests(search string, filter *types.RequestFilter, offset int) []types.SummarizedRequest {
 	var result []types.SummarizedRequest
 

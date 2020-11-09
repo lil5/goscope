@@ -15,7 +15,7 @@ import (
 	"github.com/averageflow/goscope/src/utils"
 )
 
-func QueryDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
+func QueryDetailedRequest(db *sql.DB, requestUID string) *sql.Row {
 	query := `
 		SELECT uid,
 		   client_ip,
@@ -38,7 +38,7 @@ func QueryDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
 	return row
 }
 
-func QueryGetRequests(db *sql.DB, connection string, offset int) (*sql.Rows, error) {
+func QueryGetRequests(db *sql.DB, offset int) (*sql.Rows, error) {
 	query := `
 		SELECT requests.uid,
 		   requests.method,
@@ -226,7 +226,7 @@ func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocogni
 	return rows, nil
 }
 
-func QueryDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
+func QueryDetailedResponse(db *sql.DB, requestUID string) *sql.Row {
 	query := `
 		SELECT uid,
 		   client_ip,

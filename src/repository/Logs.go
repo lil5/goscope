@@ -12,7 +12,6 @@ import (
 func FetchDetailedLog(requestUID string) types.ExceptionRecord {
 	row := QueryDetailedLog(
 		utils.DB,
-		utils.Config.GoScopeDatabaseType,
 		requestUID,
 	)
 
@@ -95,7 +94,7 @@ func FetchLogs(offset int) []types.ExceptionRecord {
 	return result
 }
 
-func QueryDetailedLog(db *sql.DB, connection, requestUID string) *sql.Row {
+func QueryDetailedLog(db *sql.DB, requestUID string) *sql.Row {
 	query := `SELECT uid, error, time FROM logs WHERE uid = ?;`
 
 	row := db.QueryRow(query, requestUID)
