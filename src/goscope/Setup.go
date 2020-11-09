@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Setup is the necessary step to enable GoScope in an application.
+// It will setup the necessary routes and middlewares for GoScope to work.
 func Setup(router *gin.Engine, goScopeGroup *gin.RouterGroup) {
 	utils.ConfigSetup()
 	utils.DatabaseSetup(utils.DatabaseInformation{

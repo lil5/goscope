@@ -14,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
+// RequestList is the controller for the requests list page in GoScope API.
 func RequestList(c *gin.Context) {
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
@@ -28,6 +29,7 @@ func RequestList(c *gin.Context) {
 	c.JSON(http.StatusOK, variables)
 }
 
+// ShowRequest is the controller for a detailed request/response page in GoScope API.
 func ShowRequest(c *gin.Context) {
 	var request types.RecordByURI
 
@@ -51,6 +53,7 @@ func ShowRequest(c *gin.Context) {
 	c.JSON(http.StatusOK, variables)
 }
 
+// SearchRequest is the controller for the search requests list page in GoScope API.
 func SearchRequest(c *gin.Context) {
 	var request types.SearchRequestPayload
 	err := c.ShouldBindBodyWith(&request, binding.JSON)
@@ -73,6 +76,7 @@ func SearchRequest(c *gin.Context) {
 	c.JSON(http.StatusOK, variables)
 }
 
+// SearchRequestOptions is the controller for the search requests list OPTIONS method in GoScope API.
 func SearchRequestOptions(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Headers", "*")

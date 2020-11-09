@@ -16,16 +16,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// LoggerGoScope is the main logger for the application.
 type LoggerGoScope struct {
 	RoutingEngine *gin.Engine
 }
 
+// Write dumps the log to the database.
 func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
 	go repository.DumpLog(string(p))
 	return len(p), nil
 }
 
-// Log an HTTP response to the DB and print to Stdout.
+// ResponseLogger logs an HTTP response to the DB and print to Stdout.
 func ResponseLogger(c *gin.Context) {
 	details := ObtainBodyLogWriter(c)
 
@@ -42,6 +44,7 @@ func ResponseLogger(c *gin.Context) {
 	}
 }
 
+// NoRouteResponseLogger logs an HTTP response to the DB and prints to Stdout for requests that match no route.
 func NoRouteResponseLogger(c *gin.Context) {
 	details := ObtainBodyLogWriter(c)
 
@@ -59,6 +62,7 @@ func NoRouteResponseLogger(c *gin.Context) {
 	})
 }
 
+// ObtainBodyLogWriter will read the request body and return a reader/writer.
 func ObtainBodyLogWriter(c *gin.Context) types.BodyLogWriterResponse {
 	blw := &types.BodyLogWriter{Body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 

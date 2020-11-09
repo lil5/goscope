@@ -28,7 +28,7 @@ func GetAppName(c *gin.Context) {
 	})
 }
 
-// Show system information of the current host.
+// ShowSystemInfo is the controller to show system information of the current host in GoScope API.
 func ShowSystemInfo(c *gin.Context) {
 	cpuStatus, _ := cpu.Info()
 	firstCPU := cpuStatus[0]
