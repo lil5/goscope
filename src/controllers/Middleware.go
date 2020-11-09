@@ -21,7 +21,7 @@ type LoggerGoScope struct {
 }
 
 func (logger LoggerGoScope) Write(p []byte) (n int, err error) {
-	go repository.WriteLogs(string(p))
+	go repository.DumpLog(string(p))
 	return len(p), nil
 }
 
@@ -38,7 +38,7 @@ func ResponseLogger(c *gin.Context) {
 	}
 
 	if utils.CheckExcludedPaths(c.FullPath()) {
-		go repository.DumpResponse(c, dumpPayload, readBody(details.Rdr))
+		go repository.DumpRequestResponse(c, dumpPayload, readBody(details.Rdr))
 	}
 }
 
@@ -51,7 +51,7 @@ func NoRouteResponseLogger(c *gin.Context) {
 		Status:  http.StatusNotFound,
 	}
 
-	go repository.DumpResponse(c, dumpPayload, readBody(details.Rdr))
+	go repository.DumpRequestResponse(c, dumpPayload, readBody(details.Rdr))
 
 	c.JSON(http.StatusNotFound, gin.H{
 		"code":    http.StatusNotFound,

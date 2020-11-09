@@ -15,131 +15,6 @@ import (
 	"github.com/averageflow/goscope/src/utils"
 )
 
-// Get all details from a request via its UID.
-func GetDetailedRequest(requestUID string) types.DetailedRequest {
-	var body string
-
-	var headers string
-
-	var result types.DetailedRequest
-
-	row := QueryDetailedRequest(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
-
-	err := row.Scan(
-		&result.UID,
-		&result.ClientIP,
-		&result.Method,
-		&result.Path,
-		&result.URL,
-		&result.Host,
-		&result.Time,
-		&headers,
-		&body,
-		&result.Referrer,
-		&result.UserAgent,
-	)
-	if err != nil {
-		log.Println(err.Error())
-	}
-
-	result.Body = utils.PrettifyJSON(body)
-	result.Headers = utils.PrettifyJSON(headers)
-
-	return result
-}
-
-func GetDetailedResponse(requestUID string) types.DetailedResponse {
-	var body string
-
-	var headers string
-
-	var result types.DetailedResponse
-
-	row := QueryDetailedResponse(utils.DB, utils.Config.GoScopeDatabaseType, requestUID)
-
-	err := row.Scan(
-		&result.UID,
-		&result.ClientIP,
-		&result.Status,
-		&result.Time,
-		&body,
-		&result.Path,
-		&headers,
-		&result.Size,
-	)
-	if err != nil {
-		log.Println(err.Error())
-	}
-
-	result.Body = utils.PrettifyJSON(body)
-	result.Headers = utils.PrettifyJSON(headers)
-
-	return result
-}
-
-func GetRequests(offset int) []types.SummarizedRequest {
-	var result []types.SummarizedRequest
-
-	rows := QueryGetRequests(utils.DB, utils.Config.GoScopeDatabaseType, offset)
-
-	if rows == nil {
-		return result
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var request types.SummarizedRequest
-
-		err := rows.Scan(
-			&request.UID,
-			&request.Method,
-			&request.Path,
-			&request.Time,
-			&request.ResponseStatus,
-		)
-		if err != nil {
-			log.Println(err.Error())
-			return result
-		}
-
-		result = append(result, request)
-	}
-
-	return result
-}
-
-func SearchRequests(search string, filter *types.RequestFilter, offset int) []types.SummarizedRequest {
-	var result []types.SummarizedRequest
-
-	rows, err := QuerySearchRequests(utils.DB, utils.Config.GoScopeDatabaseType, search, filter, offset)
-
-	if err != nil {
-		log.Println(err.Error())
-		return nil
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var request types.SummarizedRequest
-
-		err := rows.Scan(
-			&request.UID,
-			&request.Method,
-			&request.Path,
-			&request.Time,
-			&request.ResponseStatus,
-		)
-
-		if err != nil {
-			log.Println(err.Error())
-		}
-
-		result = append(result, request)
-	}
-
-	return result
-}
-
 func QueryDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
 	query := `
 		SELECT uid,
@@ -163,34 +38,26 @@ func QueryDetailedRequest(db *sql.DB, connection, requestUID string) *sql.Row {
 	return row
 }
 
-func QueryGetRequests(db *sql.DB, connection string, offset int) *sql.Rows {
-	var query string
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `requests`.`uid`, `requests`.`method`, `requests`.`path`, `requests`.`time`, " +
-			"`responses`.`status` FROM `requests` " +
-			"INNER JOIN `responses` ON `requests`.`uid` = `responses`.`request_uid` " +
-			"WHERE `requests`.`application` = ? ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "requests"."uid", "requests"."method", "requests"."path", "requests"."time",
-			"responses"."status" FROM "requests"
-			INNER JOIN "responses" ON "requests"."uid" = "responses"."request_uid"
-			WHERE "requests"."application" = ? ORDER BY "requests"."time" DESC LIMIT ? OFFSET ?;`
-	}
+func QueryGetRequests(db *sql.DB, connection string, offset int) (*sql.Rows, error) {
+	query := `
+		SELECT requests.uid,
+		   requests.method,
+		   requests.path,
+		   requests.time,
+		   responses.status
+		FROM requests
+				 INNER JOIN responses ON requests.uid = responses.request_uid
+		WHERE requests.application = ?
+		ORDER BY requests.time DESC
+		LIMIT ? OFFSET ?;
+	`
 
-	rows, err := db.Query(
+	return db.Query(
 		query,
 		utils.Config.ApplicationID,
 		utils.Config.GoScopeEntriesPerPage,
 		offset,
 	)
-
-	if err != nil {
-		log.Println(err.Error())
-
-		return nil
-	}
-
-	return rows
 }
 
 func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocognit,funlen,gocyclo
@@ -244,14 +111,14 @@ func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocogni
 
 	if connection == MySQL || connection == SQLite { //nolint:nestif
 		if hasMethodFilter && filter != nil {
-			for i, m := range filter.Method {
+			for i := range filter.Method {
 				if i == 0 {
 					methodQuery += "AND (`requests`.`method` = ? "
 				} else {
 					methodQuery += "OR `requests`.`method` = ? "
 				}
 
-				methodSQL = append(methodSQL, m)
+				methodSQL = append(methodSQL, filter.Method[i])
 			}
 
 			methodQuery += ") " //nolint:goconst
@@ -260,12 +127,12 @@ func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocogni
 		if hasSearch {
 			searchQuery += "AND (" //nolint:goconst
 
-			for i, col := range searchQueryCols {
+			for i := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR " //nolint:goconst
 				}
 
-				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", col[0], col[1])
+				searchQuery += fmt.Sprintf("`%s`.`%s` LIKE ? ", searchQueryCols[i][0], searchQueryCols[i][1])
 			}
 
 			searchQuery += ") "
@@ -280,24 +147,24 @@ func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocogni
 			"ORDER BY `requests`.`time` DESC LIMIT ? OFFSET ?;"
 	} else if connection == PostgreSQL {
 		if hasMethodFilter && filter != nil {
-			for i, m := range filter.Method {
+			for i := range filter.Method {
 				if i == 0 {
 					methodQuery += `AND ("requests"."method" = ? `
 				} else {
 					methodQuery += `OR "requests"."method" = ? `
 				}
-				methodSQL = append(methodSQL, m)
+				methodSQL = append(methodSQL, filter.Method[i])
 			}
 			methodQuery += `) `
 		}
 
 		if hasSearch {
 			searchQuery += "AND ("
-			for i, col := range searchQueryCols {
+			for i := range searchQueryCols {
 				if i != 0 {
 					searchQuery += "OR "
 				}
-				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, col[0], col[1])
+				searchQuery += fmt.Sprintf(`"%s"."%s" LIKE ? `, searchQueryCols[i][0], searchQueryCols[i][1])
 			}
 			searchQuery += ") "
 		}
@@ -314,8 +181,8 @@ func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocogni
 	args = append(args, utils.Config.ApplicationID)
 
 	if hasMethodFilter && filter != nil {
-		for _, ms := range methodSQL {
-			args = append(args, ms)
+		for i := range methodSQL {
+			args = append(args, methodSQL[i])
 		}
 	}
 
@@ -360,33 +227,38 @@ func QuerySearchRequests(db *sql.DB, connection, search string, //nolint:gocogni
 }
 
 func QueryDetailedResponse(db *sql.DB, connection, requestUID string) *sql.Row {
-	var query string
-
-	if connection == MySQL || connection == SQLite {
-		query = "SELECT `uid`, `client_ip`, `status`, `time`, " +
-			"`body`, `path`, `headers`, `size` FROM `responses` " +
-			"WHERE `request_uid` = ? LIMIT 1;"
-	} else if connection == PostgreSQL {
-		query = `SELECT "uid", "client_ip", "status", "time",
-			"body", "path", "headers", "size" FROM "responses"
-			WHERE "request_uid" = ? LIMIT 1;`
-	}
+	query := `
+		SELECT uid,
+		   client_ip,
+		   status,
+		   time,
+		   body,
+		   path,
+		   headers,
+		   size
+		FROM responses
+		WHERE request_uid = ?
+		LIMIT 1;
+	`
 
 	row := db.QueryRow(query, requestUID)
 
 	return row
 }
 
-func DumpResponse(c *gin.Context, responsePayload types.DumpResponsePayload, body string) {
+func DumpRequestResponse(c *gin.Context, responsePayload types.DumpResponsePayload, body string) {
 	now := time.Now().Unix()
 	requestUID, _ := uuid.NewV4()
 	headers, _ := json.Marshal(c.Request.Header)
-	query := "INSERT INTO requests (uid, application, client_ip, method, path, host, time, " +
-		"headers, body, referrer, url, user_agent) VALUES " +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	query := `
+		INSERT INTO requests (uid, application, client_ip, method, path, host, time,
+                      headers, body, referrer, url, user_agent)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	`
 
 	requestPath := c.FullPath()
 	if requestPath == "" {
+		// Use URL as fallback when path is not recognized as route
 		requestPath = c.Request.URL.String()
 	}
 
@@ -412,9 +284,11 @@ func DumpResponse(c *gin.Context, responsePayload types.DumpResponsePayload, bod
 
 	responseUID, _ := uuid.NewV4()
 	headers, _ = json.Marshal(responsePayload.Headers)
-	query = "INSERT INTO responses (uid, request_uid, application, client_ip, status, time, " +
-		"body, path, headers, size) VALUES " +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	query = `
+		INSERT INTO responses (uid, request_uid, application, client_ip, status, time,
+                       body, path, headers, size)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	`
 	_, err = utils.DB.Exec(
 		query,
 		responseUID.String(),

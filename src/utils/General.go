@@ -11,6 +11,10 @@ import (
 func CheckExcludedPaths(path string) bool {
 	exactMatches := []string{
 		"",
+		"/apple-touch-icon-precomposed.png",
+		"/apple-touch-icon.png",
+		"/goscope/css/light.css.map",
+		"/goscope/css/dark.css.map",
 	}
 
 	for i := range exactMatches {

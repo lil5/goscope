@@ -21,7 +21,7 @@ func RequestList(c *gin.Context) {
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,
 		"entriesPerPage":  utils.Config.GoScopeEntriesPerPage,
-		"data":            repository.GetRequests(int(offset)),
+		"data":            repository.FetchRequestList(int(offset)),
 	}
 
 	c.Header("Access-Control-Allow-Origin", "*")
@@ -36,8 +36,8 @@ func ShowRequest(c *gin.Context) {
 		log.Println(err.Error())
 	}
 
-	requestDetails := repository.GetDetailedRequest(request.UID)
-	responseDetails := repository.GetDetailedResponse(request.UID)
+	requestDetails := repository.FetchDetailedRequest(request.UID)
+	responseDetails := repository.FetchDetailedResponse(request.UID)
 
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,
@@ -61,7 +61,7 @@ func SearchRequest(c *gin.Context) {
 
 	offsetQuery := c.DefaultQuery("offset", "0")
 	offset, _ := strconv.ParseInt(offsetQuery, 10, 32)
-	result := repository.SearchRequests(request.Query, &request.Filter, int(offset))
+	result := repository.FetchSearchRequests(request.Query, &request.Filter, int(offset))
 
 	variables := gin.H{
 		"applicationName": utils.Config.ApplicationName,
