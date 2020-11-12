@@ -2,7 +2,7 @@
   <div>
     <button v-on:click="$router.go(-1)">← Back</button>
     <section>
-      <h2>Request details</h2>
+      <h1>Request details</h1>
       <dl>
         <div v-if="hasContent(this.requestDetails.clientIP)">
           <dt>Client IP</dt>
@@ -14,9 +14,9 @@
           <dt>Headers</dt>
           <details>
             <summary>Click to view headers...</summary>
-            <dd class="code-block">
-              <pre><code class="language-json">{{ this.requestDetails.headers }}</code></pre>
-            </dd>
+            <pre>
+                <code class="language-json">{{ this.requestDetails.headers }}</code>
+              </pre>
           </details>
         </div>
         <div v-if="hasContent(this.requestDetails.host)">
@@ -71,9 +71,9 @@
           <dt>Body</dt>
           <details>
             <summary>Click to view body...</summary>
-            <dd>
-              <pre><code>{{ this.requestDetails.body }}</code></pre>
-            </dd>
+            <pre>
+              <code class="language-json">{{ this.requestDetails.body }}</code>
+            </pre>
           </details>
         </div>
       </dl>
@@ -89,10 +89,10 @@
         <div v-if="hasContent(this.responseDetails.headers)">
           <dt>Headers</dt>
           <details>
-            <summary>Click to view headers...</summary>
-            <dd class="code-block">
-              <pre><code class="language-json">{{ this.responseDetails.headers }}</code></pre>
-            </dd>
+            <summary>Click to view headers... </summary>
+            <pre>
+              <code class="language-json" >{{ this.responseDetails.headers }}</code>
+            </pre>
           </details>
         </div>
         <div v-if="hasContent(this.responseDetails.path)">
@@ -135,9 +135,9 @@
           <dt>Body</dt>
           <details>
             <summary>Click to view body...</summary>
-            <dd class="code-block">
-              <pre><code class="language-json">{{ this.responseDetails.body }}</code></pre>
-            </dd>
+            <pre>
+                <code class="language-json">{{ this.responseDetails.body }}</code>
+              </pre>
           </details>
         </div>
       </dl>
@@ -151,6 +151,7 @@ import { DetailedRequest, DetailedResponse } from "@/interfaces/requests";
 import { RequestService } from "@/api/requests";
 import { epochToHumanDate } from "@/utils/time";
 import { hasContent } from "@/utils/values";
+import Prism from "prismjs";
 
 export default Vue.extend({
   name: "RequestDetails",
@@ -177,13 +178,23 @@ export default Vue.extend({
       return epochToHumanDate(this.responseDetails.time);
     }
   },
-  async created(): Promise<void> {
+  async mounted(): Promise<void> {
     const requestedData = await RequestService.getRequest(
       this.$route.params.id
     );
     this.requestDetails = requestedData.data.request;
     this.responseDetails = requestedData.data.response;
     document.title = `${requestedData.applicationName} | Request ${this.$route.params.id}`;
+    Prism.highlightAll();
   }
 });
 </script>
+<style scoped>
+pre {
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+</style>

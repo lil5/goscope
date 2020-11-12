@@ -1,13 +1,16 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-package goscope
+package types
 
 import (
 	"bytes"
+	"io"
 
 	"github.com/gin-gonic/gin"
 )
+
+type BodyLogWriterResponse struct {
+	Blw *BodyLogWriter
+	Rdr io.ReadCloser
+}
 
 type ExceptionRecord struct {
 	Error string `json:"error"`
@@ -64,17 +67,18 @@ type DetailedRequest struct {
 
 type BodyLogWriter struct {
 	gin.ResponseWriter
-	body *bytes.Buffer
+	Body *bytes.Buffer
 }
 
 // HTTP request body object.
 func (w BodyLogWriter) Write(b []byte) (int, error) {
-	w.body.Write(b)
+	w.Body.Write(b)
 	return w.ResponseWriter.Write(b)
 }
 
 type SearchRequestPayload struct {
-	Query string `json:"query"`
+	Query  string        `json:"query"`
+	Filter RequestFilter `json:"filter"`
 }
 
 type SystemInformationResponse struct {
@@ -83,6 +87,7 @@ type SystemInformationResponse struct {
 	Disk            SystemInformationResponseDisk   `json:"disk"`
 	Host            SystemInformationResponseHost   `json:"host"`
 	Memory          SystemInformationResponseMemory `json:"memory"`
+	Environment     map[string]string               `json:"environment"`
 }
 
 type SystemInformationResponseCPU struct {

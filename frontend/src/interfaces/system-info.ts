@@ -23,4 +23,5 @@ export interface SystemInfoDetailsResponse {
     totalMemory: string;
     usedSwap: string;
   };
+  environment: Record<string, string>;
 }

@@ -1,9 +1,17 @@
-# <img src="frontend/src/assets/logo.svg" alt=" " width="50" height="50"/> GoScope
+# <img src="frontend/public/logo.svg" alt=" " width="50" height="50"/> GoScope
 
-[![Build Status](https://travis-ci.com/averageflow/goscope.svg?branch=master)](https://travis-ci.com/averageflow/goscope)
+[![Build](https://img.shields.io/github/workflow/status/averageflow/goscope/golangci-lint?label=GolangCI%20Lint)](#)
+[![Build](https://img.shields.io/github/workflow/status/averageflow/goscope/gobuild?label=Go%20Build)](#)
+[![Build](https://img.shields.io/github/workflow/status/averageflow/goscope/npmbuild?label=NPM%20Build)](#)
 [![Maintainability](https://api.codeclimate.com/v1/badges/465ff63fcadad83c6aa3/maintainability)](https://codeclimate.com/github/averageflow/goscope/maintainability)
+[![Issues](https://img.shields.io/github/issues/averageflow/goscope)](#)
+[![License](https://img.shields.io/github/license/averageflow/goscope.svg)](https://github.com/averageflow/goscope/blob/master/LICENSE.md)
+[![Go Report Card](https://goreportcard.com/badge/github.com/averageflow/goscope)](https://goreportcard.com/report/github.com/averageflow/goscope)
+[![PkgGoDev](https://pkg.go.dev/badge/mod/github.com/averageflow/goscope)](https://pkg.go.dev/github.com/averageflow/goscope?tab=overview)
 
 Watch incoming requests and outgoing responses from your Go Gin application. All is logged into a database for persistence and paginated for performance.
+
+![GoScope Dashboard](showcase/0.png)
 
 The aim of this application is to be a plug and play addition to your application, not a hurdle, thus to setup, you only require a one-liner in your main function.
 
@@ -49,7 +57,7 @@ package main
 import (
     "github.com/gin-gonic/gin"
     "github.com/joho/godotenv"
-    "github.com/averageflow/goscope/goscope"
+    "github.com/averageflow/goscope/src/goscope"
 )
 
 func main(){
@@ -79,16 +87,9 @@ Your help and ideas are needed to keep this project moving forward to become a m
 GoScope is in its essence a middleware, a backend in Go and a front-end in Vue.js, thus you can hook onto the backend with any tool of your choice, being it other kinds of front-ends or monitoring tools like Zabbix or others. 
 For that purpose please find here the [API spec](SPEC-API.md).
 
-
 ### Request & Response
 
 In order to understand possible unexpected situations or simply to reassure you that everything is working correctly, GoScope provides more detailed information about request and response, including status codes and request/response bodies, as well as any useful information. Any help with expanding this would be greatly appreciated.
-
-![GoScope Dashboard](showcase/0.png)
-
-
-![GoScope Dashboard](showcase/2.png)
-
 
 ### Logging
 
@@ -96,12 +97,15 @@ GoScope hooks into the logging mechanism of your application by using a custom `
 This prints to the console for ease of development and saves the logs into the database, for further displaying in the web environment.
 Thus you only need to call your usual `log.Println` or `log.Printf` statements or any variants of the log writing package, and that will seamlessly be picked up by GoScope.
 
-![GoScope Dashboard](showcase/3.png)
-
-
 ### System Information
 
 GoScope is constantly improving and currently already can show some system information about the current host. There are plans to expand on this and help is welcome with database info, operating system, etc.
+
+### Showcase
+
+![GoScope Dashboard](showcase/2.png)
+
+![GoScope Dashboard](showcase/3.png)
 
 ![GoScope Dashboard](showcase/4.png)
 

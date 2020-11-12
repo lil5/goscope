@@ -1,7 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-package utils
+package types
 
 import (
 	"bytes"

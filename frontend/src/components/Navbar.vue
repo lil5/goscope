@@ -2,7 +2,7 @@
   <header>
     <nav role="navigation">
       <router-link to="/">
-        {{ this.applicationDetails.applicationName }}
+        <strong>{{ this.applicationDetails.applicationName }}</strong>
       </router-link>
 
       <router-link to="/">
@@ -28,6 +28,7 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "Navbar",
+
   async mounted(): Promise<void> {
     this.$data.applicationDetails = await ApplicationDetailsService.getApplicationDetails();
   },

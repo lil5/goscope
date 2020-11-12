@@ -2,79 +2,104 @@
   <div>
     <button v-on:click="$router.go(-1)">← Back</button>
     <br />
-    <section>
-      <h1>CPU</h1>
+    <section v-if="systemInformation">
+      <h2>Environment</h2>
+      <details>
+        <summary>Click to view variables...</summary>
+        <table>
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(value, key) in systemInformation.environment"
+              :key="key"
+            >
+              <td>
+                <code>{{ key }}</code>
+              </td>
+              <td>
+                <code>{{ value }}</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <h2>CPU</h2>
       <dl>
         <dt>Core Count</dt>
         <dd>
-          <code>{{ this.computedDetails.cpu.coreCount }}</code>
+          <code>{{ systemInformation.cpu.coreCount }}</code>
         </dd>
         <dt>Model</dt>
         <dd>
-          <code>{{ this.computedDetails.cpu.modelName }}</code>
+          <code>{{ systemInformation.cpu.modelName }}</code>
         </dd>
       </dl>
 
-      <h1>Disk</h1>
+      <h2>Disk</h2>
       <dl>
         <dt>Free space</dt>
         <dd>
-          <code>{{ this.computedDetails.disk.freeSpace }}</code>
+          <code>{{ systemInformation.disk.freeSpace }}</code>
         </dd>
         <dt>Partition Type</dt>
         <dd>
-          <code>{{ this.computedDetails.disk.partitionType }}</code>
+          <code>{{ systemInformation.disk.partitionType }}</code>
         </dd>
         <dt>Mount Path</dt>
         <dd>
-          <code>{{ this.computedDetails.disk.mountPath }}</code>
+          <code>{{ systemInformation.disk.mountPath }}</code>
         </dd>
         <dt>Total Space</dt>
         <dd>
-          <code>{{ this.computedDetails.disk.totalSpace }}</code>
+          <code>{{ systemInformation.disk.totalSpace }}</code>
         </dd>
       </dl>
 
-      <h1>Host</h1>
+      <h2>Host</h2>
       <dl>
         <dt>Kernel Arch</dt>
         <dd>
-          <code>{{ this.computedDetails.host.kernelArch }}</code>
+          <code>{{ systemInformation.host.kernelArch }}</code>
         </dd>
         <dt>Kernel Version</dt>
         <dd>
-          <code>{{ this.computedDetails.host.kernelVersion }}</code>
+          <code>{{ systemInformation.host.kernelVersion }}</code>
         </dd>
         <dt>Hostname</dt>
         <dd>
-          <code>{{ this.computedDetails.host.hostname }}</code>
+          <code>{{ systemInformation.host.hostname }}</code>
         </dd>
         <dt>Host OS</dt>
         <dd>
-          <code>{{ this.computedDetails.host.hostOS }}</code>
+          <code>{{ systemInformation.host.hostOS }}</code>
         </dd>
         <dt>Platform</dt>
         <dd>
-          <code>{{ this.computedDetails.host.hostPlatform }}</code>
+          <code>{{ systemInformation.host.hostPlatform }}</code>
         </dd>
         <dt>Uptime</dt>
         <dd>
-          <code>{{ this.computedDetails.host.uptime }}</code>
+          <code>{{ systemInformation.host.uptime }}</code>
         </dd>
       </dl>
 
-      <h1>Memory</h1>
+      <h2>Memory</h2>
       <dl>
         <dt>Status</dt>
         <dd>
           <code
-            >{{ this.computedDetails.memory.availableMemory }} available of
-            {{ this.computedDetails.memory.totalMemory }}</code
+            >{{ systemInformation.memory.availableMemory }} available of
+            {{ systemInformation.memory.totalMemory }}</code
           >
         </dd>
         <dt>Swap usage</dt>
         <dd>
-          <code>{{ this.computedDetails.memory.usedSwap }}</code>
+          <code>{{ systemInformation.memory.usedSwap }}</code>
         </dd>
       </dl>
     </section>
@@ -88,45 +113,9 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "SystemInfo",
-  computed: {
-    computedDetails(): SystemInfoDetailsResponse {
-      if (
-        !this.systemInformation ||
-        Object.keys(this.systemInformation).length === 0
-      ) {
-        return {
-          cpu: {
-            coreCount: "",
-            modelName: ""
-          },
-          disk: {
-            freeSpace: "",
-            partitionType: "",
-            mountPath: "",
-            totalSpace: ""
-          },
-          host: {
-            kernelArch: "",
-            kernelVersion: "",
-            hostname: "",
-            hostOS: "",
-            hostPlatform: "",
-            uptime: ""
-          },
-          memory: {
-            availableMemory: "",
-            totalMemory: "",
-            usedSwap: ""
-          }
-        } as SystemInfoDetailsResponse;
-      } else {
-        return this.systemInformation;
-      }
-    }
-  },
   data() {
     return {
-      systemInformation: {} as SystemInfoDetailsResponse
+      systemInformation: null as SystemInfoDetailsResponse | null
     };
   },
   async created(): Promise<void> {

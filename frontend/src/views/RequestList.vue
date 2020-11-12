@@ -1,18 +1,23 @@
 <template>
   <section>
     <SearchBar
-      v-on:searchEvent="this.handleSearch"
-      v-on:cancelSearchEvent="this.cancelSearch"
-      :search-enabled="this.searchModeEnabled"
-    />
+      v-on:searchEvent="handleSearch"
+      v-on:cancelSearchEvent="cancelSearch"
+      :search-enabled="searchModeEnabled"
+      :autocomplete="autocomplete"
+    >
+    </SearchBar>
+    <button :class="autoRefreshButtonClass" @click="autoRefresh = !autoRefresh">
+      <font-awesome-icon icon="sync" />&nbsp;Auto-Refresh
+    </button>
     <table>
       <thead>
         <tr>
-          <th>Status</th>
-          <th>Verb</th>
-          <th>Path</th>
-          <th>Happened</th>
-          <th></th>
+          <th style="width: 10%">Status</th>
+          <th style="width: 15%">Method</th>
+          <th style="width: 55%">Path</th>
+          <th style="width: 15%">Happened</th>
+          <th style="width: 5%;"></th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +25,9 @@
           <td v-html="applyStatusColor(request.responseStatus)"></td>
           <td v-html="applyMethodColor(request.method)"></td>
           <td>{{ request.path }}</td>
-          <td>{{ timeDiffToHuman(now - request.time) }} ago</td>
+          <td>
+            <small>{{ timeDiffToHuman(now - request.time) }} ago</small>
+          </td>
           <td>
             <router-link class="eye-link" :to="`/requests/${request.uid}`">
               <font-awesome-icon icon="eye" />
@@ -30,18 +37,50 @@
       </tbody>
     </table>
     <nav class="text-center">
-      <button v-on:click="this.previousPage">← prev</button>
-      <button v-on:click="this.nextPage">next →</button>
+      <button v-on:click="previousPage">← prev</button>
+      <button v-on:click="nextPage">next →</button>
     </nav>
   </section>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import SearchBar from "@/components/SearchBar.vue";
-import { RequestService } from "@/api/requests";
-import { RequestsEndpointResponse } from "@/interfaces/requests";
-import { intervalToLevels } from "@/utils/time";
+import SearchBar from "../components/SearchBar.vue";
+import { RequestService } from "../api/requests";
+import {
+  RequestsEndpointResponse,
+  Method,
+  Status,
+  FilterRequest
+} from "../interfaces/requests";
+import { Tag } from "../interfaces/filter";
+import { EnumReflection } from "../utils/enum-reflection";
+import { intervalToLevels } from "../utils/time";
+
+function generateAutocomplete(): Tag[] {
+  const autocomplete: Tag[] = [];
+
+  const methods = EnumReflection.getNames(Method);
+  methods.forEach(m => {
+    autocomplete.push({
+      text: "method:" + m.toLowerCase(),
+      group: "method",
+      value: m
+    });
+  });
+
+  // TODO: add status filter
+  // const statuses = EnumReflection.getNames(Status);
+  // statuses.forEach(s => {
+  //   autocomplete.push({
+  //     text: `status:${Status[s]}xx`,
+  //     group: "status",
+  //     value: s
+  //   });
+  // });
+
+  return autocomplete;
+}
 
 export default Vue.extend({
   name: "RequestList",
@@ -50,22 +89,41 @@ export default Vue.extend({
     return {
       requests: {} as RequestsEndpointResponse,
       currentPage: 1,
+      autoRefresh: false,
+      timer: 0,
       searchModeEnabled: false,
       searchQuery: "",
+      searchTags: [] as Tag[],
+      autocomplete: generateAutocomplete(),
       now: Math.round(new Date().getTime() / 1000)
     };
   },
   async created(): Promise<void> {
     this.requests = await RequestService.getRequests(this.currentPage);
     document.title = `${this.requests.applicationName} | Requests`;
+    this.timer = setInterval(async () => {
+      if (this.autoRefresh) {
+        this.requests = await RequestService.getRequests(this.currentPage);
+      }
+    }, 5000);
+  },
+  computed: {
+    autoRefreshButtonClass(): string {
+      if (!this.autoRefresh) {
+        return "";
+      }
+      return "active-auto-refresh";
+    }
   },
   methods: {
     async nextPage(): Promise<void> {
       this.currentPage++;
       if (this.searchModeEnabled) {
+        const filter = this.getFilter();
         const received = await RequestService.searchRequests(
           this.currentPage,
-          this.searchQuery
+          this.searchQuery,
+          filter
         );
         if (received.data && received.data.length > 0) {
           this.requests = received;
@@ -86,31 +144,60 @@ export default Vue.extend({
         this.currentPage--;
       }
       if (this.searchModeEnabled) {
+        const filter = this.getFilter();
         this.requests = await RequestService.searchRequests(
           this.currentPage,
-          this.searchQuery
+          this.searchQuery,
+          filter
         );
       } else {
         this.requests = await RequestService.getRequests(this.currentPage);
       }
     },
-    async handleSearch(searchQuery: string): Promise<void> {
+    async handleSearch(searchQuery: string, searchTags: Tag[]): Promise<void> {
       this.currentPage = 1;
       this.searchModeEnabled = true;
       this.searchQuery = searchQuery;
+      this.searchTags = searchTags;
+
+      const filter = this.getFilter();
       this.requests = await RequestService.searchRequests(
         this.currentPage,
-        searchQuery
+        searchQuery,
+        filter
       );
     },
     async cancelSearch(): Promise<void> {
       this.currentPage = 1;
       this.searchModeEnabled = false;
       this.searchQuery = "";
+      this.searchTags = [];
       this.requests = await RequestService.getRequests(this.currentPage);
     },
     timeDiffToHuman(value: number): string {
       return intervalToLevels(value);
+    },
+    getFilter(): FilterRequest {
+      const status: Status[] = [];
+      const method: Method[] = [];
+
+      this.searchTags.forEach((tag: Tag) => {
+        switch (tag.group) {
+          case "method":
+            //@ts-ignore
+            method.push(tag.value);
+            break;
+          case "status":
+            //@ts-ignore
+            status.push(tag.value);
+            break;
+        }
+      });
+
+      return {
+        status,
+        method
+      };
     },
     applyMethodColor(method: string): string {
       if (method === "GET") {

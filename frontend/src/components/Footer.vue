@@ -10,6 +10,14 @@
         >GitHub</a
       >
     </p>
+    <dark-mode-toggle
+      id="dark-mode-toggle-1"
+      legend=""
+      appearance="switch"
+      dark="Dark"
+      light="Light"
+      remember="Remember setting?"
+    ></dark-mode-toggle>
   </footer>
 </template>
 

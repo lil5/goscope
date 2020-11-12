@@ -1,7 +1,4 @@
-// License: MIT
-// Authors:
-// 		- Josep Jesus Bigorra Algaba (@averageflow)
-package goscope
+package utils
 
 import (
 	"bytes"
@@ -14,10 +11,14 @@ import (
 func CheckExcludedPaths(path string) bool {
 	exactMatches := []string{
 		"",
+		"/apple-touch-icon-precomposed.png",
+		"/apple-touch-icon.png",
+		"/goscope/css/light.css.map",
+		"/goscope/css/dark.css.map",
 	}
 
-	for _, s := range exactMatches {
-		if path == s {
+	for i := range exactMatches {
+		if path == exactMatches[i] {
 			return false
 		}
 	}
@@ -26,8 +27,8 @@ func CheckExcludedPaths(path string) bool {
 		"/goscope",
 	}
 
-	for _, s := range partialMatches {
-		if strings.Contains(path, s) {
+	for i := range partialMatches {
+		if strings.Contains(path, partialMatches[i]) {
 			return false
 		}
 	}
@@ -35,7 +36,7 @@ func CheckExcludedPaths(path string) bool {
 	return true
 }
 
-func prettifyJSON(rawString string) string {
+func PrettifyJSON(rawString string) string {
 	if rawString == "" {
 		return ""
 	}
